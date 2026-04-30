@@ -1,0 +1,90 @@
+/* ============================================
+   Title2Token — Design Tokens
+   public/design-tokens.css
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap');
+
+:root {
+  /* Colors */
+  --color-bg:           #f5f3ef;
+  --color-bg-card:      #ffffff;
+  --color-bg-subtle:    #f0ede8;
+  --color-bg-gold:      #f5f0e6;
+
+  --color-text:         #1a1a18;
+  --color-text-muted:   #aaa8a2;
+  --color-text-faint:   #ccc9c2;
+
+  --color-gold:         #b8952a;
+  --color-gold-light:   #e8d8a0;
+  --color-gold-dark:    #8a6f1e;
+
+  --color-border:       #e0ddd8;
+  --color-border-faint: #f0ede8;
+
+  --color-alert:        #c9907a;
+  --color-alert-bg:     #fdf5f0;
+  --color-warn:         #c9a050;
+  --color-warn-bg:      #fdfaf0;
+
+  --color-green:        #7aab8a;
+  --color-green-bg:     #f0f7f2;
+
+  /* Typography */
+  --font-ui:    'DM Sans', -apple-system, sans-serif;
+  --font-mono:  'DM Mono', 'Courier New', monospace;
+
+  --text-xs:    9px;
+  --text-sm:    10px;
+  --text-base:  11px;
+  --text-md:    12px;
+  --text-lg:    14px;
+  --text-xl:    18px;
+  --text-2xl:   22px;
+  --text-3xl:   28px;
+
+  /* Spacing */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  28px;
+
+  /* Radii */
+  --radius-sm:  3px;
+  --radius-md:  6px;
+  --radius-lg:  10px;
+  --radius-xl:  12px;
+
+  /* Shadows */
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.04);
+  --shadow-md:  0 2px 8px rgba(0,0,0,0.06);
+
+  /* Nav */
+  --nav-width:  180px;
+  --topbar-h:   48px;
+}
+
+/* Base reset */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-ui); background: var(--color-bg); color: var(--color-text); font-size: var(--text-base); }
+
+/* Utility */
+.mono  { font-family: var(--font-mono); }
+.gold  { color: var(--color-gold); }
+.muted { color: var(--color-text-muted); }
+.faint { color: var(--color-text-faint); }
+.green { color: var(--color-green); }
+.alert { color: var(--color-alert); }
+.warn  { color: var(--color-warn); }
+.label {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--color-text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.divider { height: 1px; background: var(--color-border); }

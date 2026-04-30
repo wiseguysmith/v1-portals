@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T2T Admin — T2T-001 Hotel Arco Iris</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../public/design-tokens.css"/>
+  <link rel="stylesheet" href="../styles/admin.css"/>
+  <style>
+    .deal-shell { display:flex; flex-direction:column; height:calc(100vh - var(--topbar-h)); overflow:hidden; }
+    .deal-header-bar { padding:var(--space-4) var(--space-8); border-bottom:1px solid var(--color-border); background:#fff; flex-shrink:0; }
+    .deal-header-top { display:flex; align-items:flex-start; justify-content:space-between; gap:var(--space-5); margin-bottom:var(--space-4); }
+    .deal-meta-row { display:flex; gap:var(--space-6); flex-wrap:wrap; }
+    .deal-meta-item { display:flex; flex-direction:column; gap:2px; }
+    .deal-meta-label { font-size:var(--text-xs); color:var(--color-text-faint); text-transform:uppercase; letter-spacing:0.08em; }
+    .deal-meta-val { font-size:var(--text-base); font-family:var(--font-mono); }
+    .deal-tab-bar { flex-shrink:0; }
+    .deal-content { flex:1; overflow-y:auto; padding:var(--space-6) var(--space-8); display:flex; flex-direction:column; gap:var(--space-5); }
+    /* Gate bar inline */
+    .gate-bar-inline { display:flex; align-items:center; gap:var(--space-1); overflow-x:auto; padding:var(--space-3) 0; }
+    .gate-step { display:flex; align-items:center; gap:var(--space-1); }
+    .gate-step-dot { width:22px; height:22px; border-radius:50%; border:2px solid var(--color-border); background:#fff; display:flex; align-items:center; justify-content:center; font-size:9px; font-family:var(--font-mono); color:var(--color-text-faint); flex-shrink:0; }
+    .gate-step-dot.done { background:var(--color-green); border-color:var(--color-green); color:#fff; }
+    .gate-step-dot.active { background:var(--color-warn); border-color:var(--color-warn); color:#fff; }
+    .gate-step-dot.blocked { background:var(--color-alert-bg); border-color:var(--color-alert); color:var(--color-alert); }
+    .gate-step-label { font-size:var(--text-xs); font-family:var(--font-mono); white-space:nowrap; color:var(--color-text-faint); }
+    .gate-step-label.active { color:var(--color-warn); font-weight:500; }
+    .gate-step-label.blocked { color:var(--color-alert); }
+    .gate-connector { width:20px; height:2px; background:var(--color-border); flex-shrink:0; }
+    .gate-connector.done { background:var(--color-green); }
+    /* Overview tab */
+    .overview-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:var(--space-4); }
+    .readiness-grid { display:grid; grid-template-columns:1fr 1fr; gap:var(--space-3); }
+    .readiness-cat { display:flex; flex-direction:column; gap:var(--space-1); }
+    .readiness-cat-label { font-size:var(--text-xs); color:var(--color-text-muted); }
+    .readiness-cat-bar { height:5px; border-radius:3px; background:var(--color-border); overflow:hidden; }
+    .readiness-cat-fill { height:100%; border-radius:3px; }
+    .risk-grid { display:flex; flex-direction:column; gap:var(--space-2); }
+    .risk-row-item { display:flex; align-items:center; justify-content:space-between; }
+    .risk-cat-label { font-size:var(--text-sm); color:var(--color-text-muted); }
+    /* Checklist tab */
+    .cat-header { display:flex; align-items:center; gap:var(--space-3); padding:var(--space-3) var(--space-5); background:var(--color-bg-subtle); cursor:pointer; border-bottom:1px solid var(--color-border); }
+    .cat-name { font-size:var(--text-sm); font-weight:500; flex:1; }
+    .cat-progress { font-size:var(--text-xs); font-family:var(--font-mono); color:var(--color-text-muted); }
+    .cl-item { display:grid; grid-template-columns:18px 1fr 90px 80px 70px; align-items:center; gap:var(--space-3); padding:9px var(--space-5); border-bottom:1px solid var(--color-border-faint); }
+    .cl-item:last-child { border-bottom:none; }
+    .cl-item:hover { background:var(--color-bg-subtle); }
+    .cl-label { font-size:var(--text-base); }
+    .cl-label.done { color:var(--color-text-muted); text-decoration:line-through; }
+    .cl-label.blocked { color:var(--color-alert); font-weight:500; }
+    .cl-owner { font-size:var(--text-xs); color:var(--color-text-muted); }
+    .cl-due { font-size:var(--text-xs); font-family:var(--font-mono); color:var(--color-text-muted); }
+    .cl-due.overdue { color:var(--color-alert); }
+    /* Documents tab */
+    .doc-row { display:grid; grid-template-columns:1fr 120px 100px 90px 60px; align-items:center; gap:var(--space-3); padding:10px var(--space-5); border-bottom:1px solid var(--color-border-faint); }
+    .doc-row:last-child { border-bottom:none; }
+    .doc-row:hover { background:var(--color-bg-subtle); }
+    .doc-name { font-size:var(--text-base); font-weight:500; }
+    .doc-cat { font-size:var(--text-xs); color:var(--color-text-muted); margin-top:2px; }
+    .doc-status { font-size:var(--text-xs); font-family:var(--font-mono); padding:2px 7px; border-radius:var(--radius-sm); border:1px solid; }
+    .doc-status.missing { background:var(--color-alert-bg); color:var(--color-alert); border-color:#f0c0a8; }
+    .doc-status.uploaded { background:var(--color-warn-bg); color:var(--color-warn); border-color:#e8d090; }
+    .doc-status.approved { background:var(--color-green-bg); color:var(--color-green); border-color:#b8d8c2; }
+    .doc-direction { font-size:var(--text-xs); font-family:var(--font-mono); color:var(--color-text-faint); }
+    /* Costs tab */
+    .cost-row { display:grid; grid-template-columns:1fr 110px 90px 100px 90px; align-items:center; gap:var(--space-3); padding:10px var(--space-5); border-bottom:1px solid var(--color-border-faint); }
+    .cost-row:last-child { border-bottom:none; }
+    .cost-row:hover { background:var(--color-bg-subtle); }
+    .cost-type { font-size:var(--text-xs); font-family:var(--font-mono); padding:2px 7px; border-radius:var(--radius-sm); background:var(--color-bg-subtle); border:1px solid var(--color-border); color:var(--color-text-muted); }
+    .cost-status { font-size:var(--text-xs); font-family:var(--font-mono); }
+    .cost-status.pending { color:var(--color-warn); }
+    .cost-status.approved { color:var(--color-green); }
+    .cost-status.paid { color:var(--color-text-muted); }
+    /* Responsibility tab */
+    .matrix-table { width:100%; border-collapse:collapse; }
+    .matrix-table th { font-size:var(--text-xs); font-weight:500; color:var(--color-text-faint); text-transform:uppercase; letter-spacing:0.06em; padding:var(--space-3) var(--space-3); border-bottom:1px solid var(--color-border); text-align:center; }
+    .matrix-table th:first-child { text-align:left; width:180px; }
+    .matrix-table td { padding:8px var(--space-3); border-bottom:1px solid var(--color-border-faint); font-size:var(--text-xs); text-align:center; color:var(--color-text-muted); }
+    .matrix-table td:first-child { text-align:left; font-size:var(--text-sm); color:var(--color-text); }
+    .matrix-table tr:last-child td { border-bottom:none; }
+    .matrix-cell { width:18px; height:18px; border-radius:3px; display:inline-flex; align-items:center; justify-content:center; font-size:9px; }
+    .matrix-cell.owns { background:var(--color-gold); color:#fff; }
+    .matrix-cell.supports { background:var(--color-bg-subtle); border:1px solid var(--color-border); color:var(--color-text-muted); }
+    .matrix-cell.signs { background:var(--color-bg-gold); border:1px solid var(--color-gold-light); color:var(--color-gold); }
+    /* Timeline tab */
+    .timeline-item { display:flex; gap:var(--space-4); padding:var(--space-4) var(--space-5); border-bottom:1px solid var(--color-border-faint); }
+    .timeline-item:last-child { border-bottom:none; }
+    .timeline-left { display:flex; flex-direction:column; align-items:center; gap:0; width:80px; flex-shrink:0; }
+    .timeline-date { font-size:var(--text-xs); font-family:var(--font-mono); color:var(--color-text-muted); text-align:center; }
+    .timeline-dot { width:10px; height:10px; border-radius:50%; margin:4px 0; flex-shrink:0; }
+    .timeline-dot.done { background:var(--color-green); }
+    .timeline-dot.active { background:var(--color-warn); }
+    .timeline-dot.future { background:var(--color-border); }
+    .timeline-dot.blocked { background:var(--color-alert); }
+    .timeline-line { flex:1; width:1px; background:var(--color-border); }
+    .timeline-stage { font-size:var(--text-base); font-weight:500; }
+    .timeline-desc { font-size:var(--text-sm); color:var(--color-text-muted); margin-top:2px; }
+    .timeline-status { font-size:var(--text-xs); font-family:var(--font-mono); margin-top:4px; }
+  </style>
+</head>
+<body>
+<div class="t2-shell">
+  <header class="t2-topbar">
+    <span class="t2-logo">T2T</span>
+    <span class="t2-tag">|</span>
+    <span class="t2-portal-badge">Admin Control Tower</span>
+    <div class="t2-topbar-search">
+      <input class="t2-search-input" type="text" placeholder="Search deals, documents, partners…"/>
+    </div>
+    <div class="t2-topbar-right">
+      <a href="notifications.html" class="t2-notif-btn">🔔<span class="t2-notif-badge">7</span></a>
+      <span class="t2-tag mono">James W.</span>
+      <div class="t2-avatar">JW</div>
+    </div>
+  </header>
+  <nav class="t2-nav">
+    <span class="t2-nav-label">Platform</span>
+    <a href="dashboard.html" class="t2-nav-item">⬛ Command Center</a>
+    <a href="pipeline.html" class="t2-nav-item active">◈ Pipeline <span class="t2-nav-count gold">2</span></a>
+    <span class="t2-nav-label">Operations</span>
+    <a href="blocker-board.html" class="t2-nav-item">⚑ Blocker Board <span class="t2-nav-count alert">5</span></a>
+    <a href="intake-queue.html" class="t2-nav-item">↓ Intake Queue <span class="t2-nav-count">1</span></a>
+    <a href="notifications.html" class="t2-nav-item">🔔 Inbox <span class="t2-nav-count alert">7</span></a>
+    <span class="t2-nav-label">Admin</span>
+    <a href="partner-management.html" class="t2-nav-item">◎ Partners</a>
+    <a href="workflow-builder.html" class="t2-nav-item">⚙ Workflows</a>
+    <a href="audit-log.html" class="t2-nav-item">≡ Audit Log</a>
+    <a href="settings.html" class="t2-nav-item">⚙ Settings</a>
+  </nav>
+
+  <!-- Deal shell: header + tabs + scrollable content -->
+  <div class="deal-shell">
+
+    <!-- Deal Header -->
+    <div class="deal-header-bar">
+      <!-- Hard stops banner -->
+      <div class="hard-stop-banner" style="margin-bottom:var(--space-4);">
+        <div class="hard-stop-banner-header">⛔ 3 Hard Stops — Deal cannot advance past Gate 2 until resolved</div>
+        <div class="hard-stop-item"><span class="hard-stop-icon">⛔</span><span><strong>Land title confirmation</strong> — fee simple vs. maritime concession · Owner: CR Legal Counsel</span></div>
+        <div class="hard-stop-item"><span class="hard-stop-icon">⛔</span><span><strong>2025 ADR decline</strong> — written explanation with booking data · Owner: Issuer / Asset Owner</span></div>
+        <div class="hard-stop-item"><span class="hard-stop-icon">⛔</span><span><strong>Investment thesis</strong> — blocked by unresolved ADR decline · Owner: Admin / T2T</span></div>
+      </div>
+
+      <div class="deal-header-top">
+        <div>
+          <div class="t2-breadcrumb" style="margin-bottom:var(--space-2);">
+            <a href="pipeline.html">Pipeline</a><span class="sep">›</span><span class="cur">T2T-001</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-3);">
+            <span class="deal-id">T2T-001</span>
+            <h1 style="font-size:var(--text-xl);font-weight:500;">Hotel Arco Iris</h1>
+            <span class="stage-pill readiness">Readiness Review</span>
+            <span class="risk-badge critical">HIGH RISK</span>
+          </div>
+          <div class="deal-meta-row">
+            <div class="deal-meta-item"><span class="deal-meta-label">Type</span><span class="deal-meta-val">Acquisition</span></div>
+            <div class="deal-meta-item"><span class="deal-meta-label">Location</span><span class="deal-meta-val">Tamarindo, CR</span></div>
+            <div class="deal-meta-item"><span class="deal-meta-label">Asset</span><span class="deal-meta-val">Boutique Hotel · 13 rooms + 5 bungalows</span></div>
+            <div class="deal-meta-item"><span class="deal-meta-label">Raise Target</span><span class="deal-meta-val gold">$2,320,500</span></div>
+            <div class="deal-meta-item"><span class="deal-meta-label">Cap Rate</span><span class="deal-meta-val">10.7%</span></div>
+            <div class="deal-meta-item"><span class="deal-meta-label">Hold Period</span><span class="deal-meta-val">5–7 years</span></div>
+            <div class="deal-meta-item"><span class="deal-meta-label">Readiness</span><span class="deal-meta-val" style="color:var(--color-alert);">0%</span></div>
+            <div class="deal-meta-item"><span class="deal-meta-label">Days in Stage</span><span class="deal-meta-val" style="color:var(--color-warn);">14d</span></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:var(--space-2);align-items:flex-end;flex-shrink:0;">
+          <div style="display:flex;gap:var(--space-2);">
+            <button class="pdf-btn" onclick="window.print()">⬇ Export PDF</button>
+            <button class="btn-ghost">Broadcast Message</button>
+            <button class="btn-primary">Advance Stage</button>
+          </div>
+          <!-- Gate progress -->
+          <div class="gate-bar-inline">
+            <div class="gate-step"><div class="gate-step-dot done">✓</div><span class="gate-step-label">G1 Intake</span></div>
+            <div class="gate-connector"></div>
+            <div class="gate-step"><div class="gate-step-dot active">2</div><span class="gate-step-label active">G2 Readiness</span></div>
+            <div class="gate-connector"></div>
+            <div class="gate-step"><div class="gate-step-dot blocked">⛔</div><span class="gate-step-label blocked">G3 Legal</span></div>
+            <div class="gate-connector"></div>
+            <div class="gate-step"><div class="gate-step-dot">4</div><span class="gate-step-label">G4 Commercial</span></div>
+            <div class="gate-connector"></div>
+            <div class="gate-step"><div class="gate-step-dot">5</div><span class="gate-step-label">G5 Technical</span></div>
+            <div class="gate-connector"></div>
+            <div class="gate-step"><div class="gate-step-dot">6</div><span class="gate-step-label">G6 Pre-Launch</span></div>
+            <div class="gate-connector"></div>
+            <div class="gate-step"><div class="gate-step-dot">7</div><span class="gate-step-label">G7 Active</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab bar -->
+    <div class="deal-tab-bar">
+      <div class="t2-tabs">
+        <div class="t2-tab active" onclick="switchTab('overview',this)">Overview</div>
+        <div class="t2-tab" onclick="switchTab('checklist',this)">Checklist <span class="t2-tab-count">0/42</span></div>
+        <div class="t2-tab" onclick="switchTab('documents',this)">Documents <span class="t2-tab-count">2/14</span></div>
+        <div class="t2-tab" onclick="switchTab('costs',this)">Costs</div>
+        <div class="t2-tab" onclick="switchTab('responsibility',this)">Responsibility</div>
+        <div class="t2-tab" onclick="switchTab('activity',this)">Activity</div>
+        <div class="t2-tab" onclick="switchTab('timeline',this)">Timeline</div>
+      </div>
+    </div>
+
+    <!-- Tab content -->
+    <div id="tab-overview" class="deal-content t2-tab-pane active">
+
+      <!-- Internal memo -->
+      <div class="internal-memo">
+        <div class="internal-memo-header">🔒 Internal Memo — Admin Only</div>
+        <div class="internal-memo-body">
+          Land title risk is the primary concern. CR counsel (V. Saborio) engaged but has not yet confirmed whether Arco Iris sits on fee simple or maritime zone concession. If concession, foreign equity structure becomes materially complex and may require restructuring. Do not engage investors or broker until title is confirmed. ADR decline also unresolved — operator has not responded to data request. Hold all commercial activity until both items are cleared. — JW, Apr 29
+        </div>
+      </div>
+
+      <div class="overview-grid">
+        <!-- Readiness by category -->
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Readiness by Category</span></div>
+          <div class="panel-body" style="display:flex;flex-direction:column;gap:var(--space-4);">
+            <div class="readiness-cat"><div style="display:flex;justify-content:space-between;"><span class="readiness-cat-label">Deal Profile</span><span style="font-size:var(--text-xs);font-family:var(--font-mono);color:var(--color-alert);">0%</span></div><div class="readiness-cat-bar"><div class="readiness-cat-fill" style="width:0%;background:var(--color-alert);"></div></div></div>
+            <div class="readiness-cat"><div style="display:flex;justify-content:space-between;"><span class="readiness-cat-label">Legal / Entity</span><span style="font-size:var(--text-xs);font-family:var(--font-mono);color:var(--color-alert);">0%</span></div><div class="readiness-cat-bar"><div class="readiness-cat-fill" style="width:0%;background:var(--color-alert);"></div></div></div>
+            <div class="readiness-cat"><div style="display:flex;justify-content:space-between;"><span class="readiness-cat-label">Local Jurisdiction</span><span style="font-size:var(--text-xs);font-family:var(--font-mono);color:var(--color-alert);">0%</span></div><div class="readiness-cat-bar"><div class="readiness-cat-fill" style="width:0%;background:var(--color-alert);"></div></div></div>
+            <div class="readiness-cat"><div style="display:flex;justify-content:space-between;"><span class="readiness-cat-label">Compliance</span><span style="font-size:var(--text-xs);font-family:var(--font-mono);color:var(--color-alert);">0%</span></div><div class="readiness-cat-bar"><div class="readiness-cat-fill" style="width:0%;background:var(--color-alert);"></div></div></div>
+            <div class="readiness-cat"><div style="display:flex;justify-content:space-between;"><span class="readiness-cat-label">Asset / Property</span><span style="font-size:var(--text-xs);font-family:var(--font-mono);color:var(--color-alert);">0%</span></div><div class="readiness-cat-bar"><div class="readiness-cat-fill" style="width:0%;background:var(--color-alert);"></div></div></div>
+            <div class="readiness-cat"><div style="display:flex;justify-content:space-between;"><span class="readiness-cat-label">Financial / Valuation</span><span style="font-size:var(--text-xs);font-family:var(--font-mono);color:var(--color-alert);">0%</span></div><div class="readiness-cat-bar"><div class="readiness-cat-fill" style="width:0%;background:var(--color-alert);"></div></div></div>
+            <div class="readiness-cat"><div style="display:flex;justify-content:space-between;"><span class="readiness-cat-label">Commercial / Offering</span><span style="font-size:var(--text-xs);font-family:var(--font-mono);color:var(--color-alert);">0%</span></div><div class="readiness-cat-bar"><div class="readiness-cat-fill" style="width:0%;background:var(--color-alert);"></div></div></div>
+            <div class="readiness-cat"><div style="display:flex;justify-content:space-between;"><span class="readiness-cat-label">Technical / Tokenization</span><span style="font-size:var(--text-xs);font-family:var(--font-mono);color:var(--color-alert);">0%</span></div><div class="readiness-cat-bar"><div class="readiness-cat-fill" style="width:0%;background:var(--color-alert);"></div></div></div>
+            <div class="readiness-cat"><div style="display:flex;justify-content:space-between;"><span class="readiness-cat-label">Vendors / Partners</span><span style="font-size:var(--text-xs);font-family:var(--font-mono);color:var(--color-alert);">0%</span></div><div class="readiness-cat-bar"><div class="readiness-cat-fill" style="width:0%;background:var(--color-alert);"></div></div></div>
+            <div class="readiness-cat"><div style="display:flex;justify-content:space-between;"><span class="readiness-cat-label">Post-Launch</span><span style="font-size:var(--text-xs);font-family:var(--font-mono);color:var(--color-text-faint);">—</span></div><div class="readiness-cat-bar"><div class="readiness-cat-fill" style="width:0%;background:var(--color-border);"></div></div></div>
+          </div>
+        </div>
+
+        <!-- Risk Assessment -->
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Risk Assessment</span></div>
+          <div class="panel-body">
+            <div class="risk-grid">
+              <div class="risk-row-item"><span class="risk-cat-label">Legal / Entity</span><span class="risk-badge critical">Critical</span></div>
+              <div class="risk-row-item"><span class="risk-cat-label">Jurisdictional</span><span class="risk-badge critical">Critical</span></div>
+              <div class="risk-row-item"><span class="risk-cat-label">Financial</span><span class="risk-badge high">High</span></div>
+              <div class="risk-row-item"><span class="risk-cat-label">Asset / Property</span><span class="risk-badge high">High</span></div>
+              <div class="risk-row-item"><span class="risk-cat-label">Compliance</span><span class="risk-badge medium">Medium</span></div>
+              <div class="risk-row-item"><span class="risk-cat-label">Technical</span><span class="risk-badge medium">Medium</span></div>
+              <div class="risk-row-item"><span class="risk-cat-label">Commercial</span><span class="risk-badge high">High</span></div>
+              <div class="risk-row-item"><span class="risk-cat-label">Operational</span><span class="risk-badge medium">Medium</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Next Action + Capital Structure -->
+        <div style="display:flex;flex-direction:column;gap:var(--space-4);">
+          <div class="panel">
+            <div class="panel-header"><span class="panel-title">Next Action</span></div>
+            <div class="panel-body">
+              <div style="font-size:var(--text-base);font-weight:500;margin-bottom:var(--space-2);">Resolve land title hard stop</div>
+              <div style="font-size:var(--text-sm);color:var(--color-text-muted);margin-bottom:var(--space-3);">CR Legal Counsel must confirm whether property is fee simple or maritime zone concession. No capital can be raised until this is resolved.</div>
+              <div style="display:flex;gap:var(--space-2);">
+                <span class="t2-tag mono">Owner: CR Legal Counsel</span>
+              </div>
+              <div style="margin-top:var(--space-3);padding-top:var(--space-3);border-top:1px solid var(--color-border);">
+                <div style="font-size:var(--text-xs);color:var(--color-text-faint);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:var(--space-2);">Also blocked</div>
+                <div style="font-size:var(--text-sm);color:var(--color-text-muted);">ADR decline explanation · Issuer / Asset Owner</div>
+              </div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-header"><span class="panel-title">Capital Structure</span></div>
+            <div class="panel-body" style="display:flex;flex-direction:column;gap:var(--space-2);">
+              <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Acquisition</span><span class="mono">$2,100,000</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">CapEx Reserve</span><span class="mono">$84,000</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Operating Reserve</span><span class="mono">$63,000</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Legal &amp; Structuring</span><span class="mono">$42,000</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Closing Costs</span><span class="mono">$31,500</span></div>
+              <div class="t2-divider"></div>
+              <div style="display:flex;justify-content:space-between;font-size:var(--text-base);font-weight:500;"><span>Total Raise</span><span class="gold mono">$2,320,500</span></div>
+              <div style="font-size:var(--text-xs);color:var(--color-text-faint);margin-top:var(--space-1);">All-equity SPV · 15–25 accredited investors · $75K–$150K/position</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHECKLIST TAB -->
+    <div id="tab-checklist" class="deal-content t2-tab-pane">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div class="filter-bar">
+          <select class="t2-select" style="width:150px;"><option>All categories</option></select>
+          <select class="t2-select" style="width:130px;"><option>All statuses</option></select>
+          <select class="t2-select" style="width:120px;"><option>All gates</option></select>
+        </div>
+        <span class="t2-tag mono">0 of 42 items complete</span>
+      </div>
+
+      <div class="panel">
+        <!-- Legal / Entity -->
+        <div class="checklist-category">
+          <div class="cat-header"><span class="cat-name">Legal / Entity</span><span class="risk-badge critical">Critical</span><span class="cat-progress">0 / 8</span></div>
+          <div class="cl-item"><div class="check-box stop">⛔</div><div><div class="cl-label blocked">Land title — fee simple vs. maritime concession</div><div style="font-size:var(--text-xs);color:var(--color-alert);">HARD STOP · Gate 2 blocked</div></div><span class="cl-owner">CR Legal Counsel</span><span class="cl-due overdue">Overdue</span><span class="risk-badge critical">critical</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Lien / debt / mortgage search</div><span class="cl-owner">CR Legal Counsel</span><span class="cl-due">May 14</span><span class="risk-badge high">high</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">SPV formation — entity type and jurisdiction</div><span class="cl-owner">U.S. Securities Counsel</span><span class="cl-due">May 3</span><span class="risk-badge high">high</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Operating agreement drafted</div><span class="cl-owner">U.S. Securities Counsel</span><span class="cl-due">TBD</span><span class="risk-badge high">high</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Investor rights framework</div><span class="cl-owner">U.S. Securities Counsel</span><span class="cl-due">TBD</span><span class="risk-badge high">high</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Subscription agreement finalized</div><span class="cl-owner">U.S. Securities Counsel</span><span class="cl-due">TBD</span><span class="risk-badge high">high</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">506(c) exemption filing</div><span class="cl-owner">U.S. Securities Counsel</span><span class="cl-due">TBD</span><span class="risk-badge high">high</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Costa Rica legal opinion from local counsel</div><span class="cl-owner">CR Legal Counsel</span><span class="cl-due">May 14</span><span class="risk-badge high">high</span></div>
+        </div>
+        <!-- Local Jurisdiction -->
+        <div class="checklist-category">
+          <div class="cat-header"><span class="cat-name">Local Jurisdiction / Costa Rica</span><span class="risk-badge critical">Critical</span><span class="cat-progress">0 / 5</span></div>
+          <div class="cl-item"><div class="check-box stop">⛔</div><div><div class="cl-label blocked">Maritime zone / concession vs. fee simple determination</div><div style="font-size:var(--text-xs);color:var(--color-alert);">HARD STOP · Same as land title</div></div><span class="cl-owner">CR Legal Counsel</span><span class="cl-due overdue">Overdue</span><span class="risk-badge critical">critical</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Municipal permits and zoning status</div><span class="cl-owner">CR Legal Counsel</span><span class="cl-due">May 21</span><span class="risk-badge high">high</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">RTBF registration requirements</div><span class="cl-owner">CR Legal Counsel</span><span class="cl-due">May 21</span><span class="risk-badge medium">medium</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">CR tax / withholding requirements for foreign investors</div><span class="cl-owner">Tax / Accounting Partner</span><span class="cl-due">TBD</span><span class="risk-badge medium">medium</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Foreign investment restrictions confirmed</div><span class="cl-owner">CR Legal Counsel</span><span class="cl-due">May 14</span><span class="risk-badge high">high</span></div>
+        </div>
+        <!-- Asset / Property Diligence -->
+        <div class="checklist-category">
+          <div class="cat-header"><span class="cat-name">Asset / Property Diligence</span><span class="risk-badge high">High</span><span class="cat-progress">0 / 8</span></div>
+          <div class="cl-item"><div class="check-box stop">⛔</div><div><div class="cl-label blocked">2025 ADR decline — written explanation with booking data</div><div style="font-size:var(--text-xs);color:var(--color-alert);">HARD STOP · Blocks investment thesis</div></div><span class="cl-owner">Issuer / Asset Owner</span><span class="cl-due overdue">Overdue</span><span class="risk-badge critical">critical</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">3 years tax filings + bank statements from operator</div><span class="cl-owner">Issuer / Asset Owner</span><span class="cl-due">May 10</span><span class="risk-badge high">high</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Independent appraisal / valuation</div><span class="cl-owner">Appraiser</span><span class="cl-due">May 21</span><span class="risk-badge high">high</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Property condition assessment (PCA)</div><span class="cl-owner">Backend Partner</span><span class="cl-due">May 21</span><span class="risk-badge high">high</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Environmental report</div><span class="cl-owner">Backend Partner</span><span class="cl-due">May 28</span><span class="risk-badge medium">medium</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Sponsor / operator profile and track record</div><span class="cl-owner">Issuer / Asset Owner</span><span class="cl-due overdue">Apr 27 — overdue</span><span class="risk-badge high">high</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Occupancy data verification 2022–2025</div><span class="cl-owner">Issuer / Asset Owner</span><span class="cl-due">May 10</span><span class="risk-badge high">high</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Insurance coverage confirmed</div><span class="cl-owner">Backend Partner</span><span class="cl-due">May 28</span><span class="risk-badge medium">medium</span></div>
+        </div>
+        <!-- Financial / Valuation -->
+        <div class="checklist-category">
+          <div class="cat-header"><span class="cat-name">Financial / Valuation</span><span class="risk-badge high">High</span><span class="cat-progress">0 / 9</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Financial model verified and signed off</div><span class="cl-owner">Auditor</span><span class="cl-due">TBD</span><span class="risk-badge high">high</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">ADR by month 2022–2025</div><span class="cl-owner">Issuer / Asset Owner</span><span class="cl-due">May 7</span><span class="risk-badge high">high</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Occupancy by month 2022–2025</div><span class="cl-owner">Issuer / Asset Owner</span><span class="cl-due">May 7</span><span class="risk-badge high">high</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">RevPAR by month 2022–2025</div><span class="cl-owner">Issuer / Asset Owner</span><span class="cl-due">May 7</span><span class="risk-badge medium">medium</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Booking channel breakdown</div><span class="cl-owner">Issuer / Asset Owner</span><span class="cl-due">May 7</span><span class="risk-badge medium">medium</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Market comp comparison</div><span class="cl-owner">Auditor</span><span class="cl-due">TBD</span><span class="risk-badge medium">medium</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Normalized EBITDA</div><span class="cl-owner">Auditor</span><span class="cl-due">TBD</span><span class="risk-badge high">high</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">CapEx history and deferred maintenance schedule</div><span class="cl-owner">Issuer / Asset Owner</span><span class="cl-due">May 14</span><span class="risk-badge medium">medium</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">U.S. tax implications reviewed for investors</div><span class="cl-owner">Tax / Accounting Partner</span><span class="cl-due">TBD</span><span class="risk-badge medium">medium</span></div>
+        </div>
+        <!-- Commercial / Offering -->
+        <div class="checklist-category">
+          <div class="cat-header"><span class="cat-name">Commercial / Offering</span><span class="risk-badge high">High</span><span class="cat-progress">0 / 6</span></div>
+          <div class="cl-item"><div class="check-box stop">⛔</div><div><div class="cl-label blocked">Investment thesis finalized</div><div style="font-size:var(--text-xs);color:var(--color-alert);">Blocked by ADR hard stop</div></div><span class="cl-owner">Admin / T2T</span><span class="cl-due overdue">Blocked</span><span class="risk-badge critical">critical</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Offering memorandum prepared</div><span class="cl-owner">U.S. Securities Counsel</span><span class="cl-due">TBD</span><span class="risk-badge high">high</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Investor package approved for distribution</div><span class="cl-owner">Admin / T2T</span><span class="cl-due">TBD</span><span class="risk-badge high">high</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Target investor list defined (15–25 accredited)</div><span class="cl-owner">Broker / Originator</span><span class="cl-due">TBD</span><span class="risk-badge medium">medium</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Broker / distribution channel confirmed</div><span class="cl-owner">Admin / T2T</span><span class="cl-due">May 10</span><span class="risk-badge medium">medium</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Platform fee agreement signed</div><span class="cl-owner">Admin / T2T</span><span class="cl-due">May 10</span><span class="risk-badge high">high</span></div>
+        </div>
+        <!-- Technical / Tokenization -->
+        <div class="checklist-category">
+          <div class="cat-header"><span class="cat-name">Technical / Tokenization</span><span class="risk-badge medium">Medium</span><span class="cat-progress">0 / 7</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Token standard selected — ERC-3643 on Base</div><span class="cl-owner">Backend Partner</span><span class="cl-due">May 14</span><span class="risk-badge medium">medium</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Smart contract architecture defined</div><span class="cl-owner">Backend Partner</span><span class="cl-due">May 21</span><span class="risk-badge medium">medium</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Transfer agent integration confirmed (Securitize)</div><span class="cl-owner">Backend Partner</span><span class="cl-due">TBD</span><span class="risk-badge medium">medium</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Custody solution confirmed</div><span class="cl-owner">Backend Partner</span><span class="cl-due">TBD</span><span class="risk-badge medium">medium</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Token deployment — testnet</div><span class="cl-owner">Backend Partner</span><span class="cl-due">TBD</span><span class="risk-badge low">low</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Token deployment — mainnet</div><span class="cl-owner">Backend Partner</span><span class="cl-due">TBD</span><span class="risk-badge low">low</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Smart contract security audit</div><span class="cl-owner">Security Auditor</span><span class="cl-due">TBD</span><span class="risk-badge medium">medium</span></div>
+        </div>
+        <!-- Vendors / Partner Activation -->
+        <div class="checklist-category">
+          <div class="cat-header"><span class="cat-name">Vendors / Partner Activation</span><span class="risk-badge medium">Medium</span><span class="cat-progress">0 / 7</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">SPV bank account opened</div><span class="cl-owner">Backend Partner</span><span class="cl-due">TBD</span><span class="risk-badge medium">medium</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Custody provider onboarded</div><span class="cl-owner">Backend Partner</span><span class="cl-due">TBD</span><span class="risk-badge medium">medium</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">KYC / AML provider integrated</div><span class="cl-owner">Backend Partner</span><span class="cl-due">TBD</span><span class="risk-badge medium">medium</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Accreditation provider integrated</div><span class="cl-owner">Backend Partner</span><span class="cl-due">TBD</span><span class="risk-badge medium">medium</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Cap table / registry system configured</div><span class="cl-owner">Backend Partner</span><span class="cl-due">TBD</span><span class="risk-badge medium">medium</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">Escrow / funds flow structure confirmed</div><span class="cl-owner">Backend Partner</span><span class="cl-due">TBD</span><span class="risk-badge high">high</span></div>
+          <div class="cl-item"><div class="check-box"></div><div class="cl-label">DocConnect integration tested</div><span class="cl-owner">Backend Partner</span><span class="cl-due">TBD</span><span class="risk-badge low">low</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOCUMENTS TAB -->
+    <div id="tab-documents" class="deal-content t2-tab-pane">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div class="filter-bar">
+          <select class="t2-select" style="width:160px;"><option>All categories</option></select>
+          <select class="t2-select" style="width:130px;"><option>All statuses</option></select>
+          <select class="t2-select" style="width:130px;"><option>Inbound + Outbound</option></select>
+        </div>
+        <button class="btn-primary">+ Upload Document</button>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Document Vault — T2T-001</span>
+          <span class="t2-tag mono">2 uploaded · 12 missing</span>
+        </div>
+        <table>
+          <thead><tr><th>Document</th><th>Category</th><th>Direction</th><th>Status</th><th>Uploaded By</th><th>Date</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><div class="doc-name">Hotel_Arco_Iris_Investor_Package.pdf</div></td><td><span style="font-size:var(--text-xs);color:var(--color-text-muted);">Offering Docs</span></td><td><span class="doc-direction">inbound</span></td><td><span class="doc-status approved">Approved</span></td><td class="muted">Issuer</td><td class="ts">Apr 28</td><td><button class="btn-ghost btn-sm">View</button></td></tr>
+            <tr><td><div class="doc-name">2022 P&amp;L Financials.pdf</div></td><td><span style="font-size:var(--text-xs);color:var(--color-text-muted);">Financial Docs</span></td><td><span class="doc-direction">inbound</span></td><td><span class="doc-status uploaded">Under Review</span></td><td class="muted">Issuer</td><td class="ts">Apr 29</td><td><button class="btn-ghost btn-sm">Review</button></td></tr>
+            <tr style="opacity:0.6;"><td><div class="doc-name">Land Title Confirmation</div></td><td><span style="font-size:var(--text-xs);color:var(--color-text-muted);">Legal Opinions</span></td><td><span class="doc-direction">inbound</span></td><td><span class="doc-status missing">Missing ⛔</span></td><td class="muted">—</td><td class="ts">—</td><td><button class="btn-ghost btn-sm">Request</button></td></tr>
+            <tr style="opacity:0.6;"><td><div class="doc-name">Lien / Debt Search Report</div></td><td><span style="font-size:var(--text-xs);color:var(--color-text-muted);">Legal Opinions</span></td><td><span class="doc-direction">inbound</span></td><td><span class="doc-status missing">Missing</span></td><td class="muted">—</td><td class="ts">—</td><td><button class="btn-ghost btn-sm">Request</button></td></tr>
+            <tr style="opacity:0.6;"><td><div class="doc-name">3 Years Tax Filings (2022–2024)</div></td><td><span style="font-size:var(--text-xs);color:var(--color-text-muted);">Financial Docs</span></td><td><span class="doc-direction">inbound</span></td><td><span class="doc-status missing">Missing</span></td><td class="muted">—</td><td class="ts">—</td><td><button class="btn-ghost btn-sm">Request</button></td></tr>
+            <tr style="opacity:0.6;"><td><div class="doc-name">ADR Decline Explanation Letter</div></td><td><span style="font-size:var(--text-xs);color:var(--color-text-muted);">Financial Docs</span></td><td><span class="doc-direction">inbound</span></td><td><span class="doc-status missing">Missing ⛔</span></td><td class="muted">—</td><td class="ts">—</td><td><button class="btn-ghost btn-sm">Request</button></td></tr>
+            <tr style="opacity:0.6;"><td><div class="doc-name">Property Condition Assessment</div></td><td><span style="font-size:var(--text-xs);color:var(--color-text-muted);">Property Docs</span></td><td><span class="doc-direction">inbound</span></td><td><span class="doc-status missing">Missing</span></td><td class="muted">—</td><td class="ts">—</td><td><button class="btn-ghost btn-sm">Request</button></td></tr>
+            <tr style="opacity:0.6;"><td><div class="doc-name">Operator / Sponsor Profile</div></td><td><span style="font-size:var(--text-xs);color:var(--color-text-muted);">Deal Profile</span></td><td><span class="doc-direction">inbound</span></td><td><span class="doc-status missing">Missing</span></td><td class="muted">—</td><td class="ts">—</td><td><button class="btn-ghost btn-sm">Request</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- COSTS TAB -->
+    <div id="tab-costs" class="deal-content t2-tab-pane">
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Cost Tracker — T2T-001</span>
+          <div style="display:flex;gap:var(--space-2);">
+            <span class="t2-tag mono">Est. total: $230,500</span>
+            <button class="btn-ghost btn-sm">+ Add Cost</button>
+          </div>
+        </div>
+        <table>
+          <thead><tr><th>Description</th><th>Type</th><th>Estimated</th><th>Who Pays</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><div class="cell-name">Property Acquisition</div></td><td><span class="cost-type">acquisition</span></td><td class="mono">$2,100,000</td><td class="muted">SPV / Investors</td><td><span class="cost-status pending">Pending close</span></td></tr>
+            <tr><td><div class="cell-name">T2T Structuring Fee</div></td><td><span class="cost-type">platform fee</span></td><td class="mono">$15,000</td><td class="muted">Issuer</td><td><span class="cost-status pending">Pending</span></td></tr>
+            <tr><td><div class="cell-name">T2T Platform Fee (2%)</div></td><td><span class="cost-type">platform fee</span></td><td class="mono">$46,400</td><td class="muted">SPV / Investors</td><td><span class="cost-status pending">At close</span></td></tr>
+            <tr><td><div class="cell-name">U.S. Securities Counsel</div></td><td><span class="cost-type">legal</span></td><td class="mono">$25,000</td><td class="muted">Issuer</td><td><span class="cost-status pending">Pending</span></td></tr>
+            <tr><td><div class="cell-name">CR Local Counsel (V. Saborio)</div></td><td><span class="cost-type">local counsel</span></td><td class="mono">$12,000</td><td class="muted">Issuer</td><td><span class="cost-status pending">Pending</span></td></tr>
+            <tr><td><div class="cell-name">Independent Appraisal</div></td><td><span class="cost-type">pass-through</span></td><td class="mono">$5,000</td><td class="muted">Issuer</td><td><span class="cost-status pending">Pending</span></td></tr>
+            <tr><td><div class="cell-name">KYC / AML Provider</div></td><td><span class="cost-type">kyc</span></td><td class="mono">$3,500</td><td class="muted">SPV</td><td><span class="cost-status pending">Pending</span></td></tr>
+            <tr><td><div class="cell-name">Custody / Wallet Setup</div></td><td><span class="cost-type">custody</span></td><td class="mono">$5,000</td><td class="muted">SPV</td><td><span class="cost-status pending">Pending</span></td></tr>
+            <tr><td><div class="cell-name">Transfer Agent (Securitize)</div></td><td><span class="cost-type">transfer agent</span></td><td class="mono">$8,000</td><td class="muted">SPV</td><td><span class="cost-status pending">Pending</span></td></tr>
+            <tr><td><div class="cell-name">Smart Contract Audit</div></td><td><span class="cost-type">audit</span></td><td class="mono">$12,000</td><td class="muted">SPV</td><td><span class="cost-status pending">Pending</span></td></tr>
+            <tr><td><div class="cell-name">Escrow / Closing Costs</div></td><td><span class="cost-type">pass-through</span></td><td class="mono">$31,500</td><td class="muted">SPV</td><td><span class="cost-status pending">Pending</span></td></tr>
+            <tr><td><div class="cell-name">CapEx Reserve</div></td><td><span class="cost-type">reserve</span></td><td class="mono">$84,000</td><td class="muted">SPV</td><td><span class="cost-status pending">Reserved</span></td></tr>
+            <tr><td><div class="cell-name">Operating Reserve</div></td><td><span class="cost-type">reserve</span></td><td class="mono">$63,000</td><td class="muted">SPV</td><td><span class="cost-status pending">Reserved</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- RESPONSIBILITY TAB -->
+    <div id="tab-responsibility" class="deal-content t2-tab-pane">
+      <div class="panel">
+        <div class="panel-header"><span class="panel-title">Responsibility Matrix — T2T-001</span><span class="t2-tag mono">O=Owns · S=Supports · ✓=Signs Off</span></div>
+        <div style="overflow-x:auto;">
+          <table class="matrix-table">
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>T2T Admin</th>
+                <th>Issuer</th>
+                <th>Broker</th>
+                <th>US Counsel</th>
+                <th>CR Counsel</th>
+                <th>KYC/AML</th>
+                <th>Backend</th>
+                <th>Auditor</th>
+                <th>Transfer Agent</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Deal Profile</td><td><span class="matrix-cell owns">O</span></td><td><span class="matrix-cell supports">S</span></td><td><span class="matrix-cell supports">S</span></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr><td>Legal / Entity</td><td><span class="matrix-cell signs">✓</span></td><td><span class="matrix-cell supports">S</span></td><td></td><td><span class="matrix-cell owns">O</span></td><td><span class="matrix-cell supports">S</span></td><td></td><td></td><td></td><td></td></tr>
+              <tr><td>Local Jurisdiction</td><td><span class="matrix-cell signs">✓</span></td><td><span class="matrix-cell supports">S</span></td><td></td><td><span class="matrix-cell supports">S</span></td><td><span class="matrix-cell owns">O</span></td><td></td><td></td><td></td><td></td></tr>
+              <tr><td>Compliance</td><td><span class="matrix-cell signs">✓</span></td><td><span class="matrix-cell supports">S</span></td><td></td><td><span class="matrix-cell owns">O</span></td><td></td><td><span class="matrix-cell supports">S</span></td><td></td><td></td><td></td></tr>
+              <tr><td>Asset / Property</td><td><span class="matrix-cell signs">✓</span></td><td><span class="matrix-cell owns">O</span></td><td></td><td></td><td><span class="matrix-cell supports">S</span></td><td></td><td><span class="matrix-cell supports">S</span></td><td></td><td></td></tr>
+              <tr><td>Financial / Valuation</td><td><span class="matrix-cell signs">✓</span></td><td><span class="matrix-cell supports">S</span></td><td></td><td></td><td></td><td></td><td></td><td><span class="matrix-cell owns">O</span></td><td></td></tr>
+              <tr><td>Commercial / Offering</td><td><span class="matrix-cell owns">O</span></td><td><span class="matrix-cell supports">S</span></td><td><span class="matrix-cell supports">S</span></td><td><span class="matrix-cell signs">✓</span></td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr><td>Technical / Tokenization</td><td><span class="matrix-cell signs">✓</span></td><td></td><td></td><td></td><td></td><td></td><td><span class="matrix-cell owns">O</span></td><td></td><td><span class="matrix-cell supports">S</span></td></tr>
+              <tr><td>Vendors / Partners</td><td><span class="matrix-cell owns">O</span></td><td></td><td></td><td></td><td></td><td><span class="matrix-cell supports">S</span></td><td><span class="matrix-cell supports">S</span></td><td></td><td><span class="matrix-cell supports">S</span></td></tr>
+              <tr><td>Post-Launch</td><td><span class="matrix-cell owns">O</span></td><td><span class="matrix-cell supports">S</span></td><td></td><td><span class="matrix-cell supports">S</span></td><td></td><td></td><td><span class="matrix-cell supports">S</span></td><td><span class="matrix-cell supports">S</span></td><td><span class="matrix-cell owns">O</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIVITY TAB -->
+    <div id="tab-activity" class="deal-content t2-tab-pane">
+      <div class="two-col">
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Deal Activity</span></div>
+          <div class="activity-list">
+            <div class="activity-item"><div class="activity-dot alert"></div><div><div class="activity-text"><strong>Hard stop flagged:</strong> Land title confirmation — CR counsel engaged but determination pending</div><div class="activity-time">Apr 30 · 9:02am · Admin</div></div></div>
+            <div class="activity-item"><div class="activity-dot warn"></div><div><div class="activity-text"><strong>Document requested:</strong> ADR decline explanation letter sent to Rafael Torres (Issuer)</div><div class="activity-time">Apr 29 · 4:15pm · Admin</div></div></div>
+            <div class="activity-item"><div class="activity-dot gold"></div><div><div class="activity-text"><strong>Document uploaded:</strong> 2022 P&amp;L Financials.pdf — under review</div><div class="activity-time">Apr 29 · 2:30pm · Issuer</div></div></div>
+            <div class="activity-item"><div class="activity-dot gold"></div><div><div class="activity-text"><strong>Document uploaded:</strong> Hotel_Arco_Iris_Investor_Package.pdf — approved</div><div class="activity-time">Apr 28 · 11:00am · Issuer</div></div></div>
+            <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">CR Legal Counsel (V. Saborio) assigned to Legal / Entity and Local Jurisdiction categories</div><div class="activity-time">Apr 27 · 3:00pm · Admin</div></div></div>
+            <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">Deal T2T-001 created · Intake stage → Readiness Review</div><div class="activity-time">Apr 24 · 10:00am · Admin</div></div></div>
+          </div>
+          <div class="comment-box">
+            <div style="font-size:var(--text-xs);color:var(--color-text-faint);margin-bottom:var(--space-2);">Add comment — visible to all assigned partners</div>
+            <div class="comment-input-row">
+              <textarea class="t2-textarea" placeholder="Comment or @mention a partner…" style="min-height:60px;"></textarea>
+              <button class="btn-primary">Post</button>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:var(--space-4);">
+          <div class="panel">
+            <div class="panel-header"><span class="panel-title">Partner Activity</span></div>
+            <div class="activity-list">
+              <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text"><strong>V. Saborio</strong> · CR Legal Counsel</div><div class="activity-time">Last active: Apr 30 · 8:45am</div></div><span class="status-dot active"></span></div>
+              <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text"><strong>Rafael Torres</strong> · Issuer</div><div class="activity-time">Last active: Apr 29 · 2:30pm</div></div><span class="status-dot away"></span></div>
+              <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text"><strong>Backend Partner</strong> · Not yet assigned</div><div class="activity-time">—</div></div><span class="status-dot offline"></span></div>
+            </div>
+          </div>
+          <div class="internal-memo">
+            <div class="internal-memo-header">🔒 Internal Memo — Admin Only</div>
+            <div class="internal-memo-body">Land title risk is primary concern. V. Saborio engaged but no determination yet. Do not engage investors until title confirmed and ADR gap resolved. — JW, Apr 29</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIMELINE TAB -->
+    <div id="tab-timeline" class="deal-content t2-tab-pane">
+      <div class="panel">
+        <div class="panel-header"><span class="panel-title">Deal Timeline — T2T-001</span><span class="t2-tag mono">Target activation: Q3 2026</span></div>
+        <div>
+          <div class="timeline-item">
+            <div class="timeline-left"><div class="timeline-date">Apr 24</div><div class="timeline-dot done"></div><div class="timeline-line"></div></div>
+            <div><div class="timeline-stage">Deal Created · Intake</div><div class="timeline-desc">T2T-001 created. Issuer onboarded. Initial investor package received.</div><div class="timeline-status" style="color:var(--color-green);">✓ Complete</div></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-left"><div class="timeline-date">Apr 24–<br/>May 31</div><div class="timeline-dot active"></div><div class="timeline-line"></div></div>
+            <div><div class="timeline-stage">Readiness Review <span style="color:var(--color-warn);">(current)</span></div><div class="timeline-desc">Full diligence underway. 3 hard stops open. Land title and ADR decline must be resolved before advancing.</div><div class="timeline-status" style="color:var(--color-alert);">⛔ 3 Hard Stops Blocking</div></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-left"><div class="timeline-date">Jun 2026</div><div class="timeline-dot blocked"></div><div class="timeline-line"></div></div>
+            <div><div class="timeline-stage">Legal / Compliance</div><div class="timeline-desc">SPV formation, offering docs, SEC filing, KYC/AML, CR legal opinion.</div><div class="timeline-status" style="color:var(--color-alert);">Blocked — Gate 2 not cleared</div></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-left"><div class="timeline-date">Jun 2026</div><div class="timeline-dot future"></div><div class="timeline-line"></div></div>
+            <div><div class="timeline-stage">Structuring</div><div class="timeline-desc">Token structure, SPV finalization, investor rights, offering memo.</div><div class="timeline-status muted">Not started</div></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-left"><div class="timeline-date">Jul 2026</div><div class="timeline-dot future"></div><div class="timeline-line"></div></div>
+            <div><div class="timeline-stage">Implementation</div><div class="timeline-desc">Smart contracts, custody setup, KYC integration, transfer agent config.</div><div class="timeline-status muted">Not started</div></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-left"><div class="timeline-date">Aug 2026</div><div class="timeline-dot future"></div><div class="timeline-line"></div></div>
+            <div><div class="timeline-stage">Pre-Launch</div><div class="timeline-desc">Investor outreach, subscription period, final admin sign-off.</div><div class="timeline-status muted">Not started</div></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-left"><div class="timeline-date">Q3 2026</div><div class="timeline-dot future"></div></div>
+            <div><div class="timeline-stage">Active — Tokens Issued</div><div class="timeline-desc">Capital raised, tokens deployed on Base, investors onboarded, deal live.</div><div class="timeline-status" style="color:var(--color-gold);">Target: Q3 2026</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end deal-shell -->
+</div>
+
+<script>
+function switchTab(name, el) {
+  document.querySelectorAll('.t2-tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.t2-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>

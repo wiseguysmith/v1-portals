@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T2T Admin — Pipeline</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../public/design-tokens.css"/>
+  <link rel="stylesheet" href="../styles/admin.css"/>
+  <style>
+    .stage-summary { display:flex; gap:0; background:#fff; border:1px solid var(--color-border); border-radius:var(--radius-md); overflow:hidden; }
+    .stage-col { flex:1; padding:var(--space-4) var(--space-4); border-right:1px solid var(--color-border); text-align:center; }
+    .stage-col:last-child { border-right:none; }
+    .stage-col-num { font-size:var(--text-xl); font-family:var(--font-mono); font-weight:500; }
+    .stage-col-label { font-size:var(--text-xs); color:var(--color-text-muted); margin-top:2px; }
+    .readiness-cell { display:flex; flex-direction:column; gap:4px; }
+    .readiness-mini-bar { height:3px; border-radius:2px; background:var(--color-border); overflow:hidden; width:60px; }
+    .readiness-mini-fill { height:100%; border-radius:2px; }
+    .risk-cell { display:flex; flex-direction:column; gap:3px; }
+    .risk-row { display:flex; align-items:center; gap:var(--space-1); font-size:var(--text-xs); }
+    .risk-dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+    .blocker-count { display:inline-flex; align-items:center; justify-content:center; min-width:18px; height:18px; border-radius:9px; font-size:var(--text-xs); font-family:var(--font-mono); }
+    .blocker-count.red { background:var(--color-alert-bg); color:var(--color-alert); }
+    .blocker-count.none { background:var(--color-green-bg); color:var(--color-green); }
+    .days-in-stage { font-family:var(--font-mono); font-size:var(--text-sm); }
+  </style>
+</head>
+<body>
+<div class="t2-shell">
+  <header class="t2-topbar">
+    <span class="t2-logo">T2T</span>
+    <span class="t2-tag">|</span>
+    <span class="t2-portal-badge">Admin Control Tower</span>
+    <div class="t2-topbar-search">
+      <input class="t2-search-input" type="text" placeholder="Search deals, documents, partners…"/>
+    </div>
+    <div class="t2-topbar-right">
+      <a href="notifications.html" class="t2-notif-btn">🔔<span class="t2-notif-badge">7</span></a>
+      <span class="t2-tag mono">James W.</span>
+      <div class="t2-avatar">JW</div>
+    </div>
+  </header>
+  <nav class="t2-nav">
+    <span class="t2-nav-label">Platform</span>
+    <a href="dashboard.html" class="t2-nav-item">⬛ Command Center</a>
+    <a href="pipeline.html" class="t2-nav-item active">◈ Pipeline <span class="t2-nav-count gold">2</span></a>
+    <span class="t2-nav-label">Operations</span>
+    <a href="blocker-board.html" class="t2-nav-item">⚑ Blocker Board <span class="t2-nav-count alert">5</span></a>
+    <a href="intake-queue.html" class="t2-nav-item">↓ Intake Queue <span class="t2-nav-count">1</span></a>
+    <a href="notifications.html" class="t2-nav-item">🔔 Inbox <span class="t2-nav-count alert">7</span></a>
+    <span class="t2-nav-label">Admin</span>
+    <a href="partner-management.html" class="t2-nav-item">◎ Partners</a>
+    <a href="workflow-builder.html" class="t2-nav-item">⚙ Workflows</a>
+    <a href="audit-log.html" class="t2-nav-item">≡ Audit Log</a>
+    <a href="settings.html" class="t2-nav-item">⚙ Settings</a>
+  </nav>
+  <main class="t2-main">
+
+    <div class="page-header">
+      <div>
+        <div class="t2-section-label">Deals</div>
+        <div class="page-title">Deal Pipeline</div>
+      </div>
+      <div style="display:flex;gap:var(--space-2);">
+        <button class="btn-ghost">Export CSV</button>
+        <button class="btn-primary">+ New Deal</button>
+      </div>
+    </div>
+
+    <!-- Stage summary bar -->
+    <div class="stage-summary">
+      <div class="stage-col"><div class="stage-col-num muted">—</div><div class="stage-col-label">Sourced</div></div>
+      <div class="stage-col"><div class="stage-col-num muted">—</div><div class="stage-col-label">Qualified</div></div>
+      <div class="stage-col"><div class="stage-col-num gold">1</div><div class="stage-col-label">Intake</div></div>
+      <div class="stage-col"><div class="stage-col-num" style="color:var(--color-warn);">1</div><div class="stage-col-label">Readiness</div></div>
+      <div class="stage-col"><div class="stage-col-num muted">—</div><div class="stage-col-label">Legal/Comp</div></div>
+      <div class="stage-col"><div class="stage-col-num muted">—</div><div class="stage-col-label">Structuring</div></div>
+      <div class="stage-col"><div class="stage-col-num muted">—</div><div class="stage-col-label">Implement</div></div>
+      <div class="stage-col"><div class="stage-col-num muted">—</div><div class="stage-col-label">Pre-Launch</div></div>
+      <div class="stage-col"><div class="stage-col-num muted">—</div><div class="stage-col-label">Active</div></div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-bar">
+      <input class="t2-input" type="text" placeholder="Search deals…" style="width:200px;"/>
+      <select class="t2-select" style="width:150px;"><option>All stages</option><option>Intake</option><option>Readiness Review</option></select>
+      <select class="t2-select" style="width:130px;"><option>All types</option><option>Acquisition</option><option>Development</option></select>
+      <select class="t2-select" style="width:130px;"><option>All health</option><option>Red</option><option>Yellow</option><option>Green</option></select>
+      <select class="t2-select" style="width:130px;"><option>Sort: Updated</option><option>Sort: Readiness</option><option>Sort: Value ↓</option></select>
+    </div>
+
+    <!-- Pipeline table -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Active Deals</span>
+        <span class="t2-tag mono">2 deals · $37.3M+ pipeline value</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Deal</th>
+            <th>Stage</th>
+            <th>Health</th>
+            <th>Readiness</th>
+            <th>Risk</th>
+            <th>Blockers</th>
+            <th>Value</th>
+            <th>Days in Stage</th>
+            <th>Next Action Owner</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="clickable" onclick="window.location='deal-detail.html'">
+            <td>
+              <div style="display:flex;align-items:center;gap:var(--space-2);">
+                <span class="deal-id">T2T-001</span>
+              </div>
+              <div class="cell-name" style="margin-top:4px;">Hotel Arco Iris</div>
+              <div class="cell-sub">Acquisition · Tamarindo, CR</div>
+            </td>
+            <td><span class="stage-pill readiness">Readiness Review</span></td>
+            <td><div style="display:flex;align-items:center;gap:var(--space-2);"><span class="health-dot red"></span><span style="font-size:var(--text-sm);">Red</span></div></td>
+            <td>
+              <div class="readiness-cell">
+                <span style="font-family:var(--font-mono);font-size:var(--text-base);color:var(--color-alert);">0%</span>
+                <div class="readiness-mini-bar"><div class="readiness-mini-fill red" style="width:0%;background:var(--color-alert);"></div></div>
+              </div>
+            </td>
+            <td>
+              <div class="risk-cell">
+                <div class="risk-row"><div class="risk-dot" style="background:var(--color-alert);"></div><span style="color:var(--color-alert);">Legal: Critical</span></div>
+                <div class="risk-row"><div class="risk-dot" style="background:var(--color-alert);"></div><span style="color:var(--color-alert);">Jurisdict: Critical</span></div>
+                <div class="risk-row"><div class="risk-dot" style="background:var(--color-warn);"></div><span style="color:var(--color-warn);">Financial: High</span></div>
+              </div>
+            </td>
+            <td><span class="blocker-count red">3</span></td>
+            <td><span class="t2-tag mono" style="font-size:var(--text-sm);">$2.32M</span></td>
+            <td><span class="days-in-stage" style="color:var(--color-warn);">14d</span></td>
+            <td><span style="font-size:var(--text-sm);">CR Legal Counsel</span></td>
+            <td style="text-align:right;color:var(--color-text-faint);">›</td>
+          </tr>
+          <tr class="clickable" onclick="window.location='deal-detail.html'">
+            <td>
+              <div style="display:flex;align-items:center;gap:var(--space-2);">
+                <span class="deal-id">T2T-002</span>
+              </div>
+              <div class="cell-name" style="margin-top:4px;">Grande Beach Club &amp; Villas</div>
+              <div class="cell-sub">Development · Playa Grande, CR</div>
+            </td>
+            <td><span class="stage-pill intake">Intake</span></td>
+            <td><div style="display:flex;align-items:center;gap:var(--space-2);"><span class="health-dot yellow"></span><span style="font-size:var(--text-sm);">Yellow</span></div></td>
+            <td>
+              <div class="readiness-cell">
+                <span style="font-family:var(--font-mono);font-size:var(--text-base);color:var(--color-warn);">28%</span>
+                <div class="readiness-mini-bar"><div class="readiness-mini-fill" style="width:28%;background:var(--color-warn);"></div></div>
+              </div>
+            </td>
+            <td>
+              <div class="risk-cell">
+                <div class="risk-row"><div class="risk-dot" style="background:var(--color-warn);"></div><span style="color:var(--color-warn);">Technical: High</span></div>
+                <div class="risk-row"><div class="risk-dot" style="background:var(--color-gold);"></div><span style="color:var(--color-gold);">Commercial: Med</span></div>
+              </div>
+            </td>
+            <td><span class="blocker-count red">2</span></td>
+            <td><span class="t2-tag mono" style="font-size:var(--text-sm);">$35M–$70M+</span></td>
+            <td><span class="days-in-stage">7d</span></td>
+            <td><span style="font-size:var(--text-sm);">Admin / T2T</span></td>
+            <td style="text-align:right;color:var(--color-text-faint);">›</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="pagination">
+        <span class="t2-tag mono">2 of 2 deals</span>
+        <div style="display:flex;gap:var(--space-2);">
+          <button class="btn-ghost btn-sm" disabled style="opacity:0.4;">← Prev</button>
+          <button class="btn-ghost btn-sm" disabled style="opacity:0.4;">Next →</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

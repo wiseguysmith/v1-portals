@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T2T Admin — Command Center</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../public/design-tokens.css"/>
+  <link rel="stylesheet" href="../styles/admin.css"/>
+  <style>
+    .metrics-row { display: grid; grid-template-columns: repeat(4,1fr); gap: var(--space-4); }
+    .metric-card { background:#fff; border:1px solid var(--color-border); border-radius:var(--radius-md); padding:var(--space-4) var(--space-5); }
+    .metric-label { font-size:var(--text-xs); font-weight:500; color:var(--color-text-faint); text-transform:uppercase; letter-spacing:0.08em; }
+    .metric-value { font-size:var(--text-3xl); font-family:var(--font-mono); font-weight:500; margin:var(--space-2) 0 var(--space-1); }
+    .metric-sub { font-size:var(--text-sm); font-family:var(--font-mono); color:var(--color-text-muted); }
+    .today-actions { display:flex; flex-direction:column; }
+    .action-item { display:flex; align-items:flex-start; gap:var(--space-3); padding:10px var(--space-5); border-bottom:1px solid var(--color-border-faint); }
+    .action-item:last-child { border-bottom:none; }
+    .action-priority { width:5px; border-radius:2px; align-self:stretch; flex-shrink:0; }
+    .action-priority.critical { background:var(--color-alert); }
+    .action-priority.high { background:var(--color-warn); }
+    .action-priority.medium { background:var(--color-gold); }
+    .action-body { flex:1; }
+    .action-title { font-size:var(--text-base); font-weight:500; }
+    .action-meta { font-size:var(--text-sm); color:var(--color-text-muted); margin-top:2px; }
+    .action-due { font-size:var(--text-xs); font-family:var(--font-mono); }
+    .action-due.overdue { color:var(--color-alert); }
+    .action-due.today { color:var(--color-warn); }
+    .deal-cards-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:var(--space-4); }
+    .deal-card-inner { display:flex; flex-direction:column; gap:var(--space-3); }
+    .deal-card-row { display:flex; align-items:center; justify-content:space-between; }
+    .deal-card-value { font-family:var(--font-mono); font-size:var(--text-lg); font-weight:500; }
+    .deal-card-stops { font-size:var(--text-xs); color:var(--color-alert); font-family:var(--font-mono); }
+    .blocker-item { display:flex; align-items:flex-start; gap:var(--space-3); padding:10px var(--space-5); border-bottom:1px solid var(--color-border-faint); }
+    .blocker-item:last-child { border-bottom:none; }
+    .blocker-body { flex:1; }
+    .blocker-title { font-size:var(--text-base); font-weight:500; color:var(--color-alert); }
+    .blocker-deal { font-size:var(--text-sm); color:var(--color-text-muted); margin-top:2px; }
+    .blocker-owner { font-size:var(--text-xs); font-family:var(--font-mono); color:var(--color-text-faint); margin-top:2px; }
+    .deadline-item { display:flex; align-items:center; gap:var(--space-3); padding:9px var(--space-5); border-bottom:1px solid var(--color-border-faint); }
+    .deadline-item:last-child { border-bottom:none; }
+    .deadline-date { font-family:var(--font-mono); font-size:var(--text-xs); color:var(--color-text-muted); width:70px; flex-shrink:0; }
+    .deadline-title { font-size:var(--text-base); flex:1; }
+    .bottom-grid { display:grid; grid-template-columns:1fr 1fr; gap:var(--space-5); }
+    .revenue-row { display:flex; align-items:center; justify-content:space-between; padding:var(--space-3) var(--space-5); border-bottom:1px solid var(--color-border-faint); }
+    .revenue-row:last-child { border-bottom:none; }
+    .revenue-label { font-size:var(--text-sm); color:var(--color-text-muted); }
+    .revenue-val { font-family:var(--font-mono); font-size:var(--text-base); }
+  </style>
+</head>
+<body>
+<div class="t2-shell">
+
+  <!-- Topbar -->
+  <header class="t2-topbar">
+    <span class="t2-logo">T2T</span>
+    <span class="t2-tag">|</span>
+    <span class="t2-portal-badge">Admin Control Tower</span>
+    <div class="t2-topbar-search">
+      <input class="t2-search-input" type="text" placeholder="Search deals, documents, partners…"/>
+    </div>
+    <div class="t2-topbar-right">
+      <a href="notifications.html" class="t2-notif-btn">
+        🔔<span class="t2-notif-badge">7</span>
+      </a>
+      <span class="t2-tag mono">James W.</span>
+      <div class="t2-avatar">JW</div>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <nav class="t2-nav">
+    <span class="t2-nav-label">Platform</span>
+    <a href="dashboard.html" class="t2-nav-item active">⬛ Command Center</a>
+    <a href="pipeline.html" class="t2-nav-item">◈ Pipeline <span class="t2-nav-count gold">2</span></a>
+    <span class="t2-nav-label">Operations</span>
+    <a href="blocker-board.html" class="t2-nav-item">⚑ Blocker Board <span class="t2-nav-count alert">5</span></a>
+    <a href="intake-queue.html" class="t2-nav-item">↓ Intake Queue <span class="t2-nav-count">1</span></a>
+    <a href="notifications.html" class="t2-nav-item">🔔 Inbox <span class="t2-nav-count alert">7</span></a>
+    <span class="t2-nav-label">Admin</span>
+    <a href="partner-management.html" class="t2-nav-item">◎ Partners</a>
+    <a href="workflow-builder.html" class="t2-nav-item">⚙ Workflows</a>
+    <a href="audit-log.html" class="t2-nav-item">≡ Audit Log</a>
+    <a href="settings.html" class="t2-nav-item">⚙ Settings</a>
+  </nav>
+
+  <!-- Main -->
+  <main class="t2-main">
+
+    <!-- Header -->
+    <div class="page-header">
+      <div>
+        <div class="t2-section-label">Title2Token V1</div>
+        <div class="page-title">Command Center</div>
+      </div>
+      <span class="t2-tag mono">Apr 30, 2026 · 9:14am</span>
+    </div>
+
+    <!-- Primary Metrics -->
+    <div class="metrics-row">
+      <div class="metric-card">
+        <div class="metric-label">Active Deals</div>
+        <div class="metric-value">2</div>
+        <div class="metric-sub">1 in review · 1 in intake</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Pipeline Asset Value</div>
+        <div class="metric-value gold">$37.3M+</div>
+        <div class="metric-sub">T2T-001 $2.3M · T2T-002 $35M+</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Avg Readiness Score</div>
+        <div class="metric-value" style="color:var(--color-alert);">14%</div>
+        <div class="metric-sub">T2T-001 0% · T2T-002 28%</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Critical Blockers</div>
+        <div class="metric-value" style="color:var(--color-alert);">5</div>
+        <div class="metric-sub">3 hard stops · 2 overdue</div>
+      </div>
+    </div>
+
+    <!-- Today's Actions + Blocker Board -->
+    <div class="two-col" style="grid-template-columns:1fr 360px;">
+
+      <!-- Today's Actions -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Today's Actions</span>
+          <span class="t2-tag mono">7 items need attention</span>
+        </div>
+        <div class="today-actions">
+          <div class="action-item">
+            <div class="action-priority critical"></div>
+            <div class="action-body">
+              <div class="action-title">Land title confirmation — fee simple vs. concession</div>
+              <div class="action-meta">T2T-001 Hotel Arco Iris · Owned by CR Legal Counsel · Hard Stop</div>
+            </div>
+            <div>
+              <div class="action-due overdue">HARD STOP</div>
+            </div>
+          </div>
+          <div class="action-item">
+            <div class="action-priority critical"></div>
+            <div class="action-body">
+              <div class="action-title">2025 ADR decline — written explanation with booking data</div>
+              <div class="action-meta">T2T-001 Hotel Arco Iris · Owned by Issuer / Asset Owner · Hard Stop</div>
+            </div>
+            <div>
+              <div class="action-due overdue">HARD STOP</div>
+            </div>
+          </div>
+          <div class="action-item">
+            <div class="action-priority high"></div>
+            <div class="action-body">
+              <div class="action-title">Token structure decision — per lot vs. fractional</div>
+              <div class="action-meta">T2T-002 Grande Beach Club · Owned by Admin · Blocks Gate 5</div>
+            </div>
+            <div>
+              <div class="action-due today">Due today</div>
+            </div>
+          </div>
+          <div class="action-item">
+            <div class="action-priority high"></div>
+            <div class="action-body">
+              <div class="action-title">Sponsor / operator profile and track record</div>
+              <div class="action-meta">T2T-001 Hotel Arco Iris · Owned by Issuer · Overdue 3 days</div>
+            </div>
+            <div>
+              <div class="action-due overdue">3d overdue</div>
+            </div>
+          </div>
+          <div class="action-item">
+            <div class="action-priority medium"></div>
+            <div class="action-body">
+              <div class="action-title">SPV formation — entity type and jurisdiction decision</div>
+              <div class="action-meta">T2T-001 Hotel Arco Iris · Owned by U.S. Securities Counsel</div>
+            </div>
+            <div>
+              <div class="action-due today">Due May 3</div>
+            </div>
+          </div>
+          <div class="action-item">
+            <div class="action-priority medium"></div>
+            <div class="action-body">
+              <div class="action-title">Development entitlements verification</div>
+              <div class="action-meta">T2T-002 Grande Beach Club · Owned by CR Legal Counsel</div>
+            </div>
+            <div>
+              <div class="action-due">Due May 7</div>
+            </div>
+          </div>
+          <div class="action-item">
+            <div class="action-priority medium"></div>
+            <div class="action-body">
+              <div class="action-title">Platform fee agreement — both deals</div>
+              <div class="action-meta">T2T-001 &amp; T2T-002 · Owned by Admin · Blocks Commercial gate</div>
+            </div>
+            <div>
+              <div class="action-due">Due May 10</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Critical Blockers -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Critical Blockers</span>
+          <a href="blocker-board.html" style="font-size:var(--text-sm);color:var(--color-gold);text-decoration:none;">View all</a>
+        </div>
+        <div class="blocker-item">
+          <div style="color:var(--color-alert);font-size:14px;flex-shrink:0;">⛔</div>
+          <div class="blocker-body">
+            <div class="blocker-title">Land title — fee simple vs. concession</div>
+            <div class="blocker-deal">T2T-001 · Legal/Entity · Gate 2 blocked</div>
+            <div class="blocker-owner">Owner: CR Legal Counsel</div>
+          </div>
+        </div>
+        <div class="blocker-item">
+          <div style="color:var(--color-alert);font-size:14px;flex-shrink:0;">⛔</div>
+          <div class="blocker-body">
+            <div class="blocker-title">2025 ADR decline unexplained</div>
+            <div class="blocker-deal">T2T-001 · Asset/Property · Gate 2 blocked</div>
+            <div class="blocker-owner">Owner: Issuer / Asset Owner</div>
+          </div>
+        </div>
+        <div class="blocker-item">
+          <div style="color:var(--color-alert);font-size:14px;flex-shrink:0;">⛔</div>
+          <div class="blocker-body">
+            <div class="blocker-title">Investment thesis finalized — blocked by ADR</div>
+            <div class="blocker-deal">T2T-001 · Commercial · Gate 4 blocked</div>
+            <div class="blocker-owner">Owner: Admin / Title2Token</div>
+          </div>
+        </div>
+        <div class="blocker-item">
+          <div style="color:var(--color-warn);font-size:14px;flex-shrink:0;">⚠</div>
+          <div class="blocker-body">
+            <div class="blocker-title" style="color:var(--color-warn);">Token structure not defined</div>
+            <div class="blocker-deal">T2T-002 · Technical · Gate 5 blocked</div>
+            <div class="blocker-owner">Owner: Admin / Title2Token</div>
+          </div>
+        </div>
+        <div class="blocker-item">
+          <div style="color:var(--color-warn);font-size:14px;flex-shrink:0;">⚠</div>
+          <div class="blocker-body">
+            <div class="blocker-title" style="color:var(--color-warn);">Operator profile — 3 days overdue</div>
+            <div class="blocker-deal">T2T-001 · Deal Profile · Overdue</div>
+            <div class="blocker-owner">Owner: Issuer / Asset Owner</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Deal Health Cards -->
+    <div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-3);">
+        <div class="t2-section-label">Deal Health</div>
+        <a href="pipeline.html" style="font-size:var(--text-sm);color:var(--color-gold);text-decoration:none;">View pipeline →</a>
+      </div>
+      <div class="deal-cards-grid">
+
+        <!-- T2T-001 -->
+        <a href="deal-detail.html" class="deal-card">
+          <div class="deal-card-header">
+            <div>
+              <div style="display:flex;align-items:center;gap:var(--space-2);margin-bottom:4px;">
+                <span class="deal-id">T2T-001</span>
+                <span class="stage-pill readiness">Readiness Review</span>
+              </div>
+              <div class="deal-card-name">Hotel Arco Iris</div>
+              <div style="font-size:var(--text-sm);color:var(--color-text-muted);margin-top:2px;">Acquisition · Tamarindo, Costa Rica</div>
+            </div>
+            <div style="text-align:right;flex-shrink:0;">
+              <div class="readiness-pct red">0%</div>
+              <div style="font-size:var(--text-xs);color:var(--color-text-faint);">readiness</div>
+              <div class="deal-card-stops">3 hard stops</div>
+            </div>
+          </div>
+          <div>
+            <div class="health-bar"><div class="health-bar-fill red" style="width:0%"></div></div>
+          </div>
+          <div class="deal-card-meta">
+            <span class="deal-id" style="background:var(--color-alert-bg);border-color:#f0c0a8;color:var(--color-alert);">HIGH RISK</span>
+            <span class="t2-tag mono">$2.32M raise</span>
+            <span class="t2-tag mono">Gate 1 of 7</span>
+            <span class="t2-tag mono">CR · Hospitality</span>
+          </div>
+          <div style="font-size:var(--text-sm);color:var(--color-text-muted);">
+            Next: Resolve land title hard stop · Owner: CR Legal Counsel
+          </div>
+        </a>
+
+        <!-- T2T-002 -->
+        <a href="deal-detail.html" class="deal-card">
+          <div class="deal-card-header">
+            <div>
+              <div style="display:flex;align-items:center;gap:var(--space-2);margin-bottom:4px;">
+                <span class="deal-id">T2T-002</span>
+                <span class="stage-pill intake">Intake</span>
+              </div>
+              <div class="deal-card-name">Grande Beach Club &amp; Villas</div>
+              <div style="font-size:var(--text-sm);color:var(--color-text-muted);margin-top:2px;">Development · Playa Grande, Costa Rica</div>
+            </div>
+            <div style="text-align:right;flex-shrink:0;">
+              <div class="readiness-pct yellow">28%</div>
+              <div style="font-size:var(--text-xs);color:var(--color-text-faint);">readiness</div>
+              <div style="font-size:var(--text-xs);color:var(--color-warn);font-family:var(--font-mono);">2 risks</div>
+            </div>
+          </div>
+          <div>
+            <div class="health-bar"><div class="health-bar-fill yellow" style="width:28%"></div></div>
+          </div>
+          <div class="deal-card-meta">
+            <span class="risk-badge medium">MEDIUM RISK</span>
+            <span class="t2-tag mono">$35M–$70M+</span>
+            <span class="t2-tag mono">Gate 1 of 7</span>
+            <span class="t2-tag mono">CR · Development</span>
+          </div>
+          <div style="font-size:var(--text-sm);color:var(--color-text-muted);">
+            Next: Define token structure · Owner: Admin / Title2Token
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- Upcoming Deadlines + Platform Revenue -->
+    <div class="bottom-grid">
+
+      <!-- Deadlines -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Upcoming Deadlines</span>
+          <span class="t2-tag mono">next 14 days</span>
+        </div>
+        <div class="deadline-item">
+          <div class="deadline-date">May 1</div>
+          <div class="deadline-title">Token structure decision — T2T-002</div>
+          <span class="risk-badge high">today</span>
+        </div>
+        <div class="deadline-item">
+          <div class="deadline-date">May 3</div>
+          <div class="deadline-title">SPV formation kickoff — T2T-001</div>
+          <span class="stage-pill intake">upcoming</span>
+        </div>
+        <div class="deadline-item">
+          <div class="deadline-date">May 5</div>
+          <div class="deadline-title">Operator profile submission — T2T-001</div>
+          <span class="risk-badge high">overdue</span>
+        </div>
+        <div class="deadline-item">
+          <div class="deadline-date">May 7</div>
+          <div class="deadline-title">Development entitlements — T2T-002</div>
+          <span class="stage-pill intake">upcoming</span>
+        </div>
+        <div class="deadline-item">
+          <div class="deadline-date">May 10</div>
+          <div class="deadline-title">Platform fee agreements — both deals</div>
+          <span class="stage-pill intake">upcoming</span>
+        </div>
+        <div class="deadline-item">
+          <div class="deadline-date">May 14</div>
+          <div class="deadline-title">CR legal opinion engagement — T2T-001</div>
+          <span class="stage-pill intake">upcoming</span>
+        </div>
+      </div>
+
+      <!-- Platform Revenue Estimate -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Est. Platform Revenue</span>
+          <span class="t2-tag mono">if both close</span>
+        </div>
+        <div class="revenue-row">
+          <div class="revenue-label">T2T-001 · Structuring fee</div>
+          <div class="revenue-val">$15,000</div>
+        </div>
+        <div class="revenue-row">
+          <div class="revenue-label">T2T-001 · Platform fee (2%)</div>
+          <div class="revenue-val">$46,400</div>
+        </div>
+        <div class="revenue-row">
+          <div class="revenue-label">T2T-002 · Structuring fee</div>
+          <div class="revenue-val">$50,000</div>
+        </div>
+        <div class="revenue-row">
+          <div class="revenue-label">T2T-002 · Platform fee (2%)</div>
+          <div class="revenue-val">$700,000+</div>
+        </div>
+        <div class="revenue-row" style="background:var(--color-bg-subtle);border-top:1px solid var(--color-border);">
+          <div class="revenue-label" style="font-weight:500;color:var(--color-text);">Total Estimated</div>
+          <div class="revenue-val gold" style="font-size:var(--text-lg);">$811,400+</div>
+        </div>
+        <div style="padding:var(--space-3) var(--space-5);">
+          <p style="font-size:var(--text-xs);color:var(--color-text-faint);">Estimates only. Contingent on deal activation. Final fees per signed platform fee agreements.</p>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+</body>
+</html>
