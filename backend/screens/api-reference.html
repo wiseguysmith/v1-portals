@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T2T Backend — API Reference</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../public/design-tokens.css"/>
+  <link rel="stylesheet" href="../../admin/styles/admin.css"/>
+  <link rel="stylesheet" href="../styles/backend.css"/>
+  <style>
+    .api-section { margin-bottom:var(--space-6); }
+    .api-section-title { font-size:var(--text-sm); font-weight:500; color:var(--color-text-muted); text-transform:uppercase; letter-spacing:.06em; margin-bottom:var(--space-3); padding-bottom:var(--space-2); border-bottom:1px solid var(--color-border); }
+    .endpoint-row { display:grid; grid-template-columns:70px 1fr 200px; align-items:baseline; gap:var(--space-3); padding:8px var(--space-5); border-bottom:1px solid var(--color-border-faint); font-size:var(--text-sm); }
+    .endpoint-row:last-child { border-bottom:none; }
+    .endpoint-row:hover { background:var(--color-bg-subtle); }
+    .method { font-family:var(--font-mono); font-size:11px; font-weight:500; padding:2px 7px; border-radius:3px; text-align:center; }
+    .method.get    { background:#e8f4e8; color:#3a7a4a; }
+    .method.post   { background:#e8eef8; color:#3a4a8a; }
+    .method.patch  { background:#f8f4e0; color:#7a6020; }
+    .method.delete { background:#f8e8e8; color:#8a3a3a; }
+    .endpoint-path { font-family:var(--font-mono); font-size:12px; color:var(--color-text); }
+    .endpoint-desc { font-size:var(--text-xs); color:var(--color-text-muted); }
+    .code-block { background:#1a1814; color:#e8e4dc; font-family:var(--font-mono); font-size:12px; line-height:1.6; padding:var(--space-4) var(--space-5); border-radius:var(--radius-md); overflow-x:auto; white-space:pre; margin-top:var(--space-2); }
+    .code-key   { color:#b8952a; }
+    .code-str   { color:#7aab8a; }
+    .code-num   { color:#c9907a; }
+    .code-bool  { color:#9090d8; }
+    .code-null  { color:#888; }
+    .code-comment { color:#555; }
+    .schema-row { display:grid; grid-template-columns:160px 100px 1fr; gap:var(--space-3); padding:7px var(--space-5); border-bottom:1px solid var(--color-border-faint); font-size:var(--text-sm); align-items:baseline; }
+    .schema-row:last-child { border-bottom:none; }
+    .schema-row-header { font-size:var(--text-xs); color:var(--color-text-faint); font-weight:500; text-transform:uppercase; letter-spacing:.04em; border-bottom:1px solid var(--color-border); }
+    .field-name { font-family:var(--font-mono); font-size:12px; }
+    .field-type { font-family:var(--font-mono); font-size:11px; color:#7060b0; }
+    .field-desc { font-size:var(--text-xs); color:var(--color-text-muted); }
+    .webhook-event { background:var(--color-bg-subtle); border:1px solid var(--color-border); border-radius:var(--radius-sm); padding:var(--space-3) var(--space-4); margin-bottom:var(--space-2); }
+    .webhook-name { font-family:var(--font-mono); font-size:12px; font-weight:500; color:#1a1814; }
+    .webhook-desc { font-size:var(--text-xs); color:var(--color-text-muted); margin-top:2px; }
+    .scope-tag { display:inline-block; font-family:var(--font-mono); font-size:10px; background:#f0ede8; border:1px solid var(--color-border); border-radius:3px; padding:1px 6px; margin:2px 2px 0 0; color:#888; }
+    .env-row { display:grid; grid-template-columns:220px 1fr; gap:var(--space-3); padding:7px var(--space-5); border-bottom:1px solid var(--color-border-faint); font-size:var(--text-sm); align-items:baseline; }
+    .env-row:last-child { border-bottom:none; }
+    .env-key { font-family:var(--font-mono); font-size:12px; }
+    .env-desc { font-size:var(--text-xs); color:var(--color-text-muted); }
+
+    .tab-nav { display:flex; gap:0; border-bottom:2px solid var(--color-border); margin-bottom:var(--space-5); }
+    .tab-btn { padding:8px 16px; font-size:var(--text-sm); font-weight:500; color:var(--color-text-muted); background:none; border:none; border-bottom:2px solid transparent; margin-bottom:-2px; cursor:pointer; transition:color .12s, border-color .12s; }
+    .tab-btn.active { color:#888; border-bottom-color:#888; }
+    .tab-pane { display:none; }
+    .tab-pane.active { display:block; }
+  </style>
+</head>
+<body>
+<div class="t2-shell">
+
+  <header class="t2-topbar">
+    <span class="t2-logo">T2T</span>
+    <span class="t2-tag">|</span>
+    <span class="t2-portal-badge">Backend Partner Portal</span>
+    <div class="t2-topbar-search">
+      <input class="t2-search-input" type="text" placeholder="Search API reference…"/>
+    </div>
+    <div class="t2-topbar-right">
+      <span class="t2-tag mono">Backend Partner</span>
+      <div class="t2-avatar" style="background:var(--color-text-faint);">BP</div>
+    </div>
+  </header>
+
+  <nav class="t2-nav">
+    <span class="t2-nav-label">Overview</span>
+    <a href="dashboard.html" class="t2-nav-item">⬛ My Workload</a>
+    <span class="t2-nav-label">Deals</span>
+    <a href="deal.html" class="t2-nav-item">◈ T2T-001 Hotel Arco Iris</a>
+    <a href="deal.html" class="t2-nav-item">◈ T2T-002 Grande Beach Club</a>
+    <span class="t2-nav-label">Technical</span>
+    <a href="technical-checklist.html" class="t2-nav-item">⚙ Technical Checklist <span class="t2-nav-count">14</span></a>
+    <a href="vendor-status.html" class="t2-nav-item">◎ Vendor Status <span class="t2-nav-count alert">2</span></a>
+    <a href="activity.html" class="t2-nav-item">≡ Activity</a>
+    <span class="t2-nav-label">Developer</span>
+    <a href="api-reference.html" class="t2-nav-item active">⌨ API Reference</a>
+  </nav>
+
+  <main class="t2-main">
+
+    <div class="page-header">
+      <div>
+        <div class="t2-section-label">Developer Handoff</div>
+        <div class="page-title">API Reference</div>
+      </div>
+      <span class="t2-tag mono" style="background:#f0ede8;color:#888;">v1.0 · Draft spec</span>
+    </div>
+
+    <div class="warning-banner" style="background:#f0eef8;border-color:#c8c0e8;color:var(--color-text);">
+      <span style="color:#7060b0;">ℹ</span>
+      <div>This is the v1 API contract for backend developers. All endpoints, schemas, and webhook events described here represent the target backend implementation. Adapters are designed to be provider-swappable — see the adapter pattern notes in each section.</div>
+    </div>
+
+    <div class="tab-nav">
+      <button class="tab-btn active" onclick="switchTab('endpoints')">Endpoints</button>
+      <button class="tab-btn" onclick="switchTab('schemas')">Data Models</button>
+      <button class="tab-btn" onclick="switchTab('webhooks')">Webhooks</button>
+      <button class="tab-btn" onclick="switchTab('auth')">Auth &amp; Roles</button>
+      <button class="tab-btn" onclick="switchTab('env')">Environment Setup</button>
+    </div>
+
+    <!-- ENDPOINTS -->
+    <div id="tab-endpoints" class="tab-pane active">
+
+      <div class="api-section">
+        <div class="api-section-title">Deals</div>
+        <div class="panel" style="padding:0;">
+          <div class="endpoint-row" style="font-size:var(--text-xs);color:var(--color-text-faint);font-weight:500;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--color-border);"><span>Method</span><span>Path</span><span>Description</span></div>
+          <div class="endpoint-row"><span class="method get">GET</span><span class="endpoint-path">/api/v1/deals</span><span class="endpoint-desc">List all deals accessible to the authenticated role</span></div>
+          <div class="endpoint-row"><span class="method get">GET</span><span class="endpoint-path">/api/v1/deals/:id</span><span class="endpoint-desc">Get full deal detail including gate status and checklist</span></div>
+          <div class="endpoint-row"><span class="method post">POST</span><span class="endpoint-path">/api/v1/deals</span><span class="endpoint-desc">Create new deal (admin only)</span></div>
+          <div class="endpoint-row"><span class="method patch">PATCH</span><span class="endpoint-path">/api/v1/deals/:id</span><span class="endpoint-desc">Update deal fields — stage, health, metadata</span></div>
+          <div class="endpoint-row"><span class="method post">POST</span><span class="endpoint-path">/api/v1/deals/:id/advance-gate</span><span class="endpoint-desc">Advance deal to next gate (admin only, validates all prerequisites)</span></div>
+          <div class="endpoint-row"><span class="method post">POST</span><span class="endpoint-path">/api/v1/deals/:id/hard-stop</span><span class="endpoint-desc">Set or clear a hard stop on a deal gate</span></div>
+        </div>
+      </div>
+
+      <div class="api-section">
+        <div class="api-section-title">Checklist Items</div>
+        <div class="panel" style="padding:0;">
+          <div class="endpoint-row" style="font-size:var(--text-xs);color:var(--color-text-faint);font-weight:500;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--color-border);"><span>Method</span><span>Path</span><span>Description</span></div>
+          <div class="endpoint-row"><span class="method get">GET</span><span class="endpoint-path">/api/v1/deals/:id/checklist</span><span class="endpoint-desc">Get all checklist items for a deal, filtered by role scope</span></div>
+          <div class="endpoint-row"><span class="method patch">PATCH</span><span class="endpoint-path">/api/v1/checklist/:itemId</span><span class="endpoint-desc">Update item status (complete, blocked, overdue)</span></div>
+          <div class="endpoint-row"><span class="method post">POST</span><span class="endpoint-path">/api/v1/checklist/:itemId/complete</span><span class="endpoint-desc">Mark item complete — triggers gate re-evaluation</span></div>
+        </div>
+      </div>
+
+      <div class="api-section">
+        <div class="api-section-title">Documents</div>
+        <div class="panel" style="padding:0;">
+          <div class="endpoint-row" style="font-size:var(--text-xs);color:var(--color-text-faint);font-weight:500;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--color-border);"><span>Method</span><span>Path</span><span>Description</span></div>
+          <div class="endpoint-row"><span class="method get">GET</span><span class="endpoint-path">/api/v1/deals/:id/documents</span><span class="endpoint-desc">List all documents for a deal</span></div>
+          <div class="endpoint-row"><span class="method post">POST</span><span class="endpoint-path">/api/v1/deals/:id/documents/upload</span><span class="endpoint-desc">Upload document — returns presigned S3 URL</span></div>
+          <div class="endpoint-row"><span class="method patch">PATCH</span><span class="endpoint-path">/api/v1/documents/:docId/status</span><span class="endpoint-desc">Update document status (pending, approved, rejected)</span></div>
+          <div class="endpoint-row"><span class="method post">POST</span><span class="endpoint-path">/api/v1/documents/:docId/sign</span><span class="endpoint-desc">Initiate DocConnect signing flow — adapter pattern</span></div>
+        </div>
+      </div>
+
+      <div class="api-section">
+        <div class="api-section-title">Partners &amp; Roles</div>
+        <div class="panel" style="padding:0;">
+          <div class="endpoint-row" style="font-size:var(--text-xs);color:var(--color-text-faint);font-weight:500;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--color-border);"><span>Method</span><span>Path</span><span>Description</span></div>
+          <div class="endpoint-row"><span class="method get">GET</span><span class="endpoint-path">/api/v1/partners</span><span class="endpoint-desc">List all partners (admin only)</span></div>
+          <div class="endpoint-row"><span class="method post">POST</span><span class="endpoint-path">/api/v1/partners/invite</span><span class="endpoint-desc">Invite partner by email — assigns role + deal scope</span></div>
+          <div class="endpoint-row"><span class="method get">GET</span><span class="endpoint-path">/api/v1/me</span><span class="endpoint-desc">Get current user profile, role, and deal assignments</span></div>
+          <div class="endpoint-row"><span class="method post">POST</span><span class="endpoint-path">/api/v1/auth/view-as</span><span class="endpoint-desc">Admin impersonation — returns scoped token for partner view</span></div>
+        </div>
+      </div>
+
+      <div class="api-section">
+        <div class="api-section-title">Vendors / Integrations</div>
+        <div class="panel" style="padding:0;">
+          <div class="endpoint-row" style="font-size:var(--text-xs);color:var(--color-text-faint);font-weight:500;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--color-border);"><span>Method</span><span>Path</span><span>Description</span></div>
+          <div class="endpoint-row"><span class="method get">GET</span><span class="endpoint-path">/api/v1/vendors</span><span class="endpoint-desc">List all vendor integrations and connection status</span></div>
+          <div class="endpoint-row"><span class="method post">POST</span><span class="endpoint-path">/api/v1/vendors/:id/test</span><span class="endpoint-desc">Ping vendor connection — returns latency + status</span></div>
+          <div class="endpoint-row"><span class="method post">POST</span><span class="endpoint-path">/api/v1/kyc/initiate</span><span class="endpoint-desc">Start KYC flow via configured provider (Parallel Markets adapter)</span></div>
+          <div class="endpoint-row"><span class="method get">GET</span><span class="endpoint-path">/api/v1/kyc/:investorId/status</span><span class="endpoint-desc">Poll KYC result for an investor</span></div>
+          <div class="endpoint-row"><span class="method post">POST</span><span class="endpoint-path">/api/v1/tokens/deploy</span><span class="endpoint-desc">Deploy ERC-3643 token contract to Base — testnet or mainnet</span></div>
+          <div class="endpoint-row"><span class="method get">GET</span><span class="endpoint-path">/api/v1/tokens/:dealId</span><span class="endpoint-desc">Get token deployment status and contract address</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- DATA MODELS -->
+    <div id="tab-schemas" class="tab-pane">
+
+      <div class="api-section">
+        <div class="api-section-title">Deal</div>
+        <div class="panel" style="padding:0;">
+          <div class="schema-row schema-row-header"><span>Field</span><span>Type</span><span>Description</span></div>
+          <div class="schema-row"><span class="field-name">id</span><span class="field-type">string</span><span class="field-desc">Unique deal ID — format: T2T-{NNN}</span></div>
+          <div class="schema-row"><span class="field-name">name</span><span class="field-type">string</span><span class="field-desc">Property / deal name</span></div>
+          <div class="schema-row"><span class="field-name">stage</span><span class="field-type">enum</span><span class="field-desc">sourced | qualified | intake | readiness | legal-comp | structuring | implementation | pre-launch | active | ongoing</span></div>
+          <div class="schema-row"><span class="field-name">health</span><span class="field-type">enum</span><span class="field-desc">green | yellow | red — red if any hard_stop is active</span></div>
+          <div class="schema-row"><span class="field-name">current_gate</span><span class="field-type">integer</span><span class="field-desc">1–7 — current activation gate</span></div>
+          <div class="schema-row"><span class="field-name">readiness_pct</span><span class="field-type">number</span><span class="field-desc">0–100 — % of checklist items complete for current gate</span></div>
+          <div class="schema-row"><span class="field-name">hard_stops</span><span class="field-type">HardStop[]</span><span class="field-desc">Array of active hard stop objects — empty array if none</span></div>
+          <div class="schema-row"><span class="field-name">raise_target</span><span class="field-type">number</span><span class="field-desc">Total equity raise in USD</span></div>
+          <div class="schema-row"><span class="field-name">token_standard</span><span class="field-type">string</span><span class="field-desc">e.g. "ERC-3643"</span></div>
+          <div class="schema-row"><span class="field-name">chain</span><span class="field-type">string</span><span class="field-desc">e.g. "base-mainnet"</span></div>
+          <div class="schema-row"><span class="field-name">partners</span><span class="field-type">PartnerAssignment[]</span><span class="field-desc">Partners assigned to this deal with role + category scope</span></div>
+          <div class="schema-row"><span class="field-name">created_at</span><span class="field-type">ISO 8601</span><span class="field-desc">Deal creation timestamp</span></div>
+          <div class="schema-row"><span class="field-name">updated_at</span><span class="field-type">ISO 8601</span><span class="field-desc">Last modification timestamp</span></div>
+        </div>
+        <div class="code-block"><span class="code-comment">// Example Deal object</span>
+{
+  <span class="code-key">"id"</span>: <span class="code-str">"T2T-003"</span>,
+  <span class="code-key">"name"</span>: <span class="code-str">"Sunset Lofts"</span>,
+  <span class="code-key">"stage"</span>: <span class="code-str">"legal-comp"</span>,
+  <span class="code-key">"health"</span>: <span class="code-str">"green"</span>,
+  <span class="code-key">"current_gate"</span>: <span class="code-num">5</span>,
+  <span class="code-key">"readiness_pct"</span>: <span class="code-num">62</span>,
+  <span class="code-key">"hard_stops"</span>: [],
+  <span class="code-key">"raise_target"</span>: <span class="code-num">5200000</span>,
+  <span class="code-key">"token_standard"</span>: <span class="code-str">"ERC-3643"</span>,
+  <span class="code-key">"chain"</span>: <span class="code-str">"base-mainnet"</span>
+}</div>
+      </div>
+
+      <div class="api-section">
+        <div class="api-section-title">ChecklistItem</div>
+        <div class="panel" style="padding:0;">
+          <div class="schema-row schema-row-header"><span>Field</span><span>Type</span><span>Description</span></div>
+          <div class="schema-row"><span class="field-name">id</span><span class="field-type">string</span><span class="field-desc">UUID</span></div>
+          <div class="schema-row"><span class="field-name">deal_id</span><span class="field-type">string</span><span class="field-desc">Parent deal reference</span></div>
+          <div class="schema-row"><span class="field-name">category</span><span class="field-type">enum</span><span class="field-desc">legal-entity | local-jurisdiction | technical-tokenization | vendors-partners | asset-property | financial-valuation | compliance | investor-relations | deal-profile | pre-launch</span></div>
+          <div class="schema-row"><span class="field-name">title</span><span class="field-type">string</span><span class="field-desc">Human-readable item description</span></div>
+          <div class="schema-row"><span class="field-name">owner_role</span><span class="field-type">enum</span><span class="field-desc">admin | issuer | legal | backend | broker | compliance | asset-dd</span></div>
+          <div class="schema-row"><span class="field-name">gate</span><span class="field-type">integer</span><span class="field-desc">1–7 — which gate this item gates</span></div>
+          <div class="schema-row"><span class="field-name">status</span><span class="field-type">enum</span><span class="field-desc">pending | in-progress | complete | blocked | overdue</span></div>
+          <div class="schema-row"><span class="field-name">risk</span><span class="field-type">enum</span><span class="field-desc">critical | high | medium | low</span></div>
+          <div class="schema-row"><span class="field-name">due_date</span><span class="field-type">ISO 8601 | null</span><span class="field-desc">null = TBD (admin has not set date yet)</span></div>
+          <div class="schema-row"><span class="field-name">completed_at</span><span class="field-type">ISO 8601 | null</span><span class="field-desc">Timestamp when marked complete</span></div>
+          <div class="schema-row"><span class="field-name">completed_by</span><span class="field-type">string | null</span><span class="field-desc">User ID of completing partner</span></div>
+        </div>
+      </div>
+
+      <div class="api-section">
+        <div class="api-section-title">Partner / User</div>
+        <div class="panel" style="padding:0;">
+          <div class="schema-row schema-row-header"><span>Field</span><span>Type</span><span>Description</span></div>
+          <div class="schema-row"><span class="field-name">id</span><span class="field-type">string</span><span class="field-desc">UUID</span></div>
+          <div class="schema-row"><span class="field-name">name</span><span class="field-type">string</span><span class="field-desc">Full name</span></div>
+          <div class="schema-row"><span class="field-name">email</span><span class="field-type">string</span><span class="field-desc">Login email — must be unique</span></div>
+          <div class="schema-row"><span class="field-name">role</span><span class="field-type">enum</span><span class="field-desc">admin | issuer | legal | backend | broker | compliance | asset-dd</span></div>
+          <div class="schema-row"><span class="field-name">deal_scope</span><span class="field-type">string[]</span><span class="field-desc">Array of deal IDs this partner can access — empty = all (admin)</span></div>
+          <div class="schema-row"><span class="field-name">category_scope</span><span class="field-type">string[]</span><span class="field-desc">Checklist categories this partner owns</span></div>
+          <div class="schema-row"><span class="field-name">status</span><span class="field-type">enum</span><span class="field-desc">invited | active | inactive</span></div>
+          <div class="schema-row"><span class="field-name">last_active</span><span class="field-type">ISO 8601 | null</span><span class="field-desc">Last portal login</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- WEBHOOKS -->
+    <div id="tab-webhooks" class="tab-pane">
+      <div class="api-section">
+        <div class="api-section-title">Event Schema</div>
+        <div class="code-block"><span class="code-comment">// All webhook payloads follow this envelope</span>
+{
+  <span class="code-key">"event"</span>: <span class="code-str">"deal.gate.advanced"</span>,         <span class="code-comment">// event type string</span>
+  <span class="code-key">"deal_id"</span>: <span class="code-str">"T2T-003"</span>,
+  <span class="code-key">"timestamp"</span>: <span class="code-str">"2026-05-01T14:00:00Z"</span>,
+  <span class="code-key">"actor"</span>: { <span class="code-key">"id"</span>: <span class="code-str">"usr_abc"</span>, <span class="code-key">"role"</span>: <span class="code-str">"admin"</span> },
+  <span class="code-key">"data"</span>: { <span class="code-comment">/* event-specific payload */</span> },
+  <span class="code-key">"signature"</span>: <span class="code-str">"sha256=..."</span>               <span class="code-comment">// HMAC-SHA256, verify on receipt</span>
+}</div>
+      </div>
+      <div class="api-section">
+        <div class="api-section-title">Deal Events</div>
+        <div class="webhook-event"><div class="webhook-name">deal.gate.advanced</div><div class="webhook-desc">Deal moved to the next gate. data: { from_gate, to_gate, stage }</div></div>
+        <div class="webhook-event"><div class="webhook-name">deal.hard_stop.set</div><div class="webhook-desc">A hard stop was applied to a gate. data: { gate, reason, set_by }</div></div>
+        <div class="webhook-event"><div class="webhook-name">deal.hard_stop.cleared</div><div class="webhook-desc">A hard stop was resolved. data: { gate, resolved_by }</div></div>
+        <div class="webhook-event"><div class="webhook-name">deal.health.changed</div><div class="webhook-desc">Deal health changed (green/yellow/red). data: { from, to, reason }</div></div>
+      </div>
+      <div class="api-section">
+        <div class="api-section-title">Checklist Events</div>
+        <div class="webhook-event"><div class="webhook-name">checklist.item.completed</div><div class="webhook-desc">A checklist item was marked complete. data: { item_id, category, gate, completed_by }</div></div>
+        <div class="webhook-event"><div class="webhook-name">checklist.item.overdue</div><div class="webhook-desc">An item passed its due date without completion. data: { item_id, due_date, days_overdue }</div></div>
+        <div class="webhook-event"><div class="webhook-name">checklist.item.blocked</div><div class="webhook-desc">An item was marked blocked. data: { item_id, reason }</div></div>
+      </div>
+      <div class="api-section">
+        <div class="api-section-title">KYC / Vendor Events</div>
+        <div class="webhook-event"><div class="webhook-name">kyc.result.received</div><div class="webhook-desc">KYC result returned from provider. data: { investor_id, result: passed|failed|flagged, provider }</div></div>
+        <div class="webhook-event"><div class="webhook-name">kyc.flag.raised</div><div class="webhook-desc">AML flag raised — requires compliance review. data: { investor_id, flag_type, provider }</div></div>
+        <div class="webhook-event"><div class="webhook-name">document.signed</div><div class="webhook-desc">DocConnect signing completed. data: { document_id, signers, audit_trail_url }</div></div>
+        <div class="webhook-event"><div class="webhook-name">token.deployed</div><div class="webhook-desc">ERC-3643 token contract deployed. data: { deal_id, contract_address, network, tx_hash }</div></div>
+      </div>
+      <div class="api-section">
+        <div class="api-section-title">Adapter Pattern Note</div>
+        <div class="warning-banner" style="background:#f0eef8;border-color:#c8c0e8;margin:0;">
+          <span style="color:#7060b0;">ℹ</span>
+          <div style="font-size:var(--text-sm);">All vendor integrations (KYC, custody, signing, chain RPC) use a provider-agnostic adapter layer. Swapping from Parallel Markets to another KYC provider, or from Base to another chain, requires changing the adapter config only — no application code changes. Adapters implement a standard interface per vendor category. See <code style="font-family:var(--font-mono);font-size:11px;background:#e8e4f8;padding:1px 5px;border-radius:3px;">/src/adapters/</code> in the backend repo.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AUTH -->
+    <div id="tab-auth" class="tab-pane">
+      <div class="api-section">
+        <div class="api-section-title">Authentication</div>
+        <div class="panel">
+          <div class="panel-body" style="display:flex;flex-direction:column;gap:var(--space-3);">
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Token type</span><span class="mono">JWT (RS256)</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Expiry</span><span class="mono">8 hours · refresh token: 30 days</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Header</span><span class="mono">Authorization: Bearer {token}</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Login flow</span><span>Magic link (email) + optional SSO</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">View-As</span><span class="mono">POST /api/v1/auth/view-as → scoped token</span></div>
+          </div>
+        </div>
+        <div class="code-block"><span class="code-comment">// JWT payload claims</span>
+{
+  <span class="code-key">"sub"</span>: <span class="code-str">"usr_abc123"</span>,
+  <span class="code-key">"role"</span>: <span class="code-str">"backend"</span>,
+  <span class="code-key">"deal_scope"</span>: [<span class="code-str">"T2T-001"</span>, <span class="code-str">"T2T-002"</span>],
+  <span class="code-key">"category_scope"</span>: [<span class="code-str">"technical-tokenization"</span>, <span class="code-str">"vendors-partners"</span>],
+  <span class="code-key">"view_as"</span>: <span class="code-null">null</span>,            <span class="code-comment">// set to impersonated user ID if admin view-as</span>
+  <span class="code-key">"iat"</span>: <span class="code-num">1746393600</span>,
+  <span class="code-key">"exp"</span>: <span class="code-num">1746422400</span>
+}</div>
+      </div>
+      <div class="api-section">
+        <div class="api-section-title">Role Permissions</div>
+        <div class="panel" style="padding:0;">
+          <div class="schema-row schema-row-header"><span>Role</span><span>Portal</span><span>Access Scope</span></div>
+          <div class="schema-row"><span class="field-name">admin</span><span class="field-type" style="color:#888;">All portals</span><span class="field-desc">Full read/write on all deals, partners, settings, audit log, view-as any role</span></div>
+          <div class="schema-row"><span class="field-name">issuer</span><span class="field-type" style="color:#6080c0;">Issuer</span><span class="field-desc">Read own deal data · write own checklist items · upload own documents · message admin</span></div>
+          <div class="schema-row"><span class="field-name">legal</span><span class="field-type" style="color:#b8952a;">Legal</span><span class="field-desc">Read assigned deals · write legal checklist items · sign/reject documents · message admin</span></div>
+          <div class="schema-row"><span class="field-name">backend</span><span class="field-type" style="color:#888;">Backend</span><span class="field-desc">Read assigned deals · write technical checklist · manage vendor config · token deployment</span></div>
+          <div class="schema-row"><span class="field-name">broker</span><span class="field-type" style="color:#7aab8a;">Broker</span><span class="field-desc">Submit deals · read own submitted deals (stage + health only) · message admin</span></div>
+          <div class="schema-row"><span class="field-name">compliance</span><span class="field-type" style="color:#7060b0;">Compliance</span><span class="field-desc">Read all deals · write KYC/AML review items · approve/reject investors · file Reg D</span></div>
+          <div class="schema-row"><span class="field-name">asset-dd</span><span class="field-type" style="color:#a06040;">Asset DD</span><span class="field-desc">Read assigned deals · write asset/property checklist · upload DD reports</span></div>
+        </div>
+      </div>
+      <div class="api-section">
+        <div class="api-section-title">Role Scopes — Available JWT Scopes</div>
+        <div style="display:flex;flex-wrap:wrap;gap:var(--space-2);padding:var(--space-3) 0;">
+          <span class="scope-tag">deals:read</span>
+          <span class="scope-tag">deals:write</span>
+          <span class="scope-tag">deals:admin</span>
+          <span class="scope-tag">checklist:read</span>
+          <span class="scope-tag">checklist:write</span>
+          <span class="scope-tag">documents:read</span>
+          <span class="scope-tag">documents:upload</span>
+          <span class="scope-tag">documents:approve</span>
+          <span class="scope-tag">partners:read</span>
+          <span class="scope-tag">partners:invite</span>
+          <span class="scope-tag">kyc:read</span>
+          <span class="scope-tag">kyc:approve</span>
+          <span class="scope-tag">tokens:deploy</span>
+          <span class="scope-tag">vendors:config</span>
+          <span class="scope-tag">audit:read</span>
+          <span class="scope-tag">view-as:any</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ENV SETUP -->
+    <div id="tab-env" class="tab-pane">
+      <div class="api-section">
+        <div class="api-section-title">Required Environment Variables</div>
+        <div class="panel" style="padding:0;">
+          <div class="env-row" style="font-size:var(--text-xs);color:var(--color-text-faint);font-weight:500;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--color-border);"><span>Variable</span><span>Description</span></div>
+          <div class="env-row"><span class="env-key">DATABASE_URL</span><span class="env-desc">PostgreSQL connection string — primary datastore</span></div>
+          <div class="env-row"><span class="env-key">REDIS_URL</span><span class="env-desc">Redis connection — session cache + job queue</span></div>
+          <div class="env-row"><span class="env-key">JWT_PRIVATE_KEY</span><span class="env-desc">RS256 private key for token signing (PEM format)</span></div>
+          <div class="env-row"><span class="env-key">JWT_PUBLIC_KEY</span><span class="env-desc">RS256 public key for token verification</span></div>
+          <div class="env-row"><span class="env-key">WEBHOOK_SECRET</span><span class="env-desc">HMAC secret for signing outbound webhook payloads</span></div>
+          <div class="env-row"><span class="env-key">AWS_S3_BUCKET</span><span class="env-desc">S3 bucket name for document storage</span></div>
+          <div class="env-row"><span class="env-key">AWS_REGION</span><span class="env-desc">AWS region — e.g. us-east-1</span></div>
+          <div class="env-row"><span class="env-key">DOCCONNECT_API_KEY</span><span class="env-desc">DocConnect API key — document signing adapter</span></div>
+          <div class="env-row"><span class="env-key">DOCCONNECT_WEBHOOK_URL</span><span class="env-desc">Inbound webhook URL for DocConnect signing events</span></div>
+          <div class="env-row"><span class="env-key">PARALLEL_MARKETS_KEY</span><span class="env-desc">Parallel Markets API key — KYC/AML adapter</span></div>
+          <div class="env-row"><span class="env-key">PARALLEL_MARKETS_WEBHOOK</span><span class="env-desc">Inbound webhook for KYC results and flags</span></div>
+          <div class="env-row"><span class="env-key">BASE_RPC_URL</span><span class="env-desc">Base chain RPC endpoint — mainnet or testnet</span></div>
+          <div class="env-row"><span class="env-key">BASE_DEPLOYER_PRIVATE_KEY</span><span class="env-desc">Wallet private key for ERC-3643 token deployment — keep in secrets manager</span></div>
+          <div class="env-row"><span class="env-key">SECURITIZE_API_KEY</span><span class="env-desc">Securitize transfer agent API key</span></div>
+          <div class="env-row"><span class="env-key">SENDGRID_API_KEY</span><span class="env-desc">SendGrid key for transactional email (invites, notifications)</span></div>
+          <div class="env-row"><span class="env-key">APP_URL</span><span class="env-desc">Base URL of the portal — used in email links and OAuth callbacks</span></div>
+          <div class="env-row"><span class="env-key">NODE_ENV</span><span class="env-desc">development | staging | production</span></div>
+        </div>
+      </div>
+      <div class="api-section">
+        <div class="api-section-title">Stack Notes</div>
+        <div class="warning-banner" style="background:#f0eef8;border-color:#c8c0e8;margin:0;">
+          <span style="color:#7060b0;">ℹ</span>
+          <div style="font-size:var(--text-sm);line-height:1.8;">
+            <strong>Database:</strong> PostgreSQL with row-level security per deal_scope.<br/>
+            <strong>Queue:</strong> Redis + BullMQ for background jobs (KYC polling, gate evaluation, email).<br/>
+            <strong>File storage:</strong> S3 presigned upload URLs — never proxy file bytes through the API server.<br/>
+            <strong>Token deployment:</strong> ERC-3643 on Base. Use hardhat or foundry for contract management. Keep deployer key in AWS Secrets Manager or Vault — never in .env for production.<br/>
+            <strong>Adapters:</strong> All vendor calls go through <code style="font-family:var(--font-mono);font-size:11px;background:#e8e4f8;padding:1px 5px;border-radius:3px;">/src/adapters/{category}/{provider}.ts</code> — swap provider by changing config, not code.<br/>
+            <strong>Auth:</strong> Magic link email login via SendGrid. SSO via OAuth 2.0 (optional). All portal routes are server-rendered and gated by JWT middleware.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach((b, i) => {
+    const tabs = ['endpoints','schemas','webhooks','auth','env'];
+    b.classList.toggle('active', tabs[i] === name);
+  });
+  document.querySelectorAll('.tab-pane').forEach(p => {
+    p.classList.toggle('active', p.id === 'tab-' + name);
+  });
+}
+</script>
+</body>
+</html>

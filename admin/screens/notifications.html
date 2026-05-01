@@ -239,5 +239,32 @@
 
   </main>
 </div>
+<script>
+// Mark individual notification as read on click
+document.querySelectorAll('.notif-item-full.unread').forEach(item => {
+  item.addEventListener('click', function() {
+    this.classList.remove('unread');
+    const dot = this.querySelector('.notif-dot');
+    if (dot) { dot.classList.remove('unread'); dot.classList.add('read'); }
+    updateBadge();
+  });
+});
+
+// Mark all read button
+document.querySelector('[onclick="markAllRead()"]') && (window.markAllRead = function() {
+  document.querySelectorAll('.notif-item-full.unread').forEach(item => {
+    item.classList.remove('unread');
+    const dot = item.querySelector('.notif-dot');
+    if (dot) { dot.classList.remove('unread'); dot.classList.add('read'); }
+  });
+  updateBadge();
+});
+
+function updateBadge() {
+  const count = document.querySelectorAll('.notif-item-full.unread').length;
+  const badge = document.querySelector('.t2-notif-badge');
+  if (badge) badge.textContent = count || '';
+}
+</script>
 </body>
 </html>

@@ -20,6 +20,13 @@
     .cat-header { display:flex; align-items:center; gap:var(--space-3); padding:var(--space-3) var(--space-5); background:var(--color-bg-subtle); border-bottom:1px solid var(--color-border); }
     .cat-name { font-size:var(--text-sm); font-weight:500; flex:1; }
     .cat-progress { font-size:var(--text-xs); font-family:var(--font-mono); color:var(--color-text-muted); }
+    .check-box { width:16px; height:16px; border:2px solid var(--color-border); border-radius:3px; flex-shrink:0; cursor:pointer; transition:all .15s; display:flex; align-items:center; justify-content:center; }
+    .check-box.checked { background:#6080c0; border-color:#6080c0; }
+    .check-box.checked::after { content:'✓'; color:#fff; font-size:10px; font-weight:700; }
+    .check-box.stop { border:none; cursor:default; font-size:14px; }
+    .cl-item.done .cl-label { color:var(--color-text-muted); text-decoration:line-through; }
+    .progress-toast { position:fixed; bottom:24px; right:24px; background:#1a1814; color:#f5f3ef; padding:10px 18px; border-radius:8px; font-size:var(--text-sm); font-family:var(--font-mono); opacity:0; transform:translateY(8px); transition:all .25s; pointer-events:none; z-index:100; }
+    .progress-toast.show { opacity:1; transform:translateY(0); }
   </style>
 </head>
 <body>
@@ -56,7 +63,7 @@
         <div class="t2-breadcrumb" style="margin-bottom:var(--space-1);"><a href="dashboard.html">T2T-001</a><span class="sep">›</span><span class="cur">My Checklist</span></div>
         <div class="page-title">My Checklist</div>
       </div>
-      <span class="t2-tag mono">0 of 9 items complete</span>
+      <span class="t2-tag mono" id="progressTag">0 of 9 items complete</span>
     </div>
 
     <div class="hard-stop-banner">
@@ -79,7 +86,7 @@
           <span class="cat-progress">0 / 1</span>
         </div>
         <div class="cl-item">
-          <div class="check-box"></div>
+          <div class="check-box" onclick="toggleCheck(this)"></div>
           <div><div class="cl-label">Sponsor / operator profile and track record</div><div class="cl-cat">Deal Profile</div></div>
           <span style="font-size:var(--text-xs);color:var(--color-text-muted);">Issuer</span>
           <span class="cl-due overdue">Apr 27 — overdue</span>
@@ -105,21 +112,21 @@
           <span class="risk-badge critical">critical</span>
         </div>
         <div class="cl-item">
-          <div class="check-box"></div>
+          <div class="check-box" onclick="toggleCheck(this)"></div>
           <div class="cl-label">3 years tax filings + bank statements (2022–2024)</div>
           <span style="font-size:var(--text-xs);color:var(--color-text-muted);">Issuer</span>
           <span class="cl-due">May 10</span>
           <span class="risk-badge high">high</span>
         </div>
         <div class="cl-item">
-          <div class="check-box"></div>
+          <div class="check-box" onclick="toggleCheck(this)"></div>
           <div class="cl-label">Occupancy data verification 2022–2025</div>
           <span style="font-size:var(--text-xs);color:var(--color-text-muted);">Issuer</span>
           <span class="cl-due">May 10</span>
           <span class="risk-badge high">high</span>
         </div>
         <div class="cl-item">
-          <div class="check-box"></div>
+          <div class="check-box" onclick="toggleCheck(this)"></div>
           <div class="cl-label">Insurance coverage confirmed</div>
           <span style="font-size:var(--text-xs);color:var(--color-text-muted);">Issuer</span>
           <span class="cl-due">May 28</span>
@@ -135,28 +142,28 @@
           <span class="cat-progress">0 / 4</span>
         </div>
         <div class="cl-item">
-          <div class="check-box"></div>
+          <div class="check-box" onclick="toggleCheck(this)"></div>
           <div class="cl-label">ADR by month 2022–2025</div>
           <span style="font-size:var(--text-xs);color:var(--color-text-muted);">Issuer</span>
           <span class="cl-due">May 7</span>
           <span class="risk-badge high">high</span>
         </div>
         <div class="cl-item">
-          <div class="check-box"></div>
+          <div class="check-box" onclick="toggleCheck(this)"></div>
           <div class="cl-label">Occupancy by month 2022–2025</div>
           <span style="font-size:var(--text-xs);color:var(--color-text-muted);">Issuer</span>
           <span class="cl-due">May 7</span>
           <span class="risk-badge high">high</span>
         </div>
         <div class="cl-item">
-          <div class="check-box"></div>
+          <div class="check-box" onclick="toggleCheck(this)"></div>
           <div class="cl-label">RevPAR by month 2022–2025</div>
           <span style="font-size:var(--text-xs);color:var(--color-text-muted);">Issuer</span>
           <span class="cl-due">May 7</span>
           <span class="risk-badge medium">medium</span>
         </div>
         <div class="cl-item">
-          <div class="check-box"></div>
+          <div class="check-box" onclick="toggleCheck(this)"></div>
           <div class="cl-label">Booking channel breakdown</div>
           <span style="font-size:var(--text-xs);color:var(--color-text-muted);">Issuer</span>
           <span class="cl-due">May 7</span>
@@ -169,4 +176,32 @@
   </main>
 </div>
 </body>
+<div class="progress-toast" id="toast"></div>
+<script>
+const TOTAL = 9;
+let done = 0;
+function toggleCheck(box) {
+  if (box.classList.contains('stop')) return;
+  const item = box.closest('.cl-item');
+  const wasChecked = box.classList.contains('checked');
+  box.classList.toggle('checked');
+  item.classList.toggle('done', !wasChecked);
+  done += wasChecked ? -1 : 1;
+  document.getElementById('progressTag').textContent = done + ' of ' + TOTAL + ' items complete';
+  const cat = box.closest('.checklist-category');
+  if (cat) {
+    const boxes = cat.querySelectorAll('.check-box:not(.stop)');
+    const catDone = cat.querySelectorAll('.check-box.checked').length;
+    cat.querySelector('.cat-progress').textContent = catDone + ' / ' + boxes.length;
+  }
+  showToast(wasChecked ? 'Item unchecked' : '✓ Item marked complete');
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2000);
+}
+</script>
 </html>

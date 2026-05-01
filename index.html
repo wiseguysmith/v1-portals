@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T2T — Portal Map</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'DM Sans', sans-serif; background:#f5f3ef; color:#1a1814; min-height:100vh; }
+
+    .header { background:#1a1814; color:#f5f3ef; padding:32px 48px; display:flex; align-items:center; justify-content:space-between; }
+    .header-left { display:flex; align-items:baseline; gap:16px; }
+    .logo { font-size:22px; font-weight:500; letter-spacing:-.02em; }
+    .header-sub { font-size:13px; color:#888; font-family:'DM Mono', monospace; }
+    .header-meta { font-size:12px; color:#555; font-family:'DM Mono', monospace; text-align:right; line-height:1.6; }
+
+    .container { max-width:1200px; margin:0 auto; padding:40px 48px 80px; }
+
+    .section-label { font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:.08em; color:#888; margin-bottom:20px; }
+
+    .portals-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:16px; margin-bottom:48px; }
+
+    .portal-col { display:flex; flex-direction:column; gap:0; }
+    .portal-header { border-radius:8px 8px 0 0; padding:14px 16px; display:flex; flex-direction:column; gap:4px; }
+    .portal-name { font-size:13px; font-weight:500; }
+    .portal-user { font-size:11px; font-family:'DM Mono', monospace; opacity:.75; }
+    .portal-count { font-size:10px; font-family:'DM Mono', monospace; opacity:.6; margin-top:2px; }
+
+    .screen-list { background:#fff; border:1px solid #e0ddd8; border-top:none; border-radius:0 0 8px 8px; overflow:hidden; }
+    .screen-item { display:flex; align-items:center; gap:10px; padding:10px 14px; border-bottom:1px solid #f0ede8; text-decoration:none; color:#1a1814; transition:background .12s; }
+    .screen-item:last-child { border-bottom:none; }
+    .screen-item:hover { background:#f5f3ef; }
+    .screen-icon { font-size:13px; flex-shrink:0; width:18px; text-align:center; }
+    .screen-name { font-size:13px; flex:1; }
+    .screen-arrow { font-size:11px; color:#bbb; }
+
+    /* Portal accent colors */
+    .portal-admin    .portal-header { background:#1a1814; color:#f5f3ef; }
+    .portal-issuer   .portal-header { background:#6080c0; color:#fff; }
+    .portal-legal    .portal-header { background:#b8952a; color:#fff; }
+    .portal-backend  .portal-header { background:#888; color:#fff; }
+    .portal-broker     .portal-header { background:#7aab8a; color:#fff; }
+    .portal-compliance .portal-header { background:#7060b0; color:#fff; }
+    .portal-asset-dd   .portal-header { background:#a06040; color:#fff; }
+
+    .portal-admin      .screen-item:hover { background:#f5f3ef; }
+    .portal-issuer     .screen-item:hover { background:#f0f4ff; }
+    .portal-legal      .screen-item:hover { background:#fdf8ee; }
+    .portal-backend    .screen-item:hover { background:#f5f5f5; }
+    .portal-broker     .screen-item:hover { background:#f0f7f2; }
+    .portal-compliance .screen-item:hover { background:#f0eef8; }
+    .portal-asset-dd   .screen-item:hover { background:#f7f0ec; }
+
+    /* Deals section */
+    .deals-row { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:48px; }
+    .deal-card { background:#fff; border:1px solid #e0ddd8; border-radius:8px; padding:20px 24px; }
+    .deal-card.blocked { border-left:3px solid #c9907a; }
+    .deal-card.progress { border-left:3px solid #c9a050; }
+    .deal-card-header { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+    .deal-id-badge { font-size:11px; font-family:'DM Mono', monospace; background:#f0ede8; border:1px solid #e0ddd8; padding:2px 8px; border-radius:4px; color:#888; }
+    .deal-title { font-size:16px; font-weight:500; }
+    .deal-stage { font-size:11px; font-family:'DM Mono', monospace; padding:3px 10px; border-radius:20px; }
+    .stage-readiness { background:#fff0ec; color:#c9907a; border:1px solid #f0c0a8; }
+    .stage-intake    { background:#fff8ec; color:#c9a050; border:1px solid #f0d890; }
+    .deal-meta-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+    .deal-meta-item { display:flex; flex-direction:column; gap:2px; }
+    .deal-meta-label { font-size:10px; color:#aaa; text-transform:uppercase; letter-spacing:.05em; }
+    .deal-meta-value { font-size:13px; font-family:'DM Mono', monospace; font-weight:500; }
+    .hard-stop-tag { display:inline-flex; align-items:center; gap:6px; background:#fff0ec; border:1px solid #f0c0a8; color:#c9907a; font-size:11px; padding:3px 10px; border-radius:4px; margin-top:10px; font-family:'DM Mono', monospace; }
+
+    /* Gate progress */
+    .gate-row { display:flex; gap:6px; align-items:center; margin-top:14px; }
+    .gate-pip { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-family:'DM Mono', monospace; font-weight:500; flex-shrink:0; }
+    .gate-pip.done    { background:#1a1814; color:#fff; }
+    .gate-pip.active  { background:#c9a050; color:#fff; }
+    .gate-pip.blocked { background:#c9907a; color:#fff; }
+    .gate-pip.future  { background:#f0ede8; color:#aaa; border:1px solid #e0ddd8; }
+    .gate-line { flex:1; height:2px; background:#e0ddd8; }
+    .gate-line.done { background:#1a1814; }
+
+    /* Stats bar */
+    .stats-bar { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:40px; }
+    .stat-card { background:#fff; border:1px solid #e0ddd8; border-radius:8px; padding:18px 20px; }
+    .stat-label { font-size:11px; color:#aaa; text-transform:uppercase; letter-spacing:.05em; margin-bottom:6px; }
+    .stat-value { font-size:28px; font-weight:500; line-height:1; font-family:'DM Mono', monospace; }
+    .stat-sub { font-size:11px; color:#aaa; margin-top:4px; }
+    .stat-value.gold   { color:#b8952a; }
+    .stat-value.alert  { color:#c9907a; }
+    .stat-value.green  { color:#7aab8a; }
+
+    .footer { text-align:center; font-size:12px; color:#aaa; font-family:'DM Mono', monospace; padding:40px 0 20px; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <span class="logo">T2T</span>
+    <span class="header-sub">Title2Token — V1 Operational Control Tower</span>
+  </div>
+  <div class="header-meta">
+    30 screens · 5 portals · 2 live deals<br/>
+    Static HTML/CSS · No build step
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="section-label">Platform Overview</div>
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="stat-label">Total Screens</div>
+      <div class="stat-value">47</div>
+      <div class="stat-sub">across 7 portals</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Live Deals</div>
+      <div class="stat-value gold">5</div>
+      <div class="stat-sub">T2T-001 through T2T-005</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Hard Stops</div>
+      <div class="stat-value alert">1</div>
+      <div class="stat-sub">T2T-001 land title</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Portals</div>
+      <div class="stat-value green">7</div>
+      <div class="stat-sub">Admin · Issuer · Legal · Backend · Broker</div>
+    </div>
+  </div>
+
+  <div class="section-label">Live Deals</div>
+  <div class="deals-row">
+    <div class="deal-card blocked">
+      <div class="deal-card-header">
+        <span class="deal-id-badge">T2T-001</span>
+        <span class="deal-title">Hotel Arco Iris</span>
+        <span class="deal-stage stage-readiness">Readiness Review</span>
+      </div>
+      <div class="deal-meta-grid">
+        <div class="deal-meta-item"><span class="deal-meta-label">Raise Target</span><span class="deal-meta-value" style="color:#b8952a;">$2,320,500</span></div>
+        <div class="deal-meta-item"><span class="deal-meta-label">Readiness</span><span class="deal-meta-value" style="color:#c9907a;">0%</span></div>
+        <div class="deal-meta-item"><span class="deal-meta-label">Current Gate</span><span class="deal-meta-value">Gate 2</span></div>
+        <div class="deal-meta-item"><span class="deal-meta-label">Asset</span><span class="deal-meta-value" style="font-size:11px;color:#888;">Boutique Hotel</span></div>
+        <div class="deal-meta-item"><span class="deal-meta-label">Location</span><span class="deal-meta-value" style="font-size:11px;color:#888;">Guanacaste, CR</span></div>
+        <div class="deal-meta-item"><span class="deal-meta-label">Token</span><span class="deal-meta-value" style="font-size:11px;color:#888;">ERC-3643 · Base</span></div>
+      </div>
+      <div class="gate-row">
+        <div class="gate-pip done">✓</div>
+        <div class="gate-line done"></div>
+        <div class="gate-pip active">2</div>
+        <div class="gate-line"></div>
+        <div class="gate-pip blocked">⛔</div>
+        <div class="gate-line"></div>
+        <div class="gate-pip future">4</div>
+        <div class="gate-line"></div>
+        <div class="gate-pip future">5</div>
+        <div class="gate-line"></div>
+        <div class="gate-pip future">6</div>
+        <div class="gate-line"></div>
+        <div class="gate-pip future">7</div>
+      </div>
+      <div class="hard-stop-tag">⛔ Hard Stop — Land title defect blocking Gate 2</div>
+    </div>
+    <div class="deal-card progress">
+      <div class="deal-card-header">
+        <span class="deal-id-badge">T2T-002</span>
+        <span class="deal-title">Grande Beach Club</span>
+        <span class="deal-stage stage-intake">Intake</span>
+      </div>
+      <div class="deal-meta-grid">
+        <div class="deal-meta-item"><span class="deal-meta-label">Raise Target</span><span class="deal-meta-value" style="color:#b8952a;">$1,040,000</span></div>
+        <div class="deal-meta-item"><span class="deal-meta-label">Readiness</span><span class="deal-meta-value" style="color:#c9a050;">28%</span></div>
+        <div class="deal-meta-item"><span class="deal-meta-label">Current Gate</span><span class="deal-meta-value">Gate 1</span></div>
+        <div class="deal-meta-item"><span class="deal-meta-label">Asset</span><span class="deal-meta-value" style="font-size:11px;color:#888;">Beach Club</span></div>
+        <div class="deal-meta-item"><span class="deal-meta-label">Location</span><span class="deal-meta-value" style="font-size:11px;color:#888;">Caribbean Coast, CR</span></div>
+        <div class="deal-meta-item"><span class="deal-meta-label">Token</span><span class="deal-meta-value" style="font-size:11px;color:#888;">ERC-3643 · Base</span></div>
+      </div>
+      <div class="gate-row">
+        <div class="gate-pip active">1</div>
+        <div class="gate-line"></div>
+        <div class="gate-pip future">2</div>
+        <div class="gate-line"></div>
+        <div class="gate-pip future">3</div>
+        <div class="gate-line"></div>
+        <div class="gate-pip future">4</div>
+        <div class="gate-line"></div>
+        <div class="gate-pip future">5</div>
+        <div class="gate-line"></div>
+        <div class="gate-pip future">6</div>
+        <div class="gate-line"></div>
+        <div class="gate-pip future">7</div>
+      </div>
+      <div style="margin-top:10px;">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#aaa;margin-bottom:4px;"><span>Intake progress</span><span style="font-family:'DM Mono',monospace;">28%</span></div>
+        <div style="height:6px;background:#f0ede8;border-radius:3px;overflow:hidden;"><div style="width:28%;height:100%;background:#c9a050;border-radius:3px;"></div></div>
+      </div>
+    </div>
+
+    <div class="deal-card" style="border-left:3px solid #7aab8a;">
+      <div class="deal-card-header">
+        <span class="deal-id-badge">T2T-003</span>
+        <span class="deal-title">Sunset Lofts</span>
+        <span class="deal-stage" style="font-size:11px;font-family:'DM Mono',monospace;padding:3px 10px;border-radius:20px;background:#eaf4ec;color:#3a7a4a;border:1px solid #b8d8c2;">Legal / Compliance</span>
+      </div>
+      <div class="deal-meta-grid">
+        <div class="deal-meta-item"><span class="deal-meta-label">Raise Target</span><span class="deal-meta-value" style="color:#b8952a;">$5,200,000</span></div>
+        <div class="deal-meta-item"><span class="deal-meta-label">Readiness</span><span class="deal-meta-value" style="color:#3a7a4a;">62%</span></div>
+        <div class="deal-meta-item"><span class="deal-meta-label">Current Gate</span><span class="deal-meta-value">Gate 5</span></div>
+        <div class="deal-meta-item"><span class="deal-meta-label">Asset</span><span class="deal-meta-value" style="font-size:11px;color:#888;">Multifamily · 48u</span></div>
+        <div class="deal-meta-item"><span class="deal-meta-label">Location</span><span class="deal-meta-value" style="font-size:11px;color:#888;">Miami, FL · USA</span></div>
+        <div class="deal-meta-item"><span class="deal-meta-label">KYC</span><span class="deal-meta-value" style="font-size:11px;color:#c9907a;">2 flags open</span></div>
+      </div>
+      <div class="gate-row">
+        <div class="gate-pip done">✓</div><div class="gate-line done"></div>
+        <div class="gate-pip done">✓</div><div class="gate-line done"></div>
+        <div class="gate-pip done">✓</div><div class="gate-line done"></div>
+        <div class="gate-pip done">✓</div><div class="gate-line done"></div>
+        <div class="gate-pip active">5</div><div class="gate-line"></div>
+        <div class="gate-pip future">6</div><div class="gate-line"></div>
+        <div class="gate-pip future">7</div>
+      </div>
+    </div>
+
+    <div class="deal-card" style="border-left:3px solid #c9a050;">
+      <div class="deal-card-header">
+        <span class="deal-id-badge">T2T-004</span>
+        <span class="deal-title">The Meridian</span>
+        <span class="deal-stage" style="font-size:11px;font-family:'DM Mono',monospace;padding:3px 10px;border-radius:20px;background:#fff8ec;color:#c9a050;border:1px solid #f0d890;">Structuring</span>
+      </div>
+      <div class="deal-meta-grid">
+        <div class="deal-meta-item"><span class="deal-meta-label">Raise Target</span><span class="deal-meta-value" style="color:#b8952a;">$8,700,000</span></div>
+        <div class="deal-meta-item"><span class="deal-meta-label">Readiness</span><span class="deal-meta-value" style="color:#c9a050;">74%</span></div>
+        <div class="deal-meta-item"><span class="deal-meta-label">Current Gate</span><span class="deal-meta-value">Gate 6</span></div>
+        <div class="deal-meta-item"><span class="deal-meta-label">Asset</span><span class="deal-meta-value" style="font-size:11px;color:#888;">Mixed Use</span></div>
+        <div class="deal-meta-item"><span class="deal-meta-label">Location</span><span class="deal-meta-value" style="font-size:11px;color:#888;">Nashville, TN · USA</span></div>
+        <div class="deal-meta-item"><span class="deal-meta-label">SPV</span><span class="deal-meta-value" style="font-size:11px;color:#c9a050;">Pending</span></div>
+      </div>
+      <div class="gate-row">
+        <div class="gate-pip done">✓</div><div class="gate-line done"></div>
+        <div class="gate-pip done">✓</div><div class="gate-line done"></div>
+        <div class="gate-pip done">✓</div><div class="gate-line done"></div>
+        <div class="gate-pip done">✓</div><div class="gate-line done"></div>
+        <div class="gate-pip done">✓</div><div class="gate-line done"></div>
+        <div class="gate-pip active">6</div><div class="gate-line"></div>
+        <div class="gate-pip future">7</div>
+      </div>
+    </div>
+
+    <div class="deal-card" style="border-left:3px solid #7aab8a;">
+      <div class="deal-card-header">
+        <span class="deal-id-badge">T2T-005</span>
+        <span class="deal-title">Playa Dorada Resort</span>
+        <span class="deal-stage" style="font-size:11px;font-family:'DM Mono',monospace;padding:3px 10px;border-radius:20px;background:#eaf4ec;color:#3a7a4a;border:1px solid #b8d8c2;">Pre-Launch</span>
+      </div>
+      <div class="deal-meta-grid">
+        <div class="deal-meta-item"><span class="deal-meta-label">Raise Target</span><span class="deal-meta-value" style="color:#b8952a;">$3,100,000</span></div>
+        <div class="deal-meta-item"><span class="deal-meta-label">Readiness</span><span class="deal-meta-value" style="color:#3a7a4a;">91%</span></div>
+        <div class="deal-meta-item"><span class="deal-meta-label">Current Gate</span><span class="deal-meta-value">Gate 7</span></div>
+        <div class="deal-meta-item"><span class="deal-meta-label">Asset</span><span class="deal-meta-value" style="font-size:11px;color:#888;">Boutique Resort</span></div>
+        <div class="deal-meta-item"><span class="deal-meta-label">Location</span><span class="deal-meta-value" style="font-size:11px;color:#888;">Tamarindo, CR</span></div>
+        <div class="deal-meta-item"><span class="deal-meta-label">Status</span><span class="deal-meta-value" style="font-size:11px;color:#3a7a4a;">On track</span></div>
+      </div>
+      <div class="gate-row">
+        <div class="gate-pip done">✓</div><div class="gate-line done"></div>
+        <div class="gate-pip done">✓</div><div class="gate-line done"></div>
+        <div class="gate-pip done">✓</div><div class="gate-line done"></div>
+        <div class="gate-pip done">✓</div><div class="gate-line done"></div>
+        <div class="gate-pip done">✓</div><div class="gate-line done"></div>
+        <div class="gate-pip done">✓</div><div class="gate-line done"></div>
+        <div class="gate-pip active">7</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-label">All 47 Screens — Click Any to Open</div>
+  <div class="portals-grid">
+
+    <!-- Admin -->
+    <div class="portal-col portal-admin">
+      <div class="portal-header">
+        <span class="portal-name">Admin Portal</span>
+        <span class="portal-user">James Whitmore · JW</span>
+        <span class="portal-count">10 screens · Full access</span>
+      </div>
+      <div class="screen-list">
+        <a class="screen-item" href="admin/screens/dashboard.html"><span class="screen-icon">⬛</span><span class="screen-name">Command Center</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="admin/screens/pipeline.html"><span class="screen-icon">◈</span><span class="screen-name">Pipeline</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="admin/screens/deal-detail.html"><span class="screen-icon">◈</span><span class="screen-name">Deal Detail</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="admin/screens/blocker-board.html"><span class="screen-icon">⚑</span><span class="screen-name">Blocker Board</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="admin/screens/intake-queue.html"><span class="screen-icon">↓</span><span class="screen-name">Intake Queue</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="admin/screens/notifications.html"><span class="screen-icon">🔔</span><span class="screen-name">Inbox</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="admin/screens/partner-management.html"><span class="screen-icon">◎</span><span class="screen-name">Partners</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="admin/screens/workflow-builder.html"><span class="screen-icon">⚙</span><span class="screen-name">Workflows</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="admin/screens/audit-log.html"><span class="screen-icon">≡</span><span class="screen-name">Audit Log</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="admin/screens/settings.html"><span class="screen-icon">⚙</span><span class="screen-name">Settings</span><span class="screen-arrow">→</span></a>
+      </div>
+    </div>
+
+    <!-- Issuer -->
+    <div class="portal-col portal-issuer">
+      <div class="portal-header">
+        <span class="portal-name">Issuer Portal</span>
+        <span class="portal-user">Rafael Torres · RT</span>
+        <span class="portal-count">5 screens · T2T-001 only</span>
+      </div>
+      <div class="screen-list">
+        <a class="screen-item" href="issuer/screens/dashboard.html"><span class="screen-icon">⬛</span><span class="screen-name">My Deal</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="issuer/screens/checklist.html"><span class="screen-icon">☑</span><span class="screen-name">My Checklist</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="issuer/screens/documents.html"><span class="screen-icon">📄</span><span class="screen-name">Documents</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="issuer/screens/activity.html"><span class="screen-icon">≡</span><span class="screen-name">Activity</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="issuer/screens/deal.html"><span class="screen-icon">◈</span><span class="screen-name">Full Deal View</span><span class="screen-arrow">→</span></a>
+      </div>
+    </div>
+
+    <!-- Legal -->
+    <div class="portal-col portal-legal">
+      <div class="portal-header">
+        <span class="portal-name">Legal Portal</span>
+        <span class="portal-user">V. Saborio · VS</span>
+        <span class="portal-count">5 screens · T2T-001 + 002</span>
+      </div>
+      <div class="screen-list">
+        <a class="screen-item" href="legal/screens/dashboard.html"><span class="screen-icon">⬛</span><span class="screen-name">My Workload</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="legal/screens/deal.html"><span class="screen-icon">◈</span><span class="screen-name">Deal View</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="legal/screens/document-review.html"><span class="screen-icon">📄</span><span class="screen-name">Document Review</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="legal/screens/signoffs.html"><span class="screen-icon">✍</span><span class="screen-name">Signoffs</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="legal/screens/activity.html"><span class="screen-icon">≡</span><span class="screen-name">Activity</span><span class="screen-arrow">→</span></a>
+      </div>
+    </div>
+
+    <!-- Backend -->
+    <div class="portal-col portal-backend">
+      <div class="portal-header">
+        <span class="portal-name">Backend Portal</span>
+        <span class="portal-user">Backend Partner · BP</span>
+        <span class="portal-count">6 screens · T2T-001 + 002</span>
+      </div>
+      <div class="screen-list">
+        <a class="screen-item" href="backend/screens/dashboard.html"><span class="screen-icon">⬛</span><span class="screen-name">My Workload</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="backend/screens/deal.html"><span class="screen-icon">◈</span><span class="screen-name">Deal View</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="backend/screens/technical-checklist.html"><span class="screen-icon">⚙</span><span class="screen-name">Tech Checklist</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="backend/screens/vendor-status.html"><span class="screen-icon">◎</span><span class="screen-name">Vendor Status</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="backend/screens/activity.html"><span class="screen-icon">≡</span><span class="screen-name">Activity</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="backend/screens/api-reference.html"><span class="screen-icon">⌨</span><span class="screen-name">API Reference</span><span class="screen-arrow">→</span></a>
+      </div>
+    </div>
+
+    <!-- Broker -->
+    <div class="portal-col portal-broker">
+      <div class="portal-header">
+        <span class="portal-name">Broker Portal</span>
+        <span class="portal-user">Marco Delgado · MD</span>
+        <span class="portal-count">4 screens · 3 deals submitted</span>
+      </div>
+      <div class="screen-list">
+        <a class="screen-item" href="broker/screens/dashboard.html"><span class="screen-icon">⬛</span><span class="screen-name">My Dashboard</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="broker/screens/my-deals.html"><span class="screen-icon">◈</span><span class="screen-name">My Deals</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="broker/screens/submit-deal.html"><span class="screen-icon">＋</span><span class="screen-name">Submit a Deal</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="broker/screens/activity.html"><span class="screen-icon">≡</span><span class="screen-name">Activity</span><span class="screen-arrow">→</span></a>
+      </div>
+    </div>
+
+    <!-- Compliance -->
+    <div class="portal-col portal-compliance">
+      <div class="portal-header">
+        <span class="portal-name">Compliance Portal</span>
+        <span class="portal-user">Sofia Reyes · SR</span>
+        <span class="portal-count">5 screens · All deals</span>
+      </div>
+      <div class="screen-list">
+        <a class="screen-item" href="compliance/screens/dashboard.html"><span class="screen-icon">⬛</span><span class="screen-name">My Workload</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="compliance/screens/deal.html"><span class="screen-icon">◈</span><span class="screen-name">Deal View</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="compliance/screens/kyc-review.html"><span class="screen-icon">⚑</span><span class="screen-name">KYC / AML Review</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="compliance/screens/signoffs.html"><span class="screen-icon">✍</span><span class="screen-name">Reg. Signoffs</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="compliance/screens/activity.html"><span class="screen-icon">≡</span><span class="screen-name">Activity</span><span class="screen-arrow">→</span></a>
+      </div>
+    </div>
+
+    <!-- Asset DD -->
+    <div class="portal-col portal-asset-dd">
+      <div class="portal-header">
+        <span class="portal-name">Asset DD Portal</span>
+        <span class="portal-user">Marcus Webb · MW</span>
+        <span class="portal-count">5 screens · All deals</span>
+      </div>
+      <div class="screen-list">
+        <a class="screen-item" href="asset-dd/screens/dashboard.html"><span class="screen-icon">⬛</span><span class="screen-name">My Workload</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="asset-dd/screens/deal.html"><span class="screen-icon">◈</span><span class="screen-name">Deal View</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="asset-dd/screens/reports.html"><span class="screen-icon">📋</span><span class="screen-name">Reports</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="asset-dd/screens/checklist.html"><span class="screen-icon">⚙</span><span class="screen-name">DD Checklist</span><span class="screen-arrow">→</span></a>
+        <a class="screen-item" href="asset-dd/screens/activity.html"><span class="screen-icon">≡</span><span class="screen-name">Activity</span><span class="screen-arrow">→</span></a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">Title2Token V1 Operational Control Tower · 47 screens · 7 portals · Static HTML/CSS</div>
+
+</div>
+</body>
+</html>

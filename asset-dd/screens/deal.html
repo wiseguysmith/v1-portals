@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T2T Asset DD — Deal View</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../public/design-tokens.css"/>
+  <link rel="stylesheet" href="../../admin/styles/admin.css"/>
+  <link rel="stylesheet" href="../styles/asset-dd.css"/>
+</head>
+<body>
+<div class="t2-shell">
+
+  <header class="t2-topbar">
+    <span class="t2-logo">T2T</span>
+    <span class="t2-tag">|</span>
+    <span class="t2-portal-badge">Asset Due Diligence</span>
+    <div class="t2-topbar-search">
+      <input class="t2-search-input" type="text" placeholder="Search…"/>
+    </div>
+    <div class="t2-topbar-right">
+      <span class="t2-tag mono">Marcus W.</span>
+      <div class="t2-avatar" style="background:#a06040;">MW</div>
+    </div>
+  </header>
+
+  <nav class="t2-nav">
+    <span class="t2-nav-label">Overview</span>
+    <a href="dashboard.html" class="t2-nav-item">⬛ My Workload</a>
+    <span class="t2-nav-label">Deals</span>
+    <a href="deal.html?id=001" class="t2-nav-item">◈ T2T-001 Hotel Arco Iris</a>
+    <a href="deal.html?id=002" class="t2-nav-item">◈ T2T-002 Grande Beach Club</a>
+    <a href="deal.html?id=003" class="t2-nav-item active">◈ T2T-003 Sunset Lofts</a>
+    <a href="deal.html?id=004" class="t2-nav-item">◈ T2T-004 The Meridian</a>
+    <a href="deal.html?id=005" class="t2-nav-item">◈ T2T-005 Playa Dorada</a>
+    <span class="t2-nav-label">Work Queue</span>
+    <a href="reports.html" class="t2-nav-item">📋 Reports <span class="t2-nav-count alert">2</span></a>
+    <a href="checklist.html" class="t2-nav-item">⚙ DD Checklist <span class="t2-nav-count">8</span></a>
+    <a href="activity.html" class="t2-nav-item">≡ Activity</a>
+  </nav>
+
+  <main class="t2-main">
+
+    <div class="page-header">
+      <div>
+        <div class="t2-breadcrumb"><a href="dashboard.html">Workload</a><span class="sep">›</span><span class="cur">T2T-003</span></div>
+        <div style="display:flex;align-items:center;gap:var(--space-3);margin-top:var(--space-1);">
+          <span class="deal-id">T2T-003</span>
+          <div class="page-title">Sunset Lofts</div>
+          <span class="stage-pill legal-comp">Legal / Compliance</span>
+        </div>
+      </div>
+      <a href="activity.html" class="btn-ghost" style="text-decoration:none;">Message Admin</a>
+    </div>
+
+    <div class="warning-banner">
+      <span>⚠</span>
+      <div>Independent appraisal must be submitted by May 7 to keep Gate 4 on schedule. Insurance confirmation due May 14.</div>
+    </div>
+
+    <div class="two-col">
+
+      <div class="panel">
+        <div class="panel-header"><span class="panel-title">Asset DD Checklist — T2T-003</span><span class="t2-tag mono">3 of 7 complete</span></div>
+        <div style="display:grid;grid-template-columns:18px 1fr 90px 80px;align-items:center;gap:var(--space-3);padding:8px var(--space-5);border-bottom:1px solid var(--color-border);font-size:var(--text-xs);color:var(--color-text-faint);font-weight:500;text-transform:uppercase;letter-spacing:.04em;">
+          <span></span><span>Item</span><span>Due</span><span>Status</span>
+        </div>
+        <div style="display:grid;grid-template-columns:18px 1fr 90px 80px;align-items:center;gap:var(--space-3);padding:9px var(--space-5);border-bottom:1px solid var(--color-border-faint);font-size:var(--text-sm);">
+          <span style="color:var(--color-green);">✓</span><span>Property photos &amp; site visit</span><span class="mono faint">Apr 22</span><span style="color:var(--color-green);">Done</span>
+        </div>
+        <div style="display:grid;grid-template-columns:18px 1fr 90px 80px;align-items:center;gap:var(--space-3);padding:9px var(--space-5);border-bottom:1px solid var(--color-border-faint);font-size:var(--text-sm);">
+          <span style="color:var(--color-green);">✓</span><span>Property Condition Assessment (PCA)</span><span class="mono faint">Apr 25</span><span style="color:var(--color-green);">Done</span>
+        </div>
+        <div style="display:grid;grid-template-columns:18px 1fr 90px 80px;align-items:center;gap:var(--space-3);padding:9px var(--space-5);border-bottom:1px solid var(--color-border-faint);font-size:var(--text-sm);">
+          <span style="color:var(--color-green);">✓</span><span>Environmental Phase I Report</span><span class="mono faint">Apr 28</span><span style="color:var(--color-green);">Done</span>
+        </div>
+        <div style="display:grid;grid-template-columns:18px 1fr 90px 80px;align-items:center;gap:var(--space-3);padding:9px var(--space-5);border-bottom:1px solid var(--color-border-faint);font-size:var(--text-sm);">
+          <div class="check-box"></div><span>Independent appraisal</span><span class="mono" style="color:var(--color-warn);">May 7</span><span style="color:var(--color-warn);">Pending</span>
+        </div>
+        <div style="display:grid;grid-template-columns:18px 1fr 90px 80px;align-items:center;gap:var(--space-3);padding:9px var(--space-5);border-bottom:1px solid var(--color-border-faint);font-size:var(--text-sm);">
+          <div class="check-box"></div><span>Insurance coverage confirmed</span><span class="mono" style="color:var(--color-warn);">May 14</span><span style="color:var(--color-warn);">Pending</span>
+        </div>
+        <div style="display:grid;grid-template-columns:18px 1fr 90px 80px;align-items:center;gap:var(--space-3);padding:9px var(--space-5);border-bottom:1px solid var(--color-border-faint);font-size:var(--text-sm);">
+          <div class="check-box"></div><span>Title search findings reviewed</span><span class="mono faint">May 14</span><span class="faint">Not started</span>
+        </div>
+        <div style="display:grid;grid-template-columns:18px 1fr 90px 80px;align-items:center;gap:var(--space-3);padding:9px var(--space-5);font-size:var(--text-sm);">
+          <div class="check-box"></div><span>DD summary report submitted to admin</span><span class="mono faint">May 21</span><span class="faint">Not started</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:var(--space-4);">
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Property Summary</span></div>
+          <div class="panel-body" style="display:flex;flex-direction:column;gap:var(--space-3);">
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Asset type</span><span>Multifamily · 48 units</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Location</span><span>Miami, FL · USA</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Year built</span><span class="mono">2019</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Sq footage</span><span class="mono">38,400 sf</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Current occupancy</span><span class="mono">92%</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Purchase price</span><span class="mono gold">$12,500,000</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">PCA result</span><span style="color:var(--color-green);">Good condition</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Environmental</span><span style="color:var(--color-green);">Phase I clean</span></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Gate Progress</span></div>
+          <div class="panel-body">
+            <div class="gate-bar">
+              <div class="gate-item complete"><div class="gate-dot complete">✓</div><span class="gate-label complete">G1</span></div>
+              <div class="gate-item complete"><div class="gate-dot complete">✓</div><span class="gate-label complete">G2</span></div>
+              <div class="gate-item complete"><div class="gate-dot complete">✓</div><span class="gate-label complete">G3</span></div>
+              <div class="gate-item complete"><div class="gate-dot complete">✓</div><span class="gate-label complete">G4</span></div>
+              <div class="gate-item"><div class="gate-dot active">5</div><span class="gate-label active">G5</span></div>
+              <div class="gate-item"><div class="gate-dot">6</div><span class="gate-label">G6</span></div>
+              <div class="gate-item"><div class="gate-dot">7</div><span class="gate-label">G7</span></div>
+            </div>
+            <div style="font-size:var(--text-xs);color:var(--color-text-faint);margin-top:var(--space-2);">Asset DD primarily at Gate 4 — 3 of 7 items complete. Appraisal is the critical path item.</div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Quick Actions</span></div>
+          <div class="panel-body" style="display:flex;flex-direction:column;gap:var(--space-2);">
+            <a href="reports.html" class="btn-primary" style="text-decoration:none;text-align:center;">Upload Report →</a>
+            <a href="checklist.html" class="btn-ghost" style="text-decoration:none;text-align:center;">View Full Checklist</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+</body>
+</html>

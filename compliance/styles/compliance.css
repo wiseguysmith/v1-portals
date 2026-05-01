@@ -1,0 +1,16 @@
+/* ============================================
+   Title2Token — Compliance Officer Portal CSS
+   compliance/styles/compliance.css
+   ============================================ */
+
+.t2-portal-badge {
+  background: #f0eef8;
+  color: #7060b0;
+  border-color: #c8c0e8;
+}
+
+.t2-nav-item.active {
+  border-left-color: #7060b0;
+  background: #f0eef8;
+  color: var(--color-text);
+}

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T2T Asset DD — Reports</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../public/design-tokens.css"/>
+  <link rel="stylesheet" href="../../admin/styles/admin.css"/>
+  <link rel="stylesheet" href="../styles/asset-dd.css"/>
+  <style>
+    .report-card { background:#fff; border:1px solid var(--color-border); border-radius:var(--radius-md); padding:var(--space-4) var(--space-5); display:flex; align-items:center; gap:var(--space-4); }
+    .report-icon { width:44px; height:44px; background:var(--color-bg-subtle); border:1px solid var(--color-border); border-radius:var(--radius-md); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+    .report-body { flex:1; }
+    .report-name { font-size:var(--text-base); font-weight:500; }
+    .report-meta { font-size:var(--text-sm); color:var(--color-text-muted); margin-top:2px; }
+    .report-right { display:flex; flex-direction:column; align-items:flex-end; gap:var(--space-2); flex-shrink:0; }
+    .upload-zone { border:2px dashed var(--color-border); border-radius:var(--radius-md); padding:var(--space-6); text-align:center; background:var(--color-bg-subtle); color:var(--color-text-muted); font-size:var(--text-sm); cursor:pointer; transition:border-color .15s, background .15s; }
+    .upload-zone:hover { border-color:#a06040; background:#f7f0ec; }
+
+    /* Upload interaction */
+    .upload-zone.uploading { border-color:var(--color-warn); background:#fff8ec; }
+    .upload-zone.success   { border-color:var(--color-green); background:#f0f7f2; }
+    .progress-bar { height:4px; background:var(--color-border); border-radius:2px; overflow:hidden; margin-top:var(--space-3); display:none; }
+    .progress-fill { height:100%; background:var(--color-warn); border-radius:2px; width:0%; transition:width .3s ease; }
+    .upload-success-msg { display:none; color:var(--color-green); font-weight:500; margin-top:var(--space-2); }
+  </style>
+</head>
+<body>
+<div class="t2-shell">
+
+  <header class="t2-topbar">
+    <span class="t2-logo">T2T</span>
+    <span class="t2-tag">|</span>
+    <span class="t2-portal-badge">Asset Due Diligence</span>
+    <div class="t2-topbar-search">
+      <input class="t2-search-input" type="text" placeholder="Search reports…"/>
+    </div>
+    <div class="t2-topbar-right">
+      <span class="t2-tag mono">Marcus W.</span>
+      <div class="t2-avatar" style="background:#a06040;">MW</div>
+    </div>
+  </header>
+
+  <nav class="t2-nav">
+    <span class="t2-nav-label">Overview</span>
+    <a href="dashboard.html" class="t2-nav-item">⬛ My Workload</a>
+    <span class="t2-nav-label">Deals</span>
+    <a href="deal.html?id=001" class="t2-nav-item">◈ T2T-001 Hotel Arco Iris</a>
+    <a href="deal.html?id=002" class="t2-nav-item">◈ T2T-002 Grande Beach Club</a>
+    <a href="deal.html?id=003" class="t2-nav-item">◈ T2T-003 Sunset Lofts</a>
+    <a href="deal.html?id=004" class="t2-nav-item">◈ T2T-004 The Meridian</a>
+    <a href="deal.html?id=005" class="t2-nav-item">◈ T2T-005 Playa Dorada</a>
+    <span class="t2-nav-label">Work Queue</span>
+    <a href="reports.html" class="t2-nav-item active">📋 Reports <span class="t2-nav-count alert">2</span></a>
+    <a href="checklist.html" class="t2-nav-item">⚙ DD Checklist <span class="t2-nav-count">8</span></a>
+    <a href="activity.html" class="t2-nav-item">≡ Activity</a>
+  </nav>
+
+  <main class="t2-main">
+
+    <div class="page-header">
+      <div>
+        <div class="t2-section-label">Work Queue</div>
+        <div class="page-title">Reports</div>
+      </div>
+      <div style="display:flex;gap:var(--space-2);">
+        <select class="t2-select" style="width:140px;"><option>All deals</option><option>T2T-001</option><option>T2T-002</option><option>T2T-003</option><option>T2T-004</option><option>T2T-005</option></select>
+      </div>
+    </div>
+
+    <!-- Upload zone -->
+    <div id="uploadZone" class="upload-zone" onclick="startUpload()">
+      <div style="font-size:24px;margin-bottom:var(--space-2);">↑</div>
+      <div style="font-weight:500;margin-bottom:4px;">Drop report here or click to upload</div>
+      <div style="font-size:var(--text-xs);color:var(--color-text-faint);">PCA · Environmental · Appraisal · Insurance · Phase II · Survey — PDF, DOCX max 50MB</div>
+      <div class="progress-bar" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="upload-success-msg" id="successMsg">✓ Report uploaded successfully — visible to admin for review</div>
+    </div>
+
+    <!-- Pending reports -->
+    <div style="margin-top:var(--space-4);margin-bottom:var(--space-4);">
+      <div style="font-size:var(--text-sm);font-weight:500;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:var(--space-3);">Still Needed</div>
+      <div style="display:flex;flex-direction:column;gap:var(--space-3);">
+        <div class="report-card" style="border-left:3px solid var(--color-warn);">
+          <div class="report-icon">📋</div>
+          <div class="report-body">
+            <div class="report-name">Independent Appraisal — T2T-003 Sunset Lofts</div>
+            <div class="report-meta">Miami, FL · 48-unit multifamily · Appraiser: Meridian Valuation Group · Due May 7</div>
+          </div>
+          <div class="report-right">
+            <span class="doc-status missing">Missing</span>
+            <button class="btn-ghost btn-sm" onclick="startUpload()">Upload</button>
+          </div>
+        </div>
+        <div class="report-card" style="border-left:3px solid var(--color-warn);">
+          <div class="report-icon">🛡</div>
+          <div class="report-body">
+            <div class="report-name">Insurance Coverage Confirmation — T2T-003 Sunset Lofts</div>
+            <div class="report-meta">Property &amp; liability · Binder or certificate of insurance · Due May 14</div>
+          </div>
+          <div class="report-right">
+            <span class="doc-status missing">Missing</span>
+            <button class="btn-ghost btn-sm" onclick="startUpload()">Upload</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submitted reports -->
+    <div>
+      <div style="font-size:var(--text-sm);font-weight:500;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:var(--space-3);">Submitted</div>
+      <div style="display:flex;flex-direction:column;gap:var(--space-3);">
+        <div class="report-card">
+          <div class="report-icon">📋</div>
+          <div class="report-body">
+            <div class="report-name">Property Condition Assessment — T2T-003 Sunset Lofts</div>
+            <div class="report-meta">Uploaded Apr 25 · PDF · 2.4 MB · Good condition — no critical deferred maintenance</div>
+          </div>
+          <div class="report-right">
+            <span class="doc-status approved">Approved</span>
+            <button class="btn-ghost btn-sm">View</button>
+          </div>
+        </div>
+        <div class="report-card">
+          <div class="report-icon">🌿</div>
+          <div class="report-body">
+            <div class="report-name">Environmental Phase I Report — T2T-003 Sunset Lofts</div>
+            <div class="report-meta">Uploaded Apr 28 · PDF · 5.1 MB · No recognized environmental conditions (RECs)</div>
+          </div>
+          <div class="report-right">
+            <span class="doc-status approved">Approved</span>
+            <button class="btn-ghost btn-sm">View</button>
+          </div>
+        </div>
+        <div class="report-card">
+          <div class="report-icon">📊</div>
+          <div class="report-body">
+            <div class="report-name">Full DD Package — T2T-004 The Meridian</div>
+            <div class="report-meta">Uploaded Apr 20 · ZIP · 18.3 MB · PCA + Appraisal + Environmental + Insurance — all cleared</div>
+          </div>
+          <div class="report-right">
+            <span class="doc-status approved">Approved</span>
+            <button class="btn-ghost btn-sm">View</button>
+          </div>
+        </div>
+        <div class="report-card">
+          <div class="report-icon">📊</div>
+          <div class="report-body">
+            <div class="report-name">Full DD Package — T2T-005 Playa Dorada Resort</div>
+            <div class="report-meta">Uploaded Apr 28 · ZIP · 22.7 MB · PCA + Appraisal + Environmental + Insurance — all cleared</div>
+          </div>
+          <div class="report-right">
+            <span class="doc-status approved">Approved</span>
+            <button class="btn-ghost btn-sm">View</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+function startUpload() {
+  const zone = document.getElementById('uploadZone');
+  const bar  = document.getElementById('progressBar');
+  const fill = document.getElementById('progressFill');
+  const msg  = document.getElementById('successMsg');
+
+  if (zone.classList.contains('uploading') || zone.classList.contains('success')) return;
+
+  zone.classList.add('uploading');
+  bar.style.display = 'block';
+  msg.style.display = 'none';
+
+  let pct = 0;
+  const interval = setInterval(() => {
+    pct += Math.random() * 18 + 8;
+    if (pct >= 100) {
+      pct = 100;
+      clearInterval(interval);
+      fill.style.width = '100%';
+      setTimeout(() => {
+        zone.classList.remove('uploading');
+        zone.classList.add('success');
+        msg.style.display = 'block';
+      }, 300);
+    }
+    fill.style.width = pct + '%';
+  }, 200);
+}
+</script>
+</body>
+</html>

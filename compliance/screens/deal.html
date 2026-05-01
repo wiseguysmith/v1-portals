@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T2T Compliance — Deal View</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../public/design-tokens.css"/>
+  <link rel="stylesheet" href="../../admin/styles/admin.css"/>
+  <link rel="stylesheet" href="../styles/compliance.css"/>
+  <style>
+    .comp-row { display:grid; grid-template-columns:1fr 100px 120px 80px; align-items:center; gap:var(--space-3); padding:9px var(--space-5); border-bottom:1px solid var(--color-border-faint); font-size:var(--text-sm); }
+    .comp-row:last-child { border-bottom:none; }
+    .comp-row:hover { background:var(--color-bg-subtle); }
+    .comp-row-header { font-size:var(--text-xs); color:var(--color-text-faint); font-weight:500; text-transform:uppercase; letter-spacing:.04em; border-bottom:1px solid var(--color-border); }
+  </style>
+</head>
+<body>
+<div class="t2-shell">
+
+  <header class="t2-topbar">
+    <span class="t2-logo">T2T</span>
+    <span class="t2-tag">|</span>
+    <span class="t2-portal-badge">Compliance Portal</span>
+    <div class="t2-topbar-search">
+      <input class="t2-search-input" type="text" placeholder="Search…"/>
+    </div>
+    <div class="t2-topbar-right">
+      <span class="t2-tag mono">Sofia R.</span>
+      <div class="t2-avatar" style="background:#7060b0;">SR</div>
+    </div>
+  </header>
+
+  <nav class="t2-nav">
+    <span class="t2-nav-label">Overview</span>
+    <a href="dashboard.html" class="t2-nav-item">⬛ My Workload</a>
+    <span class="t2-nav-label">Deals</span>
+    <a href="deal.html?id=001" class="t2-nav-item">◈ T2T-001 Hotel Arco Iris</a>
+    <a href="deal.html?id=002" class="t2-nav-item">◈ T2T-002 Grande Beach Club</a>
+    <a href="deal.html?id=003" class="t2-nav-item active">◈ T2T-003 Sunset Lofts</a>
+    <a href="deal.html?id=004" class="t2-nav-item">◈ T2T-004 The Meridian</a>
+    <a href="deal.html?id=005" class="t2-nav-item">◈ T2T-005 Playa Dorada</a>
+    <span class="t2-nav-label">Work Queue</span>
+    <a href="kyc-review.html" class="t2-nav-item">⚑ KYC / AML Review <span class="t2-nav-count alert">3</span></a>
+    <a href="signoffs.html" class="t2-nav-item">✍ Regulatory Signoffs <span class="t2-nav-count">5</span></a>
+    <a href="activity.html" class="t2-nav-item">≡ Activity</a>
+  </nav>
+
+  <main class="t2-main">
+
+    <div class="page-header">
+      <div>
+        <div class="t2-breadcrumb"><a href="dashboard.html">Workload</a><span class="sep">›</span><span class="cur">T2T-003</span></div>
+        <div style="display:flex;align-items:center;gap:var(--space-3);margin-top:var(--space-1);">
+          <span class="deal-id">T2T-003</span>
+          <div class="page-title">Sunset Lofts</div>
+          <span class="stage-pill legal-comp">Legal / Compliance</span>
+        </div>
+      </div>
+      <a href="activity.html" class="btn-ghost" style="text-decoration:none;">Message Admin</a>
+    </div>
+
+    <div class="warning-banner">
+      <span>⚠</span>
+      <div>2 investors flagged for enhanced due diligence by Parallel Markets. KYC review must clear before Gate 5 can advance. Form D filing due May 10.</div>
+    </div>
+
+    <div class="two-col">
+
+      <div class="panel">
+        <div class="panel-header"><span class="panel-title">Compliance Checklist — T2T-003</span><span class="t2-tag mono">3 of 8 complete</span></div>
+        <div class="comp-row comp-row-header"><span>Item</span><span>Owner</span><span>Status</span><span>Risk</span></div>
+        <div class="comp-row"><span>KYC — issuer identity verified</span><span class="muted">You</span><span style="color:var(--color-green);">✓ Complete</span><span class="risk-badge high">high</span></div>
+        <div class="comp-row"><span>AML screening — issuer entity</span><span class="muted">You</span><span style="color:var(--color-green);">✓ Complete</span><span class="risk-badge high">high</span></div>
+        <div class="comp-row"><span>506(c) offering structure confirmed</span><span class="muted">You</span><span style="color:var(--color-green);">✓ Complete</span><span class="risk-badge medium">medium</span></div>
+        <div class="comp-row"><span>KYC — investor pool screening</span><span class="muted">You</span><span style="color:var(--color-alert);">⚑ 2 flags</span><span class="risk-badge high">high</span></div>
+        <div class="comp-row"><span>AML enhanced due diligence (2 investors)</span><span class="muted">You</span><span style="color:var(--color-alert);">⚑ In review</span><span class="risk-badge high">high</span></div>
+        <div class="comp-row"><span>506(c) accreditation verification signoff</span><span class="muted">You</span><span style="color:var(--color-warn);">○ Pending</span><span class="risk-badge medium">medium</span></div>
+        <div class="comp-row"><span>Reg D — Form D preparation</span><span class="muted">You</span><span style="color:var(--color-warn);">○ Due May 10</span><span class="risk-badge medium">medium</span></div>
+        <div class="comp-row"><span>Reg D — Form D SEC filing</span><span class="muted">You</span><span class="faint">Not started</span><span class="risk-badge medium">medium</span></div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:var(--space-4);">
+
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Deal Summary — Compliance View</span></div>
+          <div class="panel-body" style="display:flex;flex-direction:column;gap:var(--space-3);">
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Asset type</span><span>Multifamily · 48 units</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Location</span><span>Miami, FL · USA</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Raise target</span><span class="mono gold">$5,200,000</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Offering type</span><span class="mono">Reg D · 506(c)</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Investors</span><span>35 accredited (2 flagged)</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">KYC provider</span><span>Parallel Markets</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Form D due</span><span class="mono" style="color:var(--color-warn);">May 10, 2026</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Jurisdiction</span><span>Federal + Florida state</span></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Gate Progress</span></div>
+          <div class="panel-body">
+            <div class="gate-bar">
+              <div class="gate-item complete"><div class="gate-dot complete">✓</div><span class="gate-label complete">G1</span></div>
+              <div class="gate-item complete"><div class="gate-dot complete">✓</div><span class="gate-label complete">G2</span></div>
+              <div class="gate-item complete"><div class="gate-dot complete">✓</div><span class="gate-label complete">G3</span></div>
+              <div class="gate-item complete"><div class="gate-dot complete">✓</div><span class="gate-label complete">G4</span></div>
+              <div class="gate-item"><div class="gate-dot active">5</div><span class="gate-label active">G5</span></div>
+              <div class="gate-item"><div class="gate-dot">6</div><span class="gate-label">G6</span></div>
+              <div class="gate-item"><div class="gate-dot">7</div><span class="gate-label">G7</span></div>
+            </div>
+            <div style="font-size:var(--text-xs);color:var(--color-text-faint);margin-top:var(--space-2);">Compliance items (Gate 5) are blocking. KYC flags must clear before advance.</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Quick Actions</span></div>
+          <div class="panel-body" style="display:flex;flex-direction:column;gap:var(--space-2);">
+            <a href="kyc-review.html" class="btn-primary" style="text-decoration:none;text-align:center;">Review KYC Flags →</a>
+            <a href="signoffs.html" class="btn-ghost" style="text-decoration:none;text-align:center;">Manage Signoffs</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

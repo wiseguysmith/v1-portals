@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T2T Compliance — KYC / AML Review</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../public/design-tokens.css"/>
+  <link rel="stylesheet" href="../../admin/styles/admin.css"/>
+  <link rel="stylesheet" href="../styles/compliance.css"/>
+  <style>
+    .kyc-card { background:#fff; border:1px solid var(--color-border); border-radius:var(--radius-md); margin-bottom:var(--space-3); overflow:hidden; }
+    .kyc-card-header { display:flex; align-items:center; justify-content:space-between; padding:var(--space-4) var(--space-5); border-bottom:1px solid var(--color-border); }
+    .kyc-card-body { padding:var(--space-4) var(--space-5); display:flex; flex-direction:column; gap:var(--space-3); }
+    .kyc-field-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-3); }
+    .kyc-field { display:flex; flex-direction:column; gap:2px; }
+    .kyc-field-label { font-size:var(--text-xs); color:var(--color-text-faint); text-transform:uppercase; letter-spacing:.04em; }
+    .kyc-field-value { font-size:var(--text-sm); font-family:var(--font-mono); }
+    .kyc-flag { background:#fff0ec; border:1px solid #f0c0a8; border-radius:var(--radius-sm); padding:var(--space-3) var(--space-4); }
+    .kyc-flag-title { font-size:var(--text-sm); font-weight:500; color:var(--color-alert); margin-bottom:4px; }
+    .kyc-flag-body  { font-size:var(--text-sm); color:var(--color-text-muted); }
+    .kyc-actions { display:flex; gap:var(--space-2); padding:var(--space-3) var(--space-5); background:var(--color-bg-subtle); border-top:1px solid var(--color-border); }
+    .review-note { display:flex; flex-direction:column; gap:var(--space-1); }
+    .investor-row { display:grid; grid-template-columns:1fr 120px 100px 80px; align-items:center; gap:var(--space-3); padding:8px var(--space-5); border-bottom:1px solid var(--color-border-faint); font-size:var(--text-sm); }
+    .investor-row:last-child { border-bottom:none; }
+    .investor-row-header { font-size:var(--text-xs); color:var(--color-text-faint); font-weight:500; text-transform:uppercase; letter-spacing:.04em; border-bottom:1px solid var(--color-border); }
+  </style>
+</head>
+<body>
+<div class="t2-shell">
+
+  <header class="t2-topbar">
+    <span class="t2-logo">T2T</span>
+    <span class="t2-tag">|</span>
+    <span class="t2-portal-badge">Compliance Portal</span>
+    <div class="t2-topbar-search">
+      <input class="t2-search-input" type="text" placeholder="Search investors, flags…"/>
+    </div>
+    <div class="t2-topbar-right">
+      <span class="t2-tag mono">Sofia R.</span>
+      <div class="t2-avatar" style="background:#7060b0;">SR</div>
+    </div>
+  </header>
+
+  <nav class="t2-nav">
+    <span class="t2-nav-label">Overview</span>
+    <a href="dashboard.html" class="t2-nav-item">⬛ My Workload</a>
+    <span class="t2-nav-label">Deals</span>
+    <a href="deal.html?id=001" class="t2-nav-item">◈ T2T-001 Hotel Arco Iris</a>
+    <a href="deal.html?id=002" class="t2-nav-item">◈ T2T-002 Grande Beach Club</a>
+    <a href="deal.html?id=003" class="t2-nav-item">◈ T2T-003 Sunset Lofts</a>
+    <a href="deal.html?id=004" class="t2-nav-item">◈ T2T-004 The Meridian</a>
+    <a href="deal.html?id=005" class="t2-nav-item">◈ T2T-005 Playa Dorada</a>
+    <span class="t2-nav-label">Work Queue</span>
+    <a href="kyc-review.html" class="t2-nav-item active">⚑ KYC / AML Review <span class="t2-nav-count alert">3</span></a>
+    <a href="signoffs.html" class="t2-nav-item">✍ Regulatory Signoffs <span class="t2-nav-count">5</span></a>
+    <a href="activity.html" class="t2-nav-item">≡ Activity</a>
+  </nav>
+
+  <main class="t2-main">
+
+    <div class="page-header">
+      <div>
+        <div class="t2-section-label">Work Queue</div>
+        <div class="page-title">KYC / AML Review</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:var(--space-3);">
+        <select class="t2-select" style="width:140px;"><option>All deals</option><option>T2T-003</option><option>T2T-001</option></select>
+        <span class="t2-tag mono" style="color:var(--color-alert);">3 items need review</span>
+      </div>
+    </div>
+
+    <!-- Flag 1 -->
+    <div class="kyc-card" style="border-left:3px solid var(--color-alert);">
+      <div class="kyc-card-header">
+        <div style="display:flex;align-items:center;gap:var(--space-3);">
+          <span class="risk-badge high" style="font-size:var(--text-xs);">AML FLAG</span>
+          <span style="font-size:var(--text-base);font-weight:500;">Investor #14 — Enhanced Due Diligence Required</span>
+          <span class="deal-id">T2T-003</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;"><span class="integration-status-dot pending"></span><span style="font-size:var(--text-sm);color:var(--color-warn);">Pending Review</span></div>
+      </div>
+      <div class="kyc-card-body">
+        <div class="kyc-field-grid">
+          <div class="kyc-field"><span class="kyc-field-label">Investor</span><span class="kyc-field-value">R. Carvalho</span></div>
+          <div class="kyc-field"><span class="kyc-field-label">Investment</span><span class="kyc-field-value">$150,000</span></div>
+          <div class="kyc-field"><span class="kyc-field-label">Flagged by</span><span class="kyc-field-value">Parallel Markets</span></div>
+          <div class="kyc-field"><span class="kyc-field-label">Flag date</span><span class="kyc-field-value">Apr 30, 2026</span></div>
+          <div class="kyc-field"><span class="kyc-field-label">Country of origin</span><span class="kyc-field-value">Brazil</span></div>
+          <div class="kyc-field"><span class="kyc-field-label">PEP status</span><span class="kyc-field-value" style="color:var(--color-alert);">Possible match</span></div>
+        </div>
+        <div class="kyc-flag">
+          <div class="kyc-flag-title">⚑ AML Flag — Politically Exposed Person (PEP) Possible Match</div>
+          <div class="kyc-flag-body">Parallel Markets returned a possible PEP match on investor R. Carvalho based on name and country of origin. Manual review of source of funds documentation required before approval. Enhanced due diligence checklist must be completed.</div>
+        </div>
+        <div class="review-note">
+          <label style="font-size:var(--text-sm);font-weight:500;">Review Notes</label>
+          <textarea class="t2-textarea" placeholder="Document your findings and decision rationale here…" style="min-height:72px;"></textarea>
+        </div>
+      </div>
+      <div class="kyc-actions">
+        <button class="btn-primary btn-sm">Approve — Clear Flag</button>
+        <button class="btn-ghost btn-sm">Request More Info</button>
+        <button class="btn-danger btn-sm">Reject Investor</button>
+      </div>
+    </div>
+
+    <!-- Flag 2 -->
+    <div class="kyc-card" style="border-left:3px solid var(--color-alert);">
+      <div class="kyc-card-header">
+        <div style="display:flex;align-items:center;gap:var(--space-3);">
+          <span class="risk-badge high" style="font-size:var(--text-xs);">AML FLAG</span>
+          <span style="font-size:var(--text-base);font-weight:500;">Investor #27 — Source of Funds Unclear</span>
+          <span class="deal-id">T2T-003</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;"><span class="integration-status-dot pending"></span><span style="font-size:var(--text-sm);color:var(--color-warn);">Pending Review</span></div>
+      </div>
+      <div class="kyc-card-body">
+        <div class="kyc-field-grid">
+          <div class="kyc-field"><span class="kyc-field-label">Investor</span><span class="kyc-field-value">M. Okafor</span></div>
+          <div class="kyc-field"><span class="kyc-field-label">Investment</span><span class="kyc-field-value">$250,000</span></div>
+          <div class="kyc-field"><span class="kyc-field-label">Flagged by</span><span class="kyc-field-value">Parallel Markets</span></div>
+          <div class="kyc-field"><span class="kyc-field-label">Flag date</span><span class="kyc-field-value">Apr 30, 2026</span></div>
+          <div class="kyc-field"><span class="kyc-field-label">Country of origin</span><span class="kyc-field-value">Nigeria</span></div>
+          <div class="kyc-field"><span class="kyc-field-label">PEP status</span><span class="kyc-field-value" style="color:var(--color-green);">Clear</span></div>
+        </div>
+        <div class="kyc-flag">
+          <div class="kyc-flag-title">⚑ AML Flag — Source of Funds Documentation Insufficient</div>
+          <div class="kyc-flag-body">Investor's bank statements provided cover only 30 days. AML policy requires 90-day statement for investments over $100K. Wire transfer origin also requires further verification. Request updated documentation before proceeding.</div>
+        </div>
+        <div class="review-note">
+          <label style="font-size:var(--text-sm);font-weight:500;">Review Notes</label>
+          <textarea class="t2-textarea" placeholder="Document your findings and decision rationale here…" style="min-height:72px;"></textarea>
+        </div>
+      </div>
+      <div class="kyc-actions">
+        <button class="btn-primary btn-sm">Approve — Clear Flag</button>
+        <button class="btn-ghost btn-sm">Request More Info</button>
+        <button class="btn-danger btn-sm">Reject Investor</button>
+      </div>
+    </div>
+
+    <!-- Investor pool summary -->
+    <div class="panel">
+      <div class="panel-header"><span class="panel-title">Full Investor Pool — T2T-003 Sunset Lofts</span><span class="t2-tag mono">35 total · 33 cleared · 2 flagged</span></div>
+      <div class="investor-row investor-row-header"><span>Investor</span><span>Investment</span><span>KYC Status</span><span>Accredited</span></div>
+      <div class="investor-row"><span>A. Martinez</span><span class="mono">$100,000</span><span style="color:var(--color-green);">✓ Cleared</span><span style="color:var(--color-green);">✓</span></div>
+      <div class="investor-row"><span>B. Chen</span><span class="mono">$75,000</span><span style="color:var(--color-green);">✓ Cleared</span><span style="color:var(--color-green);">✓</span></div>
+      <div class="investor-row"><span>C. Nguyen</span><span class="mono">$200,000</span><span style="color:var(--color-green);">✓ Cleared</span><span style="color:var(--color-green);">✓</span></div>
+      <div class="investor-row" style="background:#fff8f6;"><span style="color:var(--color-alert);">R. Carvalho ⚑</span><span class="mono">$150,000</span><span style="color:var(--color-alert);">⚑ AML Flag</span><span style="color:var(--color-text-muted);">Pending</span></div>
+      <div class="investor-row"><span>D. Williams</span><span class="mono">$50,000</span><span style="color:var(--color-green);">✓ Cleared</span><span style="color:var(--color-green);">✓</span></div>
+      <div class="investor-row" style="border-bottom:2px dashed var(--color-border);">
+        <span style="color:var(--color-text-faint);font-size:var(--text-xs);">… 28 more investors cleared</span><span></span><span></span><span></span>
+      </div>
+      <div class="investor-row" style="background:#fff8f6;"><span style="color:var(--color-alert);">M. Okafor ⚑</span><span class="mono">$250,000</span><span style="color:var(--color-alert);">⚑ AML Flag</span><span style="color:var(--color-text-muted);">Pending</span></div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

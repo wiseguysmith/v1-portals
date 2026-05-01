@@ -112,5 +112,25 @@
 
   </main>
 </div>
+<script>
+document.querySelectorAll('.btn-primary').forEach(btn => {
+  if (btn.textContent.trim() === 'Send') {
+    btn.addEventListener('click', function() {
+      const textarea = this.closest('.comment-input-row').querySelector('textarea');
+      if (!textarea.value.trim()) { textarea.focus(); return; }
+      const original = this.textContent;
+      this.textContent = '✓ Sent';
+      this.disabled = true;
+      this.style.background = 'var(--color-green)';
+      setTimeout(() => {
+        textarea.value = '';
+        this.textContent = original;
+        this.disabled = false;
+        this.style.background = '';
+      }, 2000);
+    });
+  }
+});
+</script>
 </body>
 </html>

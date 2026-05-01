@@ -1,0 +1,16 @@
+/* ============================================
+   Title2Token — Asset Due Diligence Portal CSS
+   asset-dd/styles/asset-dd.css
+   ============================================ */
+
+.t2-portal-badge {
+  background: #f7f0ec;
+  color: #a06040;
+  border-color: #ddb898;
+}
+
+.t2-nav-item.active {
+  border-left-color: #a06040;
+  background: #f7f0ec;
+  color: var(--color-text);
+}

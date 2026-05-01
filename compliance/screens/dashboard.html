@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T2T Compliance — Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../public/design-tokens.css"/>
+  <link rel="stylesheet" href="../../admin/styles/admin.css"/>
+  <link rel="stylesheet" href="../styles/compliance.css"/>
+  <style>
+    .work-item { display:flex; align-items:flex-start; gap:var(--space-3); padding:10px var(--space-5); border-bottom:1px solid var(--color-border-faint); }
+    .work-item:last-child { border-bottom:none; }
+    .work-body { flex:1; }
+    .work-title { font-size:var(--text-base); font-weight:500; }
+    .work-meta  { font-size:var(--text-sm); color:var(--color-text-muted); margin-top:2px; }
+  </style>
+</head>
+<body>
+<div class="t2-shell">
+
+  <header class="t2-topbar">
+    <span class="t2-logo">T2T</span>
+    <span class="t2-tag">|</span>
+    <span class="t2-portal-badge">Compliance Portal</span>
+    <div class="t2-topbar-search">
+      <input class="t2-search-input" type="text" placeholder="Search deals, items…"/>
+    </div>
+    <div class="t2-topbar-right">
+      <span class="t2-tag mono">Sofia R.</span>
+      <div class="t2-avatar" style="background:#7060b0;">SR</div>
+    </div>
+  </header>
+
+  <nav class="t2-nav">
+    <span class="t2-nav-label">Overview</span>
+    <a href="dashboard.html" class="t2-nav-item active">⬛ My Workload</a>
+    <span class="t2-nav-label">Deals</span>
+    <a href="deal.html?id=001" class="t2-nav-item">◈ T2T-001 Hotel Arco Iris</a>
+    <a href="deal.html?id=002" class="t2-nav-item">◈ T2T-002 Grande Beach Club</a>
+    <a href="deal.html?id=003" class="t2-nav-item">◈ T2T-003 Sunset Lofts</a>
+    <a href="deal.html?id=004" class="t2-nav-item">◈ T2T-004 The Meridian</a>
+    <a href="deal.html?id=005" class="t2-nav-item">◈ T2T-005 Playa Dorada</a>
+    <span class="t2-nav-label">Work Queue</span>
+    <a href="kyc-review.html" class="t2-nav-item">⚑ KYC / AML Review <span class="t2-nav-count alert">3</span></a>
+    <a href="signoffs.html" class="t2-nav-item">✍ Regulatory Signoffs <span class="t2-nav-count">5</span></a>
+    <a href="activity.html" class="t2-nav-item">≡ Activity</a>
+  </nav>
+
+  <main class="t2-main">
+
+    <div class="page-header">
+      <div>
+        <div class="t2-section-label">Compliance Officer Portal</div>
+        <div class="page-title">My Workload</div>
+      </div>
+      <span class="t2-tag mono">May 1, 2026</span>
+    </div>
+
+    <div class="warning-banner">
+      <span>⚠</span>
+      <div>T2T-001 is blocked at Gate 2 — land title hard stop. KYC review for T2T-003 has 3 items requiring your sign-off before Gate 5 can clear.</div>
+    </div>
+
+    <div class="four-col">
+      <div class="metric-card">
+        <div class="metric-label">Active Deals</div>
+        <div class="metric-value">5</div>
+        <div class="metric-sub">across all stages</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">KYC / AML Pending</div>
+        <div class="metric-value" style="color:var(--color-alert);">3</div>
+        <div class="metric-sub">T2T-003 priority</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Signoffs Due</div>
+        <div class="metric-value" style="color:var(--color-warn);">5</div>
+        <div class="metric-sub">across 3 deals</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Cleared</div>
+        <div class="metric-value green">2</div>
+        <div class="metric-sub">T2T-004 · T2T-005</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Priority Items</span>
+          <a href="kyc-review.html" style="font-size:var(--text-sm);color:#7060b0;text-decoration:none;">View KYC queue →</a>
+        </div>
+        <div class="work-item">
+          <div style="color:var(--color-alert);font-size:14px;flex-shrink:0;">⚑</div>
+          <div class="work-body">
+            <div class="work-title">KYC review — Investor pool screening (T2T-003)</div>
+            <div class="work-meta">Sunset Lofts · Legal/Compliance · Gate 5 · Due May 5</div>
+          </div>
+          <span class="risk-badge high">high</span>
+        </div>
+        <div class="work-item">
+          <div style="color:var(--color-alert);font-size:14px;flex-shrink:0;">⚑</div>
+          <div class="work-body">
+            <div class="work-title">AML flag review — 2 investors flagged for enhanced due diligence</div>
+            <div class="work-meta">Sunset Lofts · T2T-003 · Parallel Markets escalation</div>
+          </div>
+          <span class="risk-badge high">high</span>
+        </div>
+        <div class="work-item">
+          <div style="color:var(--color-warn);font-size:14px;flex-shrink:0;">⚑</div>
+          <div class="work-body">
+            <div class="work-title">506(c) accreditation verification signoff</div>
+            <div class="work-meta">T2T-003 · Sunset Lofts · Gate 5 prerequisite</div>
+          </div>
+          <span class="risk-badge medium">medium</span>
+        </div>
+        <div class="work-item">
+          <div style="color:var(--color-warn);font-size:14px;flex-shrink:0;">⚑</div>
+          <div class="work-body">
+            <div class="work-title">Regulatory filing — Reg D Form D submission</div>
+            <div class="work-meta">T2T-003 · Sunset Lofts · SEC filing due May 10</div>
+          </div>
+          <span class="risk-badge medium">medium</span>
+        </div>
+        <div class="work-item">
+          <div style="color:var(--color-text-faint);font-size:14px;flex-shrink:0;">⚑</div>
+          <div class="work-body">
+            <div class="work-title">Compliance pre-check — T2T-002 intake</div>
+            <div class="work-meta">Grande Beach Club · Intake · No blockers yet</div>
+          </div>
+          <span class="risk-badge low">low</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:var(--space-4);">
+
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Deal Compliance Status</span></div>
+          <table style="width:100%;border-collapse:collapse;">
+            <thead><tr>
+              <th style="text-align:left;padding:8px var(--space-5);font-size:var(--text-xs);color:var(--color-text-faint);font-weight:500;border-bottom:1px solid var(--color-border);">Deal</th>
+              <th style="text-align:left;padding:8px var(--space-5);font-size:var(--text-xs);color:var(--color-text-faint);font-weight:500;border-bottom:1px solid var(--color-border);">KYC</th>
+              <th style="text-align:left;padding:8px var(--space-5);font-size:var(--text-xs);color:var(--color-text-faint);font-weight:500;border-bottom:1px solid var(--color-border);">506(c)</th>
+              <th style="text-align:left;padding:8px var(--space-5);font-size:var(--text-xs);color:var(--color-text-faint);font-weight:500;border-bottom:1px solid var(--color-border);">Reg D</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--color-border-faint);">
+                <td style="padding:9px var(--space-5);font-size:var(--text-sm);"><span class="deal-id">T2T-001</span></td>
+                <td style="padding:9px var(--space-5);font-size:var(--text-sm);color:var(--color-text-muted);">Blocked</td>
+                <td style="padding:9px var(--space-5);font-size:var(--text-sm);color:var(--color-text-muted);">Pending</td>
+                <td style="padding:9px var(--space-5);font-size:var(--text-sm);color:var(--color-text-muted);">Pending</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border-faint);">
+                <td style="padding:9px var(--space-5);font-size:var(--text-sm);"><span class="deal-id">T2T-002</span></td>
+                <td style="padding:9px var(--space-5);font-size:var(--text-sm);color:var(--color-text-muted);">Not started</td>
+                <td style="padding:9px var(--space-5);font-size:var(--text-sm);color:var(--color-text-muted);">Not started</td>
+                <td style="padding:9px var(--space-5);font-size:var(--text-sm);color:var(--color-text-muted);">Not started</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border-faint);">
+                <td style="padding:9px var(--space-5);font-size:var(--text-sm);"><span class="deal-id">T2T-003</span></td>
+                <td style="padding:9px var(--space-5);font-size:var(--text-sm);color:var(--color-alert);">⚑ Review needed</td>
+                <td style="padding:9px var(--space-5);font-size:var(--text-sm);color:var(--color-warn);">○ In progress</td>
+                <td style="padding:9px var(--space-5);font-size:var(--text-sm);color:var(--color-warn);">○ Due May 10</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border-faint);">
+                <td style="padding:9px var(--space-5);font-size:var(--text-sm);"><span class="deal-id">T2T-004</span></td>
+                <td style="padding:9px var(--space-5);font-size:var(--text-sm);color:var(--color-green);">✓ Cleared</td>
+                <td style="padding:9px var(--space-5);font-size:var(--text-sm);color:var(--color-green);">✓ Cleared</td>
+                <td style="padding:9px var(--space-5);font-size:var(--text-sm);color:var(--color-green);">✓ Filed</td>
+              </tr>
+              <tr>
+                <td style="padding:9px var(--space-5);font-size:var(--text-sm);"><span class="deal-id">T2T-005</span></td>
+                <td style="padding:9px var(--space-5);font-size:var(--text-sm);color:var(--color-green);">✓ Cleared</td>
+                <td style="padding:9px var(--space-5);font-size:var(--text-sm);color:var(--color-green);">✓ Cleared</td>
+                <td style="padding:9px var(--space-5);font-size:var(--text-sm);color:var(--color-green);">✓ Filed</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Recent Activity</span><a href="activity.html" style="font-size:var(--text-sm);color:#7060b0;text-decoration:none;">View all →</a></div>
+          <div class="activity-list" style="padding:var(--space-3) var(--space-5);">
+            <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">2 AML flags raised on T2T-003 investor pool — escalated by Parallel Markets</div><div class="activity-time">Apr 30 · 4:10pm · System</div></div></div>
+            <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">506(c) accreditation cleared for T2T-005 — all 22 investors verified</div><div class="activity-time">Apr 29 · 11:00am · You</div></div></div>
+            <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">Reg D Form D filed for T2T-004 — SEC acknowledgement received</div><div class="activity-time">Apr 28 · 3:30pm · You</div></div></div>
+            <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">KYC review initiated for T2T-003 investor pool via Parallel Markets</div><div class="activity-time">Apr 27 · 9:00am · System</div></div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

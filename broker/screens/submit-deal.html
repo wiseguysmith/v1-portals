@@ -270,5 +270,24 @@
 
   </main>
 </div>
+
+<!-- Success overlay -->
+<div id="submitSuccess" style="display:none;position:fixed;inset:0;background:rgba(26,24,20,.6);z-index:200;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:12px;padding:40px 48px;max-width:440px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.2);">
+    <div style="font-size:48px;margin-bottom:16px;">✓</div>
+    <div style="font-size:20px;font-weight:500;margin-bottom:8px;">Deal Submitted</div>
+    <div style="font-size:14px;color:#888;margin-bottom:24px;line-height:1.6;">Your deal has been submitted for auto-screening. T2T admin will review within 1–2 business days. You'll receive a notification when a decision is made.</div>
+    <a href="my-deals.html" style="display:inline-block;background:#7aab8a;color:#fff;padding:10px 24px;border-radius:6px;text-decoration:none;font-weight:500;font-size:14px;">View My Deals →</a>
+  </div>
+</div>
+
+<script>
+document.querySelector('.btn-primary').addEventListener('click', function() {
+  if (this.textContent.includes('Submit')) {
+    const overlay = document.getElementById('submitSuccess');
+    overlay.style.display = 'flex';
+  }
+});
+</script>
 </body>
 </html>
