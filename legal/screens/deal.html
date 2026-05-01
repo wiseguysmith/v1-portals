@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T2T Legal — T2T-001 Deal View</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../public/design-tokens.css"/>
+  <link rel="stylesheet" href="../../admin/styles/admin.css"/>
+  <link rel="stylesheet" href="../styles/legal.css"/>
+  <style>
+    .cl-item { display:grid; grid-template-columns:18px 1fr 90px 80px 70px; align-items:center; gap:var(--space-3); padding:9px var(--space-5); border-bottom:1px solid var(--color-border-faint); }
+    .cl-item:last-child { border-bottom:none; }
+    .cl-item:hover { background:var(--color-bg-subtle); }
+    .cl-label.blocked { color:var(--color-alert); font-weight:500; }
+    .cl-due { font-size:var(--text-xs); font-family:var(--font-mono); color:var(--color-text-muted); }
+    .cl-due.overdue { color:var(--color-alert); }
+    .cat-header { display:flex; align-items:center; gap:var(--space-3); padding:var(--space-3) var(--space-5); background:var(--color-bg-subtle); border-bottom:1px solid var(--color-border); }
+    .cat-name { font-size:var(--text-sm); font-weight:500; flex:1; }
+  </style>
+</head>
+<body>
+<div class="t2-shell">
+
+  <header class="t2-topbar">
+    <span class="t2-logo">T2T</span>
+    <span class="t2-tag">|</span>
+    <span class="t2-portal-badge">Legal Partner Portal</span>
+    <div class="t2-topbar-search">
+      <input class="t2-search-input" type="text" placeholder="Search…"/>
+    </div>
+    <div class="t2-topbar-right">
+      <span class="t2-tag mono">V. Saborio</span>
+      <div class="t2-avatar" style="background:var(--color-gold-dark);">VS</div>
+    </div>
+  </header>
+
+  <nav class="t2-nav">
+    <span class="t2-nav-label">Overview</span>
+    <a href="dashboard.html" class="t2-nav-item">⬛ My Workload</a>
+    <span class="t2-nav-label">Deals</span>
+    <a href="deal.html" class="t2-nav-item active">◈ T2T-001 Hotel Arco Iris <span class="t2-nav-count alert">2</span></a>
+    <a href="deal.html" class="t2-nav-item">◈ T2T-002 Grande Beach Club</a>
+    <span class="t2-nav-label">Work Queue</span>
+    <a href="document-review.html" class="t2-nav-item">📄 Document Review <span class="t2-nav-count alert">1</span></a>
+    <a href="signoffs.html" class="t2-nav-item">✓ Signoffs Needed <span class="t2-nav-count">3</span></a>
+    <a href="activity.html" class="t2-nav-item">◎ Activity</a>
+  </nav>
+
+  <main class="t2-main">
+
+    <div class="page-header">
+      <div>
+        <div class="t2-breadcrumb" style="margin-bottom:var(--space-1);"><a href="dashboard.html">Workload</a><span class="sep">›</span><span class="cur">T2T-001</span></div>
+        <div style="display:flex;align-items:center;gap:var(--space-3);margin-top:var(--space-1);">
+          <span class="deal-id">T2T-001</span>
+          <div class="page-title">Hotel Arco Iris</div>
+          <span class="stage-pill readiness">Readiness Review</span>
+          <span class="risk-badge critical">HIGH RISK</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:var(--space-2);">
+        <button class="pdf-btn">⬇ Export PDF</button>
+        <a href="activity.html" class="btn-ghost" style="text-decoration:none;">Message Admin</a>
+      </div>
+    </div>
+
+    <div class="hard-stop-banner">
+      <div class="hard-stop-banner-header">⛔ Land Title Hard Stop — Your Primary Blocker</div>
+      <div class="hard-stop-item"><span class="hard-stop-icon">⛔</span><span>You must confirm whether Hotel Arco Iris sits on <strong>fee simple title</strong> or a <strong>maritime zone concession</strong>. If concession, the foreign equity structure requires significant restructuring. Deal cannot advance until confirmed.</span></div>
+    </div>
+
+    <!-- Deal meta -->
+    <div class="panel">
+      <div class="panel-body">
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:var(--space-4);">
+          <div><div style="font-size:var(--text-xs);color:var(--color-text-faint);text-transform:uppercase;letter-spacing:0.08em;">Type</div><div style="font-family:var(--font-mono);font-size:var(--text-base);margin-top:3px;">Acquisition</div></div>
+          <div><div style="font-size:var(--text-xs);color:var(--color-text-faint);text-transform:uppercase;letter-spacing:0.08em;">Location</div><div style="font-family:var(--font-mono);font-size:var(--text-base);margin-top:3px;">Tamarindo, CR</div></div>
+          <div><div style="font-size:var(--text-xs);color:var(--color-text-faint);text-transform:uppercase;letter-spacing:0.08em;">Raise Target</div><div style="font-family:var(--font-mono);font-size:var(--text-base);color:var(--color-gold);margin-top:3px;">$2,320,500</div></div>
+          <div><div style="font-size:var(--text-xs);color:var(--color-text-faint);text-transform:uppercase;letter-spacing:0.08em;">Readiness</div><div style="font-family:var(--font-mono);font-size:var(--text-base);color:var(--color-alert);margin-top:3px;">0%</div></div>
+          <div><div style="font-size:var(--text-xs);color:var(--color-text-faint);text-transform:uppercase;letter-spacing:0.08em;">Days in Stage</div><div style="font-family:var(--font-mono);font-size:var(--text-base);color:var(--color-warn);margin-top:3px;">14d</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- My assigned checklist items -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">My Assigned Items — T2T-001</span>
+        <span class="t2-tag mono">0 of 13 complete</span>
+      </div>
+
+      <div class="checklist-category">
+        <div class="cat-header"><span class="cat-name">Legal / Entity</span><span class="risk-badge critical">Critical</span><span style="font-size:var(--text-xs);font-family:var(--font-mono);color:var(--color-text-muted);">0 / 8</span></div>
+        <div class="cl-item"><div class="check-box stop">⛔</div><div><div class="cl-label blocked">Land title — fee simple vs. maritime concession</div><div style="font-size:var(--text-xs);color:var(--color-alert);">HARD STOP · Gate 2 blocked</div></div><span style="font-size:var(--text-xs);color:var(--color-text-muted);">You</span><span class="cl-due overdue">Overdue</span><span class="risk-badge critical">critical</span></div>
+        <div class="cl-item"><div class="check-box"></div><div class="cl-label">Lien / debt / mortgage search</div><span style="font-size:var(--text-xs);color:var(--color-text-muted);">You</span><span class="cl-due">May 14</span><span class="risk-badge high">high</span></div>
+        <div class="cl-item"><div class="check-box"></div><div class="cl-label">SPV formation — entity type and jurisdiction decision</div><span style="font-size:var(--text-xs);color:var(--color-text-muted);">US Counsel</span><span class="cl-due">May 3</span><span class="risk-badge high">high</span></div>
+        <div class="cl-item"><div class="check-box"></div><div class="cl-label">Operating agreement drafted</div><span style="font-size:var(--text-xs);color:var(--color-text-muted);">US Counsel</span><span class="cl-due">TBD</span><span class="risk-badge high">high</span></div>
+        <div class="cl-item"><div class="check-box"></div><div class="cl-label">Investor rights framework</div><span style="font-size:var(--text-xs);color:var(--color-text-muted);">US Counsel</span><span class="cl-due">TBD</span><span class="risk-badge high">high</span></div>
+        <div class="cl-item"><div class="check-box"></div><div class="cl-label">Subscription agreement finalized</div><span style="font-size:var(--text-xs);color:var(--color-text-muted);">US Counsel</span><span class="cl-due">TBD</span><span class="risk-badge high">high</span></div>
+        <div class="cl-item"><div class="check-box"></div><div class="cl-label">506(c) exemption filing</div><span style="font-size:var(--text-xs);color:var(--color-text-muted);">US Counsel</span><span class="cl-due">TBD</span><span class="risk-badge high">high</span></div>
+        <div class="cl-item"><div class="check-box"></div><div class="cl-label">Costa Rica legal opinion from local counsel</div><span style="font-size:var(--text-xs);color:var(--color-text-muted);">You</span><span class="cl-due">May 14</span><span class="risk-badge high">high</span></div>
+      </div>
+
+      <div class="checklist-category">
+        <div class="cat-header"><span class="cat-name">Local Jurisdiction / Costa Rica</span><span class="risk-badge critical">Critical</span><span style="font-size:var(--text-xs);font-family:var(--font-mono);color:var(--color-text-muted);">0 / 5</span></div>
+        <div class="cl-item"><div class="check-box stop">⛔</div><div><div class="cl-label blocked">Maritime zone / concession vs. fee simple determination</div><div style="font-size:var(--text-xs);color:var(--color-alert);">HARD STOP · Same as land title item</div></div><span style="font-size:var(--text-xs);color:var(--color-text-muted);">You</span><span class="cl-due overdue">Overdue</span><span class="risk-badge critical">critical</span></div>
+        <div class="cl-item"><div class="check-box"></div><div class="cl-label">Municipal permits and zoning status</div><span style="font-size:var(--text-xs);color:var(--color-text-muted);">You</span><span class="cl-due">May 21</span><span class="risk-badge high">high</span></div>
+        <div class="cl-item"><div class="check-box"></div><div class="cl-label">RTBF registration requirements</div><span style="font-size:var(--text-xs);color:var(--color-text-muted);">You</span><span class="cl-due">May 21</span><span class="risk-badge medium">medium</span></div>
+        <div class="cl-item"><div class="check-box"></div><div class="cl-label">CR tax / withholding requirements for foreign investors</div><span style="font-size:var(--text-xs);color:var(--color-text-muted);">Tax Partner</span><span class="cl-due">TBD</span><span class="risk-badge medium">medium</span></div>
+        <div class="cl-item"><div class="check-box"></div><div class="cl-label">Foreign investment restrictions confirmed</div><span style="font-size:var(--text-xs);color:var(--color-text-muted);">You</span><span class="cl-due">May 14</span><span class="risk-badge high">high</span></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

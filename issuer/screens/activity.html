@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T2T Issuer — Activity</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../public/design-tokens.css"/>
+  <link rel="stylesheet" href="../../admin/styles/admin.css"/>
+  <link rel="stylesheet" href="../styles/issuer.css"/>
+</head>
+<body>
+<div class="t2-shell">
+
+  <header class="t2-topbar">
+    <span class="t2-logo">T2T</span>
+    <span class="t2-tag">|</span>
+    <span class="t2-portal-badge">Issuer Portal</span>
+    <div class="t2-topbar-search">
+      <input class="t2-search-input" type="text" placeholder="Search activity…"/>
+    </div>
+    <div class="t2-topbar-right">
+      <span class="t2-tag mono">Rafael Torres</span>
+      <div class="t2-avatar" style="background:#6080c0;">RT</div>
+    </div>
+  </header>
+
+  <nav class="t2-nav">
+    <span class="t2-nav-label">My Deal</span>
+    <a href="dashboard.html" class="t2-nav-item">◈ T2T-001 Overview</a>
+    <span class="t2-nav-label">Work Items</span>
+    <a href="checklist.html" class="t2-nav-item">✓ My Checklist <span class="t2-nav-count alert">3</span></a>
+    <a href="documents.html" class="t2-nav-item">⬆ Documents <span class="t2-nav-count">2</span></a>
+    <a href="activity.html" class="t2-nav-item active">◎ Activity &amp; Thread</a>
+    <span class="t2-nav-label">Deal Info</span>
+    <a href="deal.html" class="t2-nav-item">≡ Full Deal View</a>
+  </nav>
+
+  <main class="t2-main">
+
+    <div class="page-header">
+      <div>
+        <div class="t2-breadcrumb" style="margin-bottom:var(--space-1);"><a href="dashboard.html">T2T-001</a><span class="sep">›</span><span class="cur">Activity</span></div>
+        <div class="page-title">Activity &amp; Deal Thread</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+
+      <!-- Deal thread -->
+      <div class="panel">
+        <div class="panel-header"><span class="panel-title">Deal Thread</span><span class="t2-tag mono">Visible to: Admin, Issuer, Assigned Partners</span></div>
+
+        <div class="comment-item">
+          <div class="comment-avatar" style="background:var(--color-gold);">JW</div>
+          <div class="comment-body">
+            <div><span class="comment-author">James Whitmore</span><span class="comment-time">Apr 29 · 4:15pm</span></div>
+            <div class="comment-text"><span class="mention">@Rafael Torres</span> — we need the ADR decline explanation as soon as possible. This is a hard stop blocking the entire deal. Please provide a written explanation with monthly booking data for 2022–2025 showing what caused the drop in average daily rate. This is required before we can proceed.</div>
+          </div>
+        </div>
+
+        <div class="comment-item">
+          <div class="comment-avatar" style="background:#6080c0;">RT</div>
+          <div class="comment-body">
+            <div><span class="comment-author">Rafael Torres</span><span class="comment-time">Apr 29 · 6:30pm</span></div>
+            <div class="comment-text">Understood. The ADR decline in 2025 was primarily due to a planned renovation period (Feb–Apr) when we closed 8 of the 13 rooms. I'll prepare the full written explanation with booking data this week. I'm also working on the P&L for 2023 and 2024 — will upload by May 7.</div>
+          </div>
+        </div>
+
+        <div class="comment-item">
+          <div class="comment-avatar" style="background:var(--color-gold);">JW</div>
+          <div class="comment-body">
+            <div><span class="comment-author">James Whitmore</span><span class="comment-time">Apr 30 · 9:05am</span></div>
+            <div class="comment-text">Thanks Rafael. Please make sure the explanation letter includes: (1) monthly ADR and occupancy 2022–2025, (2) a clear description of the renovation timeline and which rooms were offline, (3) a statement on current and projected ADR post-renovation. The investment thesis depends on this being resolved clearly.</div>
+          </div>
+        </div>
+
+        <div class="comment-box">
+          <div style="font-size:var(--text-xs);color:var(--color-text-faint);margin-bottom:var(--space-2);">Reply — visible to all assigned partners on this deal</div>
+          <div class="comment-input-row">
+            <textarea class="t2-textarea" placeholder="Write a message or @mention a partner…" style="min-height:60px;"></textarea>
+            <button class="btn-primary">Send</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity feed -->
+      <div style="display:flex;flex-direction:column;gap:var(--space-4);">
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Deal Activity</span></div>
+          <div class="activity-list">
+            <div class="activity-item"><div class="activity-dot alert"></div><div><div class="activity-text"><strong>Hard stop flagged:</strong> Land title confirmation pending — CR Legal Counsel engaged</div><div class="activity-time">Apr 30 · 9:02am · Admin</div></div></div>
+            <div class="activity-item"><div class="activity-dot warn"></div><div><div class="activity-text"><strong>Document requested:</strong> ADR decline explanation letter — deadline Apr 27</div><div class="activity-time">Apr 29 · 4:15pm · Admin</div></div></div>
+            <div class="activity-item"><div class="activity-dot gold"></div><div><div class="activity-text"><strong>You uploaded:</strong> 2022 P&L Financials.pdf — under review</div><div class="activity-time">Apr 29 · 2:30pm · You</div></div></div>
+            <div class="activity-item"><div class="activity-dot gold"></div><div><div class="activity-text"><strong>You uploaded:</strong> Hotel_Arco_Iris_Investor_Package.pdf — approved</div><div class="activity-time">Apr 28 · 10:30am · You</div></div></div>
+            <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">CR Legal Counsel assigned to Legal/Entity and Local Jurisdiction categories</div><div class="activity-time">Apr 27 · 3:00pm · Admin</div></div></div>
+            <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">You were added to deal T2T-001 as Issuer</div><div class="activity-time">Apr 24 · 10:00am · Admin</div></div></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Deal Partners</span></div>
+          <div class="activity-list">
+            <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text"><strong>James Whitmore</strong> · Admin</div><div class="activity-time">Last active: today · 9:05am</div></div><span class="status-dot active"></span></div>
+            <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text"><strong>V. Saborio</strong> · CR Legal Counsel</div><div class="activity-time">Last active: today · 8:45am</div></div><span class="status-dot active"></span></div>
+            <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text"><strong>Marco Delgado</strong> · Broker</div><div class="activity-time">Last active: Apr 29</div></div><span class="status-dot away"></span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

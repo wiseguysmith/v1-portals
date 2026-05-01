@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T2T Admin — Inbox</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../public/design-tokens.css"/>
+  <link rel="stylesheet" href="../styles/admin.css"/>
+  <style>
+    .notif-group-label {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:var(--space-3) var(--space-5);
+      background:var(--color-bg-subtle);
+      border-bottom:1px solid var(--color-border);
+      font-size:var(--text-xs); font-weight:500; text-transform:uppercase; letter-spacing:0.08em;
+    }
+    .notif-item-full {
+      display:flex; gap:var(--space-3);
+      padding:var(--space-3) var(--space-5);
+      border-bottom:1px solid var(--color-border-faint);
+      cursor:pointer; transition:background 0.1s;
+    }
+    .notif-item-full:last-child { border-bottom:none; }
+    .notif-item-full:hover { background:var(--color-bg-subtle); }
+    .notif-item-full.unread { background:var(--color-bg-gold); }
+    .notif-item-full.unread:hover { background:#f0e8d0; }
+    .notif-icon { width:32px; height:32px; border-radius:var(--radius-md); display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; margin-top:2px; }
+    .notif-icon.critical { background:var(--color-alert-bg); }
+    .notif-icon.warn     { background:var(--color-warn-bg); }
+    .notif-icon.info     { background:var(--color-bg-subtle); }
+    .notif-icon.green    { background:var(--color-green-bg); }
+    .notif-body { flex:1; }
+    .notif-title { font-size:var(--text-base); font-weight:500; margin-bottom:2px; }
+    .notif-desc  { font-size:var(--text-sm); color:var(--color-text-muted); line-height:1.5; }
+    .notif-meta  { display:flex; align-items:center; gap:var(--space-3); margin-top:var(--space-2); }
+    .notif-right { display:flex; flex-direction:column; align-items:flex-end; gap:var(--space-2); flex-shrink:0; }
+  </style>
+</head>
+<body>
+<div class="t2-shell">
+
+  <header class="t2-topbar">
+    <span class="t2-logo">T2T</span>
+    <span class="t2-tag">|</span>
+    <span class="t2-portal-badge">Admin Control Tower</span>
+    <div class="t2-topbar-search">
+      <input class="t2-search-input" type="text" placeholder="Search deals, documents, partners…"/>
+    </div>
+    <div class="t2-topbar-right">
+      <a href="notifications.html" class="t2-notif-btn">🔔<span class="t2-notif-badge">7</span></a>
+      <span class="t2-tag mono">James W.</span>
+      <div class="t2-avatar">JW</div>
+    </div>
+  </header>
+
+  <nav class="t2-nav">
+    <span class="t2-nav-label">Platform</span>
+    <a href="dashboard.html" class="t2-nav-item">⬛ Command Center</a>
+    <a href="pipeline.html" class="t2-nav-item">◈ Pipeline <span class="t2-nav-count gold">2</span></a>
+    <span class="t2-nav-label">Operations</span>
+    <a href="blocker-board.html" class="t2-nav-item">⚑ Blocker Board <span class="t2-nav-count alert">5</span></a>
+    <a href="intake-queue.html" class="t2-nav-item">↓ Intake Queue <span class="t2-nav-count">1</span></a>
+    <a href="notifications.html" class="t2-nav-item active">🔔 Inbox <span class="t2-nav-count alert">7</span></a>
+    <span class="t2-nav-label">Admin</span>
+    <a href="partner-management.html" class="t2-nav-item">◎ Partners</a>
+    <a href="workflow-builder.html" class="t2-nav-item">⚙ Workflows</a>
+    <a href="audit-log.html" class="t2-nav-item">≡ Audit Log</a>
+    <a href="settings.html" class="t2-nav-item">⚙ Settings</a>
+  </nav>
+
+  <main class="t2-main">
+
+    <div class="page-header">
+      <div>
+        <div class="t2-section-label">Operations</div>
+        <div class="page-title">Inbox</div>
+      </div>
+      <div style="display:flex;gap:var(--space-2);">
+        <button class="btn-ghost" onclick="document.querySelectorAll('.notif-item-full.unread').forEach(n=>{n.classList.remove('unread')})">Mark All Read</button>
+        <button class="btn-ghost">Notification Rules</button>
+      </div>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="filter-bar">
+      <button class="btn-ghost btn-sm" style="border-color:var(--color-gold);color:var(--color-gold);">All <span class="t2-nav-count gold" style="margin-left:4px;">7</span></button>
+      <button class="btn-ghost btn-sm">Critical <span class="t2-nav-count alert" style="margin-left:4px;">3</span></button>
+      <button class="btn-ghost btn-sm">High <span class="t2-nav-count" style="margin-left:4px;">2</span></button>
+      <button class="btn-ghost btn-sm">Info <span class="t2-nav-count" style="margin-left:4px;">2</span></button>
+      <div style="margin-left:auto;">
+        <select class="t2-select" style="width:140px;"><option>All deals</option><option>T2T-001</option><option>T2T-002</option></select>
+      </div>
+    </div>
+
+    <div class="panel">
+
+      <!-- Critical -->
+      <div class="notif-group-label">
+        <span style="color:var(--color-alert);">⛔ Critical — Action Required</span>
+        <span class="t2-tag mono">3 unread</span>
+      </div>
+
+      <div class="notif-item-full unread" onclick="window.location='deal-detail.html'">
+        <div class="notif-icon critical">⛔</div>
+        <div class="notif-body">
+          <div class="notif-title">Hard stop: Land title unresolved — T2T-001 blocked at Gate 2</div>
+          <div class="notif-desc">CR Legal Counsel (V. Saborio) has not yet confirmed whether Hotel Arco Iris sits on fee simple or maritime concession. Deal cannot advance until resolved.</div>
+          <div class="notif-meta">
+            <span class="deal-id">T2T-001</span>
+            <span class="stage-pill readiness">Readiness Review</span>
+            <span style="font-size:var(--text-xs);color:var(--color-text-muted);">Owner: CR Legal Counsel</span>
+          </div>
+        </div>
+        <div class="notif-right">
+          <span class="ts">Today · 9:02am</span>
+          <div class="notif-dot unread"></div>
+          <button class="btn-ghost btn-sm">View Deal</button>
+        </div>
+      </div>
+
+      <div class="notif-item-full unread" onclick="window.location='deal-detail.html'">
+        <div class="notif-icon critical">⛔</div>
+        <div class="notif-body">
+          <div class="notif-title">Hard stop: ADR decline explanation — 3 days overdue</div>
+          <div class="notif-desc">Rafael Torres (Issuer) has not submitted the written explanation for the 2025 ADR decline with supporting booking data. Escalation triggered.</div>
+          <div class="notif-meta">
+            <span class="deal-id">T2T-001</span>
+            <span class="stage-pill readiness">Readiness Review</span>
+            <span style="font-size:var(--text-xs);color:var(--color-alert);">Escalated Day 3</span>
+          </div>
+        </div>
+        <div class="notif-right">
+          <span class="ts">Today · 8:15am</span>
+          <div class="notif-dot unread"></div>
+          <button class="btn-ghost btn-sm">View Deal</button>
+        </div>
+      </div>
+
+      <div class="notif-item-full unread" onclick="window.location='intake-queue.html'">
+        <div class="notif-icon warn">↓</div>
+        <div class="notif-body">
+          <div class="notif-title">New intake submission — Casa Horizonte, Puerto Viejo</div>
+          <div class="notif-desc">Broker Marco Delgado submitted a new deal for review. $4.5M raise target, boutique hotel, 22 rooms. Auto-screening flagged 2 failures (missing docs).</div>
+          <div class="notif-meta">
+            <span class="deal-id">INTAKE-003</span>
+            <span class="stage-pill intake">Pending Review</span>
+            <span style="font-size:var(--text-xs);color:var(--color-text-muted);">Broker: Marco Delgado</span>
+          </div>
+        </div>
+        <div class="notif-right">
+          <span class="ts">Today · 6:40am</span>
+          <div class="notif-dot unread"></div>
+          <button class="btn-ghost btn-sm">Review</button>
+        </div>
+      </div>
+
+      <!-- High -->
+      <div class="notif-group-label">
+        <span style="color:var(--color-warn);">⚠ High Priority</span>
+        <span class="t2-tag mono">2 unread</span>
+      </div>
+
+      <div class="notif-item-full unread" onclick="window.location='deal-detail.html'">
+        <div class="notif-icon warn">⚠</div>
+        <div class="notif-body">
+          <div class="notif-title">Token structure decision due today — T2T-002</div>
+          <div class="notif-desc">Admin must decide on per-lot vs. fractional token structure for Grande Beach Club before EOD. Smart contract architecture is blocked on this decision.</div>
+          <div class="notif-meta">
+            <span class="deal-id">T2T-002</span>
+            <span class="stage-pill intake">Intake</span>
+            <span style="font-size:var(--text-xs);color:var(--color-warn);">Due today · Gate 5</span>
+          </div>
+        </div>
+        <div class="notif-right">
+          <span class="ts">Today · 7:00am</span>
+          <div class="notif-dot unread"></div>
+          <button class="btn-ghost btn-sm">View Deal</button>
+        </div>
+      </div>
+
+      <div class="notif-item-full unread" onclick="window.location='deal-detail.html'">
+        <div class="notif-icon warn">⚠</div>
+        <div class="notif-body">
+          <div class="notif-title">Operator profile overdue — T2T-001 · 3 days past deadline</div>
+          <div class="notif-desc">Sponsor/operator profile for Hotel Arco Iris was due Apr 27. Issuer has not responded. Auto-escalated to admin.</div>
+          <div class="notif-meta">
+            <span class="deal-id">T2T-001</span>
+            <span style="font-size:var(--text-xs);color:var(--color-alert);">3d overdue · auto-escalated</span>
+          </div>
+        </div>
+        <div class="notif-right">
+          <span class="ts">Yesterday · 9:00am</span>
+          <div class="notif-dot unread"></div>
+          <button class="btn-ghost btn-sm">View Deal</button>
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="notif-group-label">
+        <span>Info</span>
+        <span class="t2-tag mono">2 read</span>
+      </div>
+
+      <div class="notif-item-full" onclick="window.location='deal-detail.html'">
+        <div class="notif-icon green">✓</div>
+        <div class="notif-body">
+          <div class="notif-title">Document uploaded — 2022 P&L Financials.pdf · T2T-001</div>
+          <div class="notif-desc">Rafael Torres uploaded the 2022 P&L financials. Document is under review. Remaining financial docs still missing.</div>
+          <div class="notif-meta">
+            <span class="deal-id">T2T-001</span>
+            <span style="font-size:var(--text-xs);color:var(--color-text-muted);">Uploaded by: Issuer</span>
+          </div>
+        </div>
+        <div class="notif-right">
+          <span class="ts">Apr 29 · 2:30pm</span>
+          <div class="notif-dot read"></div>
+          <button class="btn-ghost btn-sm">Review</button>
+        </div>
+      </div>
+
+      <div class="notif-item-full" onclick="window.location='deal-detail.html'">
+        <div class="notif-icon green">✓</div>
+        <div class="notif-body">
+          <div class="notif-title">Document approved — Hotel Arco Iris Investor Package · T2T-001</div>
+          <div class="notif-desc">Investor package approved by admin. Document is now available to assigned broker for distribution planning.</div>
+          <div class="notif-meta">
+            <span class="deal-id">T2T-001</span>
+            <span style="font-size:var(--text-xs);color:var(--color-green);">Approved · Offering Docs</span>
+          </div>
+        </div>
+        <div class="notif-right">
+          <span class="ts">Apr 28 · 11:00am</span>
+          <div class="notif-dot read"></div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

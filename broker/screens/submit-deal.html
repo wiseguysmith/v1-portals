@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T2T Broker — Submit a Deal</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../public/design-tokens.css"/>
+  <link rel="stylesheet" href="../../admin/styles/admin.css"/>
+  <link rel="stylesheet" href="../styles/broker.css"/>
+  <style>
+    .form-section { margin-bottom:var(--space-6); }
+    .form-section-title { font-size:var(--text-sm); font-weight:500; color:var(--color-text-muted); text-transform:uppercase; letter-spacing:.05em; margin-bottom:var(--space-4); padding-bottom:var(--space-2); border-bottom:1px solid var(--color-border); }
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:var(--space-4); }
+    .form-grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:var(--space-4); }
+    .form-full { grid-column:1/-1; }
+    .field { display:flex; flex-direction:column; gap:var(--space-1); }
+    .field label { font-size:var(--text-sm); font-weight:500; color:var(--color-text); }
+    .field .hint { font-size:var(--text-xs); color:var(--color-text-faint); }
+    .upload-zone { border:2px dashed var(--color-border); border-radius:var(--radius-md); padding:var(--space-6) var(--space-5); text-align:center; background:var(--color-bg-subtle); color:var(--color-text-muted); font-size:var(--text-sm); cursor:pointer; }
+    .upload-zone:hover { border-color:var(--color-green); background:#f0f7f2; }
+    .checklist-confirm { display:flex; flex-direction:column; gap:var(--space-2); }
+    .confirm-item { display:flex; align-items:center; gap:var(--space-3); font-size:var(--text-sm); }
+    .confirm-item input[type=checkbox] { width:16px; height:16px; accent-color:var(--color-green); flex-shrink:0; }
+  </style>
+</head>
+<body>
+<div class="t2-shell">
+
+  <header class="t2-topbar">
+    <span class="t2-logo">T2T</span>
+    <span class="t2-tag">|</span>
+    <span class="t2-portal-badge">Broker Portal</span>
+    <div class="t2-topbar-search">
+      <input class="t2-search-input" type="text" placeholder="Search deals…"/>
+    </div>
+    <div class="t2-topbar-right">
+      <span class="t2-tag mono">Marco D.</span>
+      <div class="t2-avatar" style="background:#7090b0;">MD</div>
+    </div>
+  </header>
+
+  <nav class="t2-nav">
+    <span class="t2-nav-label">Overview</span>
+    <a href="dashboard.html" class="t2-nav-item">⬛ My Dashboard</a>
+    <span class="t2-nav-label">Deals</span>
+    <a href="my-deals.html" class="t2-nav-item">◈ My Deals <span class="t2-nav-count">3</span></a>
+    <a href="submit-deal.html" class="t2-nav-item active">＋ Submit a Deal</a>
+    <span class="t2-nav-label">Communications</span>
+    <a href="activity.html" class="t2-nav-item">≡ Activity</a>
+  </nav>
+
+  <main class="t2-main">
+
+    <div class="page-header">
+      <div>
+        <div class="t2-section-label">Broker Portal</div>
+        <div class="page-title">Submit a Deal</div>
+      </div>
+      <span style="font-size:var(--text-sm);color:var(--color-text-muted);">Takes ~5 min · Auto-screening within 24h</span>
+    </div>
+
+    <div class="warning-banner" style="background:#f0f7f2;border-color:#b8d8c2;color:var(--color-text);">
+      <span style="color:var(--color-green);">ℹ</span>
+      <div>All submissions go through auto-screening first. T2T admin reviews within 1–2 business days. You'll receive an email and portal notification with the outcome.</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 300px;gap:var(--space-6);align-items:start;">
+
+      <div class="panel">
+        <div class="panel-header"><span class="panel-title">Deal Information</span></div>
+        <div class="panel-body" style="padding:var(--space-5);">
+
+          <div class="form-section">
+            <div class="form-section-title">Property &amp; Asset</div>
+            <div class="form-grid">
+              <div class="field">
+                <label>Property Name</label>
+                <input class="t2-input" type="text" placeholder="e.g. Hotel Arco Iris"/>
+              </div>
+              <div class="field">
+                <label>Asset Type</label>
+                <select class="t2-select">
+                  <option value="">Select type…</option>
+                  <option>Hotel / Hospitality</option>
+                  <option>Multifamily / Residential</option>
+                  <option>Commercial Office</option>
+                  <option>Retail</option>
+                  <option>Industrial / Warehouse</option>
+                  <option>Mixed Use</option>
+                  <option>Land</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Country</label>
+                <input class="t2-input" type="text" placeholder="e.g. Costa Rica"/>
+              </div>
+              <div class="field">
+                <label>City / Region</label>
+                <input class="t2-input" type="text" placeholder="e.g. Guanacaste"/>
+              </div>
+              <div class="field form-full">
+                <label>Property Address</label>
+                <input class="t2-input" type="text" placeholder="Street address or parcel description"/>
+              </div>
+              <div class="field">
+                <label>Transaction Type</label>
+                <select class="t2-select">
+                  <option value="">Select…</option>
+                  <option>Acquisition</option>
+                  <option>Refinance</option>
+                  <option>Development</option>
+                  <option>Recapitalization</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Property Status</label>
+                <select class="t2-select">
+                  <option value="">Select…</option>
+                  <option>Stabilized / Operating</option>
+                  <option>Value-Add</option>
+                  <option>Development / Construction</option>
+                  <option>Distressed</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">Financial Overview</div>
+            <div class="form-grid-3">
+              <div class="field">
+                <label>Raise Target ($)</label>
+                <input class="t2-input" type="text" placeholder="e.g. 2,320,500"/>
+                <span class="hint">Total equity raise in USD</span>
+              </div>
+              <div class="field">
+                <label>Property Value ($)</label>
+                <input class="t2-input" type="text" placeholder="e.g. 6,500,000"/>
+                <span class="hint">Current or purchase price</span>
+              </div>
+              <div class="field">
+                <label>Target Return (%)</label>
+                <input class="t2-input" type="text" placeholder="e.g. 12.5"/>
+                <span class="hint">Projected annual return</span>
+              </div>
+              <div class="field">
+                <label>Min. Investment ($)</label>
+                <input class="t2-input" type="text" placeholder="e.g. 25,000"/>
+              </div>
+              <div class="field">
+                <label>Expected Investors</label>
+                <input class="t2-input" type="text" placeholder="e.g. 15–25"/>
+              </div>
+              <div class="field">
+                <label>Hold Period</label>
+                <input class="t2-input" type="text" placeholder="e.g. 5 years"/>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">Issuer / Sponsor</div>
+            <div class="form-grid">
+              <div class="field">
+                <label>Issuer Name</label>
+                <input class="t2-input" type="text" placeholder="Full legal name or entity name"/>
+              </div>
+              <div class="field">
+                <label>Issuer Email</label>
+                <input class="t2-input" type="email" placeholder="issuer@example.com"/>
+              </div>
+              <div class="field">
+                <label>Issuer Phone</label>
+                <input class="t2-input" type="text" placeholder="+1 (555) 000-0000"/>
+              </div>
+              <div class="field">
+                <label>Country of Entity</label>
+                <input class="t2-input" type="text" placeholder="e.g. United States"/>
+              </div>
+              <div class="field form-full">
+                <label>Brief Issuer Background</label>
+                <textarea class="t2-textarea" placeholder="Prior deals, experience, relevant background…" style="min-height:72px;"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">Deal Description</div>
+            <div class="field">
+              <label>Deal Summary</label>
+              <textarea class="t2-textarea" placeholder="Describe the opportunity, investment thesis, use of proceeds, and any notable risks or considerations…" style="min-height:100px;"></textarea>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">Supporting Documents</div>
+            <div class="upload-zone">
+              <div style="font-size:20px;margin-bottom:var(--space-2);">↑</div>
+              <div style="font-weight:500;margin-bottom:var(--space-1);">Drag files here or click to upload</div>
+              <div style="font-size:var(--text-xs);color:var(--color-text-faint);">Pitch deck · Financials · Property photos · Any supporting materials · PDF, DOCX, XLSX, JPG — max 50MB each</div>
+            </div>
+          </div>
+
+          <div class="form-section" style="margin-bottom:0;">
+            <div class="form-section-title">Submission Checklist</div>
+            <div class="checklist-confirm">
+              <label class="confirm-item"><input type="checkbox"/> I confirm the issuer has authorized me to submit this deal on their behalf.</label>
+              <label class="confirm-item"><input type="checkbox"/> The financial information provided is accurate to the best of my knowledge.</label>
+              <label class="confirm-item"><input type="checkbox"/> I understand T2T will contact the issuer directly for additional diligence.</label>
+              <label class="confirm-item"><input type="checkbox"/> I have reviewed the broker agreement and commission structure for this deal type.</label>
+            </div>
+          </div>
+
+        </div>
+        <div style="display:flex;align-items:center;justify-content:flex-end;gap:var(--space-3);padding:var(--space-4) var(--space-5);border-top:1px solid var(--color-border);">
+          <button class="btn-ghost">Save Draft</button>
+          <button class="btn-primary">Submit Deal →</button>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:var(--space-4);">
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">What Happens Next</span></div>
+          <div class="panel-body" style="display:flex;flex-direction:column;gap:var(--space-3);">
+            <div style="display:flex;gap:var(--space-3);font-size:var(--text-sm);">
+              <span style="font-family:var(--font-mono);color:var(--color-green);font-weight:500;flex-shrink:0;">1.</span>
+              <div><strong>Auto-screening</strong> — system checks completeness and basic eligibility criteria within minutes.</div>
+            </div>
+            <div style="display:flex;gap:var(--space-3);font-size:var(--text-sm);">
+              <span style="font-family:var(--font-mono);color:var(--color-green);font-weight:500;flex-shrink:0;">2.</span>
+              <div><strong>Admin review</strong> — T2T reviews the submission within 1–2 business days.</div>
+            </div>
+            <div style="display:flex;gap:var(--space-3);font-size:var(--text-sm);">
+              <span style="font-family:var(--font-mono);color:var(--color-green);font-weight:500;flex-shrink:0;">3.</span>
+              <div><strong>Decision</strong> — you'll receive Approved, More Info Needed, or Declined via email + portal notification.</div>
+            </div>
+            <div style="display:flex;gap:var(--space-3);font-size:var(--text-sm);">
+              <span style="font-family:var(--font-mono);color:var(--color-green);font-weight:500;flex-shrink:0;">4.</span>
+              <div><strong>Issuer invited</strong> — if approved, the issuer gets portal access and the deal enters the intake pipeline.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Commission Structure</span></div>
+          <div class="panel-body" style="display:flex;flex-direction:column;gap:var(--space-2);">
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Standard rate</span><span class="mono">1% of raise</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Paid at</span><span class="mono">Close / Gate 7</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Deal minimum</span><span class="mono">$500,000 raise</span></div>
+            <div class="t2-divider"></div>
+            <div style="font-size:var(--text-xs);color:var(--color-text-faint);">Non-standard arrangements require written agreement before submission. Contact your T2T deal coordinator.</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Screening Criteria</span></div>
+          <div class="panel-body" style="display:flex;flex-direction:column;gap:var(--space-2);font-size:var(--text-sm);">
+            <div style="display:flex;align-items:center;gap:var(--space-2);"><span style="color:var(--color-green);">✓</span> Raise target $500K – $50M</div>
+            <div style="display:flex;align-items:center;gap:var(--space-2);"><span style="color:var(--color-green);">✓</span> Accredited investors only (506(c))</div>
+            <div style="display:flex;align-items:center;gap:var(--space-2);"><span style="color:var(--color-green);">✓</span> Clear title / no known encumbrances</div>
+            <div style="display:flex;align-items:center;gap:var(--space-2);"><span style="color:var(--color-green);">✓</span> Issuer identity verifiable</div>
+            <div style="display:flex;align-items:center;gap:var(--space-2);"><span style="color:var(--color-green);">✓</span> Tokenizable asset class</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

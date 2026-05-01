@@ -1,0 +1,16 @@
+/* ============================================
+   Title2Token — Legal Partner Portal CSS
+   legal/styles/legal.css
+   ============================================ */
+
+.t2-portal-badge {
+  background: var(--color-bg-gold);
+  color: var(--color-gold-dark);
+  border-color: var(--color-gold-light);
+}
+
+.t2-nav-item.active {
+  border-left-color: var(--color-gold-dark);
+  background: var(--color-bg-gold);
+  color: var(--color-text);
+}

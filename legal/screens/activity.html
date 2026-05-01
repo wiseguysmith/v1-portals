@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T2T Legal — Activity</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../public/design-tokens.css"/>
+  <link rel="stylesheet" href="../../admin/styles/admin.css"/>
+  <link rel="stylesheet" href="../styles/legal.css"/>
+</head>
+<body>
+<div class="t2-shell">
+
+  <header class="t2-topbar">
+    <span class="t2-logo">T2T</span>
+    <span class="t2-tag">|</span>
+    <span class="t2-portal-badge">Legal Partner Portal</span>
+    <div class="t2-topbar-search">
+      <input class="t2-search-input" type="text" placeholder="Search activity…"/>
+    </div>
+    <div class="t2-topbar-right">
+      <span class="t2-tag mono">V. Saborio</span>
+      <div class="t2-avatar" style="background:var(--color-gold-dark);">VS</div>
+    </div>
+  </header>
+
+  <nav class="t2-nav">
+    <span class="t2-nav-label">Overview</span>
+    <a href="dashboard.html" class="t2-nav-item">⬛ My Workload</a>
+    <span class="t2-nav-label">Deals</span>
+    <a href="deal.html" class="t2-nav-item">◈ T2T-001 Hotel Arco Iris <span class="t2-nav-count alert">2</span></a>
+    <a href="deal.html" class="t2-nav-item">◈ T2T-002 Grande Beach Club</a>
+    <span class="t2-nav-label">Work Queue</span>
+    <a href="document-review.html" class="t2-nav-item">📄 Document Review <span class="t2-nav-count alert">1</span></a>
+    <a href="signoffs.html" class="t2-nav-item">✓ Signoffs Needed <span class="t2-nav-count">3</span></a>
+    <a href="activity.html" class="t2-nav-item active">◎ Activity</a>
+  </nav>
+
+  <main class="t2-main">
+
+    <div class="page-header">
+      <div>
+        <div class="t2-section-label">Work Queue</div>
+        <div class="page-title">Activity</div>
+      </div>
+      <select class="t2-select" style="width:140px;"><option>All deals</option><option>T2T-001</option><option>T2T-002</option></select>
+    </div>
+
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-header"><span class="panel-title">Deal Thread — T2T-001</span></div>
+        <div class="comment-item">
+          <div class="comment-avatar" style="background:var(--color-gold);">JW</div>
+          <div class="comment-body">
+            <div><span class="comment-author">James Whitmore</span><span class="comment-time">Apr 30 · 9:02am</span></div>
+            <div class="comment-text"><span class="mention">@V. Saborio</span> — the land title issue is a hard stop for T2T-001. We need your written determination on whether the property is fee simple or maritime concession as soon as possible. The deal cannot advance until this is resolved. Please confirm your timeline.</div>
+          </div>
+        </div>
+        <div class="comment-item">
+          <div class="comment-avatar" style="background:var(--color-gold-dark);">VS</div>
+          <div class="comment-body">
+            <div><span class="comment-author">V. Saborio</span><span class="comment-time">Apr 30 · 8:45am</span></div>
+            <div class="comment-text">I've located the Registro Nacional entry for the property. Initial review suggests fee simple, however there is a boundary adjacent to the maritime zone that requires a formal survey before I can provide a legal opinion. I will have a preliminary determination by May 7 and a full written opinion by May 14.</div>
+          </div>
+        </div>
+        <div class="comment-box">
+          <div style="font-size:var(--text-xs);color:var(--color-text-faint);margin-bottom:var(--space-2);">Reply in thread — visible to admin and assigned partners</div>
+          <div class="comment-input-row">
+            <textarea class="t2-textarea" placeholder="Write a message…" style="min-height:60px;"></textarea>
+            <button class="btn-primary">Send</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header"><span class="panel-title">My Activity Log</span></div>
+        <div class="activity-list">
+          <div class="activity-item"><div class="activity-dot gold"></div><div><div class="activity-text"><strong>You replied:</strong> Preliminary title review — fee simple likely, formal survey needed by May 7</div><div class="activity-time">Today · 8:45am</div></div></div>
+          <div class="activity-item"><div class="activity-dot alert"></div><div><div class="activity-text"><strong>Hard stop flagged by admin:</strong> Land title confirmation required</div><div class="activity-time">Today · 9:02am · Admin</div></div></div>
+          <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">Assigned to T2T-002 — Local Jurisdiction category</div><div class="activity-time">Apr 23 · 3:20pm · Admin</div></div></div>
+          <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">Assigned to T2T-001 — Legal/Entity + Local Jurisdiction categories</div><div class="activity-time">Apr 27 · 3:00pm · Admin</div></div></div>
+          <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">Portal access granted for T2T-001 and T2T-002</div><div class="activity-time">Apr 27 · 2:45pm · Admin</div></div></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

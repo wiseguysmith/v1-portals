@@ -1,0 +1,16 @@
+/* ============================================
+   Title2Token — Broker Portal CSS
+   broker/styles/broker.css
+   ============================================ */
+
+.t2-portal-badge {
+  background: var(--color-green-bg);
+  color: var(--color-green);
+  border-color: #b8d8c2;
+}
+
+.t2-nav-item.active {
+  border-left-color: var(--color-green);
+  background: var(--color-green-bg);
+  color: var(--color-text);
+}

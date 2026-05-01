@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T2T Broker — Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../public/design-tokens.css"/>
+  <link rel="stylesheet" href="../../admin/styles/admin.css"/>
+  <link rel="stylesheet" href="../styles/broker.css"/>
+  <style>
+    .deal-row { display:grid; grid-template-columns:80px 1fr 130px 110px 90px 90px; align-items:center; gap:var(--space-3); padding:10px var(--space-5); border-bottom:1px solid var(--color-border-faint); }
+    .deal-row:last-child { border-bottom:none; }
+    .deal-row:hover { background:var(--color-bg-subtle); cursor:pointer; }
+    .deal-row-header { font-size:var(--text-xs); color:var(--color-text-faint); font-weight:500; text-transform:uppercase; letter-spacing:.04em; border-bottom:1px solid var(--color-border); }
+    .deal-name { font-size:var(--text-base); font-weight:500; }
+    .deal-sub  { font-size:var(--text-sm); color:var(--color-text-muted); margin-top:1px; }
+    .comm-value { font-size:var(--text-base); font-weight:500; font-family:var(--font-mono); }
+    .comm-pending { color:var(--color-text-muted); }
+    .comm-earned  { color:var(--color-green); }
+  </style>
+</head>
+<body>
+<div class="t2-shell">
+
+  <header class="t2-topbar">
+    <span class="t2-logo">T2T</span>
+    <span class="t2-tag">|</span>
+    <span class="t2-portal-badge">Broker Portal</span>
+    <div class="t2-topbar-search">
+      <input class="t2-search-input" type="text" placeholder="Search deals…"/>
+    </div>
+    <div class="t2-topbar-right">
+      <span class="t2-tag mono">Marco D.</span>
+      <div class="t2-avatar" style="background:#7090b0;">MD</div>
+    </div>
+  </header>
+
+  <nav class="t2-nav">
+    <span class="t2-nav-label">Overview</span>
+    <a href="dashboard.html" class="t2-nav-item active">⬛ My Dashboard</a>
+    <span class="t2-nav-label">Deals</span>
+    <a href="my-deals.html" class="t2-nav-item">◈ My Deals <span class="t2-nav-count">3</span></a>
+    <a href="submit-deal.html" class="t2-nav-item">＋ Submit a Deal</a>
+    <span class="t2-nav-label">Communications</span>
+    <a href="activity.html" class="t2-nav-item">≡ Activity</a>
+  </nav>
+
+  <main class="t2-main">
+
+    <div class="page-header">
+      <div>
+        <div class="t2-section-label">Broker Portal</div>
+        <div class="page-title">My Dashboard</div>
+      </div>
+      <span class="t2-tag mono">May 1, 2026</span>
+    </div>
+
+    <div class="four-col">
+      <div class="metric-card">
+        <div class="metric-label">Submitted Deals</div>
+        <div class="metric-value">3</div>
+        <div class="metric-sub">2 active · 1 intake</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Active Raise</div>
+        <div class="metric-value gold">2</div>
+        <div class="metric-sub">T2T-001 · T2T-002</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Commission Earned</div>
+        <div class="metric-value green">$0</div>
+        <div class="metric-sub">pending closes</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Est. Commission</div>
+        <div class="metric-value">$46,410</div>
+        <div class="metric-sub">if both deals close</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">My Submitted Deals</span>
+          <a href="my-deals.html" style="font-size:var(--text-sm);color:var(--color-green);text-decoration:none;">View all →</a>
+        </div>
+        <div class="deal-row deal-row-header">
+          <span>Deal ID</span><span>Property</span><span>Stage</span><span>Health</span><span>Commission</span><span></span>
+        </div>
+        <div class="deal-row" onclick="location.href='my-deals.html'">
+          <span class="deal-id">T2T-001</span>
+          <div><div class="deal-name">Hotel Arco Iris</div><div class="deal-sub">Boutique Hotel · $2.32M raise</div></div>
+          <span class="stage-pill readiness">Readiness Review</span>
+          <div style="display:flex;align-items:center;gap:6px;"><span class="health-dot red"></span><span style="font-size:var(--text-sm);">Blocked</span></div>
+          <span class="comm-value comm-pending">$23,205</span>
+          <a href="my-deals.html" style="font-size:var(--text-sm);color:var(--color-text-muted);text-decoration:none;">View →</a>
+        </div>
+        <div class="deal-row" onclick="location.href='my-deals.html'">
+          <span class="deal-id">T2T-002</span>
+          <div><div class="deal-name">Grande Beach Club</div><div class="deal-sub">Beach Club · $1.04M raise</div></div>
+          <span class="stage-pill intake">Intake</span>
+          <div style="display:flex;align-items:center;gap:6px;"><span class="health-dot yellow"></span><span style="font-size:var(--text-sm);">In Progress</span></div>
+          <span class="comm-value comm-pending">$10,400</span>
+          <a href="my-deals.html" style="font-size:var(--text-sm);color:var(--color-text-muted);text-decoration:none;">View →</a>
+        </div>
+        <div class="deal-row" onclick="location.href='my-deals.html'">
+          <span class="deal-id" style="color:var(--color-text-muted);">INTAKE-003</span>
+          <div><div class="deal-name">Casa Horizonte</div><div class="deal-sub">Residential · Submitted Apr 28</div></div>
+          <span class="stage-pill sourced">Submitted</span>
+          <div style="display:flex;align-items:center;gap:6px;"><span class="health-dot" style="background:var(--color-text-faint);"></span><span style="font-size:var(--text-sm);color:var(--color-text-muted);">Screening</span></div>
+          <span class="comm-value comm-pending" style="color:var(--color-text-faint);">TBD</span>
+          <a href="my-deals.html" style="font-size:var(--text-sm);color:var(--color-text-muted);text-decoration:none;">View →</a>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:var(--space-4);">
+
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Commission Tracker</span></div>
+          <div class="panel-body" style="display:flex;flex-direction:column;gap:var(--space-3);">
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);">
+              <span class="muted">T2T-001 · Hotel Arco Iris</span>
+              <span class="mono" style="color:var(--color-text-muted);">$23,205 pending</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);">
+              <span class="muted">T2T-002 · Grande Beach Club</span>
+              <span class="mono" style="color:var(--color-text-muted);">$10,400 pending</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);">
+              <span class="muted">INTAKE-003 · Casa Horizonte</span>
+              <span class="mono faint">TBD — screening</span>
+            </div>
+            <div class="t2-divider"></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);">
+              <span class="muted">Total earned to date</span>
+              <span class="mono green">$0.00</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);">
+              <span class="muted">Total pending (est.)</span>
+              <span class="mono">$33,605</span>
+            </div>
+            <div style="font-size:var(--text-xs);color:var(--color-text-faint);">Commission paid at close. Rates per deal agreement. Final amounts may vary.</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Recent Activity</span><a href="activity.html" style="font-size:var(--text-sm);color:var(--color-green);text-decoration:none;">View all →</a></div>
+          <div class="activity-list" style="padding:var(--space-3) var(--space-5);">
+            <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">INTAKE-003 Casa Horizonte submitted for screening</div><div class="activity-time">Apr 28 · 11:30am</div></div></div>
+            <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">T2T-001 advanced to Readiness Review</div><div class="activity-time">Apr 27 · 9:00am</div></div></div>
+            <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">T2T-002 accepted into intake pipeline</div><div class="activity-time">Apr 23 · 2:00pm</div></div></div>
+            <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">T2T-001 deal submitted and approved for intake</div><div class="activity-time">Apr 15 · 10:00am</div></div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

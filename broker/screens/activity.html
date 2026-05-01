@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T2T Broker — Activity</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../public/design-tokens.css"/>
+  <link rel="stylesheet" href="../../admin/styles/admin.css"/>
+  <link rel="stylesheet" href="../styles/broker.css"/>
+</head>
+<body>
+<div class="t2-shell">
+
+  <header class="t2-topbar">
+    <span class="t2-logo">T2T</span>
+    <span class="t2-tag">|</span>
+    <span class="t2-portal-badge">Broker Portal</span>
+    <div class="t2-topbar-search">
+      <input class="t2-search-input" type="text" placeholder="Search activity…"/>
+    </div>
+    <div class="t2-topbar-right">
+      <span class="t2-tag mono">Marco D.</span>
+      <div class="t2-avatar" style="background:#7090b0;">MD</div>
+    </div>
+  </header>
+
+  <nav class="t2-nav">
+    <span class="t2-nav-label">Overview</span>
+    <a href="dashboard.html" class="t2-nav-item">⬛ My Dashboard</a>
+    <span class="t2-nav-label">Deals</span>
+    <a href="my-deals.html" class="t2-nav-item">◈ My Deals <span class="t2-nav-count">3</span></a>
+    <a href="submit-deal.html" class="t2-nav-item">＋ Submit a Deal</a>
+    <span class="t2-nav-label">Communications</span>
+    <a href="activity.html" class="t2-nav-item active">≡ Activity</a>
+  </nav>
+
+  <main class="t2-main">
+
+    <div class="page-header">
+      <div>
+        <div class="t2-section-label">Communications</div>
+        <div class="page-title">Activity</div>
+      </div>
+      <select class="t2-select" style="width:140px;">
+        <option>All deals</option>
+        <option>T2T-001</option>
+        <option>T2T-002</option>
+        <option>INTAKE-003</option>
+      </select>
+    </div>
+
+    <div class="two-col">
+
+      <div class="panel">
+        <div class="panel-header"><span class="panel-title">Deal Thread — T2T-001</span></div>
+
+        <div class="comment-item">
+          <div class="comment-avatar" style="background:var(--color-gold);">JW</div>
+          <div class="comment-body">
+            <div><span class="comment-author">James Whitmore</span><span class="comment-time">Apr 27 · 3:00pm · Admin</span></div>
+            <div class="comment-text">Marco — T2T-001 has advanced to Readiness Review. There is currently a hard stop at Gate 2 due to a land title defect. The legal team is working on resolution. Technical and tokenization work can begin scoping now, but no gate progress until title clears. We'll notify you when Gate 2 is unblocked.</div>
+          </div>
+        </div>
+
+        <div class="comment-item">
+          <div class="comment-avatar" style="background:#7090b0;">MD</div>
+          <div class="comment-body">
+            <div><span class="comment-author">Marco Delgado</span><span class="comment-time">Apr 27 · 3:45pm · You</span></div>
+            <div class="comment-text">Understood. Do we have a timeline estimate for the title resolution? The issuer is asking. Also, should I loop in the issuer on the backend scoping work, or hold off until the hard stop clears?</div>
+          </div>
+        </div>
+
+        <div class="comment-item">
+          <div class="comment-avatar" style="background:var(--color-gold);">JW</div>
+          <div class="comment-body">
+            <div><span class="comment-author">James Whitmore</span><span class="comment-time">Apr 28 · 10:15am · Admin</span></div>
+            <div class="comment-text">No firm timeline yet — legal is targeting resolution within 2–3 weeks but that's not guaranteed. On the issuer question: yes, keep Rafael looped in on the scoping conversations. We want the architecture work to proceed in parallel so we're not delaying Gate 6 once Gate 2 clears.</div>
+          </div>
+        </div>
+
+        <div class="comment-item">
+          <div class="comment-avatar" style="background:#7090b0;">MD</div>
+          <div class="comment-body">
+            <div><span class="comment-author">Marco Delgado</span><span class="comment-time">Apr 28 · 11:00am · You</span></div>
+            <div class="comment-text">Got it. I'll brief Rafael and make sure he's connected with the backend team. Any update on T2T-002 timeline — Elena is asking when intake will be complete and what comes next.</div>
+          </div>
+        </div>
+
+        <div class="comment-item">
+          <div class="comment-avatar" style="background:var(--color-gold);">JW</div>
+          <div class="comment-body">
+            <div><span class="comment-author">James Whitmore</span><span class="comment-time">Apr 29 · 9:30am · Admin</span></div>
+            <div class="comment-text">T2T-002 is at 28% readiness — we're still waiting on the deal profile and financial summary from Elena. Once intake is at 100% we can move to Readiness Review. Tell her to prioritize the two outstanding documents and flag me if she needs guidance on what format we require.</div>
+          </div>
+        </div>
+
+        <div class="comment-box">
+          <div style="font-size:var(--text-xs);color:var(--color-text-faint);margin-bottom:var(--space-2);">Reply — visible to admin only</div>
+          <div class="comment-input-row">
+            <textarea class="t2-textarea" placeholder="Write a message or ask a question…" style="min-height:60px;"></textarea>
+            <button class="btn-primary">Send</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:var(--space-4);">
+
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">My Activity Log</span></div>
+          <div class="activity-list" style="padding:var(--space-3) var(--space-5);">
+            <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">INTAKE-003 Casa Horizonte submitted for admin review</div><div class="activity-time">Apr 28 · 11:30am</div></div></div>
+            <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">Message sent to admin re: T2T-002 issuer timeline</div><div class="activity-time">Apr 28 · 11:00am</div></div></div>
+            <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">Message sent to admin re: T2T-001 title resolution + issuer scoping</div><div class="activity-time">Apr 27 · 3:45pm</div></div></div>
+            <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">T2T-001 advanced to Readiness Review — hard stop notified</div><div class="activity-time">Apr 27 · 3:00pm · Admin</div></div></div>
+            <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">T2T-002 Grande Beach Club accepted into intake pipeline</div><div class="activity-time">Apr 23 · 2:00pm · Admin</div></div></div>
+            <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">Portal access granted</div><div class="activity-time">Apr 15 · 9:45am · Admin</div></div></div>
+            <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">T2T-001 Hotel Arco Iris approved — deal entered intake pipeline</div><div class="activity-time">Apr 15 · 10:00am · Admin</div></div></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">INTAKE-003 Status</span></div>
+          <div class="panel-body" style="display:flex;flex-direction:column;gap:var(--space-2);">
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Property</span><span>Casa Horizonte</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Submitted</span><span class="mono">Apr 28, 2026</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Auto-screening</span><span style="color:var(--color-warn);">In progress</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Admin review</span><span class="faint">Pending screening</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Decision by</span><span class="mono faint">~Apr 30</span></div>
+            <div class="t2-divider"></div>
+            <div style="font-size:var(--text-xs);color:var(--color-text-faint);">You'll receive an email + portal notification when a decision is made.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

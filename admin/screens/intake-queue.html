@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T2T Admin — Intake Queue</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../public/design-tokens.css"/>
+  <link rel="stylesheet" href="../styles/admin.css"/>
+  <style>
+    .intake-card {
+      background:#fff; border:1px solid var(--color-border); border-radius:var(--radius-md);
+      overflow:hidden; transition:box-shadow 0.12s;
+    }
+    .intake-card:hover { box-shadow:var(--shadow-md); }
+    .intake-card-header {
+      display:flex; align-items:flex-start; justify-content:space-between;
+      padding:var(--space-4) var(--space-5); border-bottom:1px solid var(--color-border);
+    }
+    .intake-card-body { padding:var(--space-5); display:flex; flex-direction:column; gap:var(--space-4); }
+    .intake-field-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-4); }
+    .intake-field { display:flex; flex-direction:column; gap:3px; }
+    .intake-field-label { font-size:var(--text-xs); color:var(--color-text-faint); text-transform:uppercase; letter-spacing:0.08em; }
+    .intake-field-val { font-size:var(--text-base); font-family:var(--font-mono); }
+    .intake-docs { display:flex; flex-direction:column; gap:var(--space-2); }
+    .doc-line { display:flex; align-items:center; justify-content:space-between; font-size:var(--text-sm); padding:var(--space-2) 0; border-bottom:1px solid var(--color-border-faint); }
+    .doc-line:last-child { border-bottom:none; }
+    .screening-checklist { display:flex; flex-direction:column; gap:var(--space-2); }
+    .screen-item { display:flex; align-items:center; gap:var(--space-2); font-size:var(--text-sm); }
+    .screen-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+    .screen-dot.pass { background:var(--color-green); }
+    .screen-dot.fail { background:var(--color-alert); }
+    .screen-dot.pending { background:var(--color-warn); }
+    .intake-actions { display:flex; gap:var(--space-2); padding:var(--space-4) var(--space-5); border-top:1px solid var(--color-border); background:var(--color-bg-subtle); }
+    .empty-queue { text-align:center; padding:var(--space-8) var(--space-6); color:var(--color-text-faint); }
+  </style>
+</head>
+<body>
+<div class="t2-shell">
+
+  <header class="t2-topbar">
+    <span class="t2-logo">T2T</span>
+    <span class="t2-tag">|</span>
+    <span class="t2-portal-badge">Admin Control Tower</span>
+    <div class="t2-topbar-search">
+      <input class="t2-search-input" type="text" placeholder="Search deals, documents, partners…"/>
+    </div>
+    <div class="t2-topbar-right">
+      <a href="notifications.html" class="t2-notif-btn">🔔<span class="t2-notif-badge">7</span></a>
+      <span class="t2-tag mono">James W.</span>
+      <div class="t2-avatar">JW</div>
+    </div>
+  </header>
+
+  <nav class="t2-nav">
+    <span class="t2-nav-label">Platform</span>
+    <a href="dashboard.html" class="t2-nav-item">⬛ Command Center</a>
+    <a href="pipeline.html" class="t2-nav-item">◈ Pipeline <span class="t2-nav-count gold">2</span></a>
+    <span class="t2-nav-label">Operations</span>
+    <a href="blocker-board.html" class="t2-nav-item">⚑ Blocker Board <span class="t2-nav-count alert">5</span></a>
+    <a href="intake-queue.html" class="t2-nav-item active">↓ Intake Queue <span class="t2-nav-count">1</span></a>
+    <a href="notifications.html" class="t2-nav-item">🔔 Inbox <span class="t2-nav-count alert">7</span></a>
+    <span class="t2-nav-label">Admin</span>
+    <a href="partner-management.html" class="t2-nav-item">◎ Partners</a>
+    <a href="workflow-builder.html" class="t2-nav-item">⚙ Workflows</a>
+    <a href="audit-log.html" class="t2-nav-item">≡ Audit Log</a>
+    <a href="settings.html" class="t2-nav-item">⚙ Settings</a>
+  </nav>
+
+  <main class="t2-main">
+
+    <div class="page-header">
+      <div>
+        <div class="t2-section-label">Operations</div>
+        <div class="page-title">Intake Queue</div>
+      </div>
+      <div style="display:flex;gap:var(--space-2);">
+        <button class="btn-ghost">Screening Criteria</button>
+        <button class="btn-primary">+ Manual Entry</button>
+      </div>
+    </div>
+
+    <!-- Stats bar -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-4);">
+      <div class="metric-card">
+        <div class="metric-label">Pending Review</div>
+        <div class="metric-value">1</div>
+        <div class="metric-sub">submitted today</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Avg Review Time</div>
+        <div class="metric-value">2.1d</div>
+        <div class="metric-sub">last 30 days</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Approved (30d)</div>
+        <div class="metric-value green">2</div>
+        <div class="metric-sub">T2T-001 · T2T-002</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Declined (30d)</div>
+        <div class="metric-value muted">0</div>
+        <div class="metric-sub">no rejections yet</div>
+      </div>
+    </div>
+
+    <!-- Pending submissions -->
+    <div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-3);">
+        <div class="t2-section-label">Pending Submissions</div>
+        <div class="filter-bar">
+          <select class="t2-select" style="width:140px;"><option>All brokers</option></select>
+          <select class="t2-select" style="width:130px;"><option>All asset types</option></select>
+        </div>
+      </div>
+
+      <!-- Submission card -->
+      <div class="intake-card">
+        <div class="intake-card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:var(--space-2);margin-bottom:var(--space-2);">
+              <span class="deal-id" style="background:var(--color-warn-bg);border-color:#e8d090;color:var(--color-warn);">INTAKE-003</span>
+              <span class="stage-pill intake">Pending Review</span>
+              <span class="risk-badge medium">Unscreened</span>
+            </div>
+            <div style="font-size:var(--text-lg);font-weight:500;">Casa Horizonte — Luxury Boutique Hotel</div>
+            <div style="font-size:var(--text-sm);color:var(--color-text-muted);margin-top:2px;">Development / Renovation · Puerto Viejo, Costa Rica · Submitted Apr 30, 2026 · 6:40am</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;">
+            <div style="font-size:var(--text-sm);color:var(--color-text-muted);">Submitted by</div>
+            <div style="font-size:var(--text-base);font-weight:500;margin-top:2px;">Marco Delgado</div>
+            <div style="font-size:var(--text-xs);color:var(--color-text-muted);">Broker · CR</div>
+          </div>
+        </div>
+
+        <div class="intake-card-body">
+
+          <!-- Key fields -->
+          <div class="intake-field-grid">
+            <div class="intake-field">
+              <span class="intake-field-label">Asset Type</span>
+              <span class="intake-field-val">Boutique Hotel</span>
+            </div>
+            <div class="intake-field">
+              <span class="intake-field-label">Deal Type</span>
+              <span class="intake-field-val">Development / Reno</span>
+            </div>
+            <div class="intake-field">
+              <span class="intake-field-label">Location</span>
+              <span class="intake-field-val">Puerto Viejo, CR</span>
+            </div>
+            <div class="intake-field">
+              <span class="intake-field-label">Target Raise</span>
+              <span class="intake-field-val gold">$4,500,000</span>
+            </div>
+            <div class="intake-field">
+              <span class="intake-field-label">Projected Cap Rate</span>
+              <span class="intake-field-val">9.2%</span>
+            </div>
+            <div class="intake-field">
+              <span class="intake-field-label">Hold Period</span>
+              <span class="intake-field-val">5 years</span>
+            </div>
+            <div class="intake-field">
+              <span class="intake-field-label">Rooms / Keys</span>
+              <span class="intake-field-val">22 rooms</span>
+            </div>
+            <div class="intake-field">
+              <span class="intake-field-label">Ownership Structure</span>
+              <span class="intake-field-val">Fee Simple (claimed)</span>
+            </div>
+            <div class="intake-field">
+              <span class="intake-field-label">Issuer / Sponsor</span>
+              <span class="intake-field-val">Camila Vargas</span>
+            </div>
+          </div>
+
+          <div class="t2-divider"></div>
+
+          <!-- Two-column: docs + screening -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-6);">
+
+            <!-- Documents submitted -->
+            <div>
+              <div style="font-size:var(--text-xs);text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-faint);margin-bottom:var(--space-3);">Documents Submitted</div>
+              <div class="intake-docs">
+                <div class="doc-line">
+                  <span>Investor Overview Deck.pdf</span>
+                  <span class="doc-status approved">Received</span>
+                </div>
+                <div class="doc-line">
+                  <span>2024 Revenue Summary.xlsx</span>
+                  <span class="doc-status uploaded">Received</span>
+                </div>
+                <div class="doc-line">
+                  <span>Property Photos (12 images)</span>
+                  <span class="doc-status approved">Received</span>
+                </div>
+                <div class="doc-line">
+                  <span>Land Title / Registro</span>
+                  <span class="doc-status missing">Missing</span>
+                </div>
+                <div class="doc-line">
+                  <span>3yr Tax Filings</span>
+                  <span class="doc-status missing">Missing</span>
+                </div>
+                <div class="doc-line">
+                  <span>Sponsor / Operator Profile</span>
+                  <span class="doc-status missing">Missing</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Auto-screening -->
+            <div>
+              <div style="font-size:var(--text-xs);text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-faint);margin-bottom:var(--space-3);">Auto-Screening</div>
+              <div class="screening-checklist">
+                <div class="screen-item"><div class="screen-dot pass"></div><span>Target raise ≥ $500K</span></div>
+                <div class="screen-item"><div class="screen-dot pass"></div><span>Asset type on approved list</span></div>
+                <div class="screen-item"><div class="screen-dot pass"></div><span>CR jurisdiction — eligible</span></div>
+                <div class="screen-item"><div class="screen-dot pass"></div><span>Broker is registered on platform</span></div>
+                <div class="screen-item"><div class="screen-dot pending"></div><span>Cap rate ≥ 8% — 9.2% (unverified)</span></div>
+                <div class="screen-item"><div class="screen-dot fail"></div><span>Minimum documents — 3 of 6 missing</span></div>
+                <div class="screen-item"><div class="screen-dot pending"></div><span>Land title type — not confirmed</span></div>
+                <div class="screen-item"><div class="screen-dot fail"></div><span>Sponsor profile — not submitted</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Admin note field -->
+          <div>
+            <div style="font-size:var(--text-xs);text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-faint);margin-bottom:var(--space-2);">Admin Note (Internal)</div>
+            <textarea class="t2-textarea" placeholder="Add screening notes before approving or declining…" style="min-height:60px;"></textarea>
+          </div>
+
+        </div>
+
+        <div class="intake-actions">
+          <button class="btn-primary">Approve → Create T2T-003</button>
+          <button class="btn-ghost">Request More Info</button>
+          <button class="btn-danger">Decline</button>
+          <span style="margin-left:auto;font-size:var(--text-xs);color:var(--color-text-faint);">2 auto-screening failures — review required before approval</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reviewed (recent) -->
+    <div>
+      <div class="t2-section-label" style="margin-bottom:var(--space-3);">Recently Reviewed</div>
+      <div class="panel">
+        <table>
+          <thead>
+            <tr>
+              <th>Submission</th>
+              <th>Broker</th>
+              <th>Raise Target</th>
+              <th>Submitted</th>
+              <th>Decision</th>
+              <th>Reviewed By</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="cell-name">Grande Beach Club &amp; Villas</div>
+                <div class="cell-sub">Development · Playa Grande, CR → T2T-002</div>
+              </td>
+              <td class="muted">Marco Delgado</td>
+              <td class="mono">$35M–$70M+</td>
+              <td class="ts">Apr 23</td>
+              <td><span class="doc-status approved">Approved</span></td>
+              <td class="muted">James W.</td>
+              <td class="muted" style="font-size:var(--text-sm);">Title confirmed fee simple. Strong data room.</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="cell-name">Hotel Arco Iris</div>
+                <div class="cell-sub">Acquisition · Tamarindo, CR → T2T-001</div>
+              </td>
+              <td class="muted">Rafael Torres (self)</td>
+              <td class="mono">$2,320,500</td>
+              <td class="ts">Apr 22</td>
+              <td><span class="doc-status approved">Approved</span></td>
+              <td class="muted">James W.</td>
+              <td class="muted" style="font-size:var(--text-sm);">Conditional — land title must be confirmed in readiness stage.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

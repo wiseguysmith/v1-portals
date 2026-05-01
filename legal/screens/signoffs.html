@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T2T Legal — Signoffs</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../public/design-tokens.css"/>
+  <link rel="stylesheet" href="../../admin/styles/admin.css"/>
+  <link rel="stylesheet" href="../styles/legal.css"/>
+  <style>
+    .signoff-row { display:grid; grid-template-columns:1fr 110px 100px 90px 160px; align-items:center; gap:var(--space-4); padding:12px var(--space-5); border-bottom:1px solid var(--color-border-faint); }
+    .signoff-row:last-child { border-bottom:none; }
+    .signoff-row:hover { background:var(--color-bg-subtle); }
+  </style>
+</head>
+<body>
+<div class="t2-shell">
+
+  <header class="t2-topbar">
+    <span class="t2-logo">T2T</span>
+    <span class="t2-tag">|</span>
+    <span class="t2-portal-badge">Legal Partner Portal</span>
+    <div class="t2-topbar-search">
+      <input class="t2-search-input" type="text" placeholder="Search signoffs…"/>
+    </div>
+    <div class="t2-topbar-right">
+      <span class="t2-tag mono">V. Saborio</span>
+      <div class="t2-avatar" style="background:var(--color-gold-dark);">VS</div>
+    </div>
+  </header>
+
+  <nav class="t2-nav">
+    <span class="t2-nav-label">Overview</span>
+    <a href="dashboard.html" class="t2-nav-item">⬛ My Workload</a>
+    <span class="t2-nav-label">Deals</span>
+    <a href="deal.html" class="t2-nav-item">◈ T2T-001 Hotel Arco Iris <span class="t2-nav-count alert">2</span></a>
+    <a href="deal.html" class="t2-nav-item">◈ T2T-002 Grande Beach Club</a>
+    <span class="t2-nav-label">Work Queue</span>
+    <a href="document-review.html" class="t2-nav-item">📄 Document Review <span class="t2-nav-count alert">1</span></a>
+    <a href="signoffs.html" class="t2-nav-item active">✓ Signoffs Needed <span class="t2-nav-count">3</span></a>
+    <a href="activity.html" class="t2-nav-item">◎ Activity</a>
+  </nav>
+
+  <main class="t2-main">
+
+    <div class="page-header">
+      <div>
+        <div class="t2-section-label">Work Queue</div>
+        <div class="page-title">Signoffs Needed</div>
+      </div>
+      <span class="t2-tag mono">3 pending your sign-off</span>
+    </div>
+
+    <div class="warning-banner">
+      <span>⚠</span>
+      <span>These sign-offs are <strong>blocked by the land title hard stop</strong> on T2T-001 — you cannot formally sign off until the title type is confirmed. You may review and pre-approve conditionally, but final sign-off requires title resolution.</span>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Pending Sign-offs</span>
+        <span class="t2-tag mono">3 items</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 110px 100px 90px 160px;padding:var(--space-2) var(--space-5);border-bottom:1px solid var(--color-border);background:var(--color-bg-subtle);">
+        <span class="label">Item</span><span class="label">Deal</span><span class="label">Category</span><span class="label">Gate</span><span class="label"></span>
+      </div>
+      <div class="signoff-row">
+        <div>
+          <div class="cell-name">Legal / Entity — full category review</div>
+          <div class="cell-sub">Sign off once all Legal/Entity checklist items are complete</div>
+        </div>
+        <span class="deal-id">T2T-001</span>
+        <span style="font-size:var(--text-sm);color:var(--color-text-muted);">Legal/Entity</span>
+        <span class="stage-pill readiness" style="font-size:var(--text-xs);">Gate 2</span>
+        <div style="display:flex;gap:var(--space-1);">
+          <button class="btn-ghost btn-sm" disabled style="opacity:0.5;">Blocked ⛔</button>
+        </div>
+      </div>
+      <div class="signoff-row">
+        <div>
+          <div class="cell-name">Local Jurisdiction / CR — full category review</div>
+          <div class="cell-sub">Sign off once all CR jurisdiction items are complete</div>
+        </div>
+        <span class="deal-id">T2T-001</span>
+        <span style="font-size:var(--text-sm);color:var(--color-text-muted);">Local Jurisdiction</span>
+        <span class="stage-pill readiness" style="font-size:var(--text-xs);">Gate 2</span>
+        <div style="display:flex;gap:var(--space-1);">
+          <button class="btn-ghost btn-sm" disabled style="opacity:0.5;">Blocked ⛔</button>
+        </div>
+      </div>
+      <div class="signoff-row">
+        <div>
+          <div class="cell-name">Local Jurisdiction / CR — T2T-002 entitlements</div>
+          <div class="cell-sub">Development entitlements verification — Playa Grande</div>
+        </div>
+        <span class="deal-id">T2T-002</span>
+        <span style="font-size:var(--text-sm);color:var(--color-text-muted);">Local Jurisdiction</span>
+        <span class="stage-pill intake" style="font-size:var(--text-xs);">Gate 2</span>
+        <div style="display:flex;gap:var(--space-1);">
+          <button class="btn-primary btn-sm">Sign Off</button>
+          <button class="btn-ghost btn-sm">Flag Issue</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Completed signoffs -->
+    <div class="panel">
+      <div class="panel-header"><span class="panel-title">Completed Sign-offs</span></div>
+      <div style="padding:var(--space-5);color:var(--color-text-faint);font-size:var(--text-sm);text-align:center;">No completed sign-offs yet.</div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

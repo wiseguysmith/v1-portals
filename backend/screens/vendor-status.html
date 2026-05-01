@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T2T Backend — Vendor Status</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../public/design-tokens.css"/>
+  <link rel="stylesheet" href="../../admin/styles/admin.css"/>
+  <link rel="stylesheet" href="../styles/backend.css"/>
+  <style>
+    .vendor-card { background:#fff; border:1px solid var(--color-border); border-radius:var(--radius-md); padding:var(--space-4) var(--space-5); display:flex; align-items:flex-start; gap:var(--space-4); }
+    .vendor-icon { width:40px; height:40px; border-radius:var(--radius-md); background:var(--color-bg-subtle); border:1px solid var(--color-border); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+    .vendor-body { flex:1; }
+    .vendor-name { font-size:var(--text-base); font-weight:500; }
+    .vendor-cat  { font-size:var(--text-sm); color:var(--color-text-muted); margin-top:1px; }
+    .vendor-detail { font-size:var(--text-xs); font-family:var(--font-mono); color:var(--color-text-faint); margin-top:var(--space-2); }
+    .vendor-right { display:flex; flex-direction:column; align-items:flex-end; gap:var(--space-2); flex-shrink:0; }
+  </style>
+</head>
+<body>
+<div class="t2-shell">
+
+  <header class="t2-topbar">
+    <span class="t2-logo">T2T</span>
+    <span class="t2-tag">|</span>
+    <span class="t2-portal-badge">Backend Partner Portal</span>
+    <div class="t2-topbar-search">
+      <input class="t2-search-input" type="text" placeholder="Search vendors…"/>
+    </div>
+    <div class="t2-topbar-right">
+      <span class="t2-tag mono">Backend Partner</span>
+      <div class="t2-avatar" style="background:var(--color-text-faint);">BP</div>
+    </div>
+  </header>
+
+  <nav class="t2-nav">
+    <span class="t2-nav-label">Overview</span>
+    <a href="dashboard.html" class="t2-nav-item">⬛ My Workload</a>
+    <span class="t2-nav-label">Deals</span>
+    <a href="deal.html" class="t2-nav-item">◈ T2T-001 Hotel Arco Iris</a>
+    <a href="deal.html" class="t2-nav-item">◈ T2T-002 Grande Beach Club</a>
+    <span class="t2-nav-label">Technical</span>
+    <a href="technical-checklist.html" class="t2-nav-item">⚙ Technical Checklist <span class="t2-nav-count">14</span></a>
+    <a href="vendor-status.html" class="t2-nav-item active">◎ Vendor Status <span class="t2-nav-count alert">2</span></a>
+    <a href="activity.html" class="t2-nav-item">≡ Activity</a>
+  </nav>
+
+  <main class="t2-main">
+
+    <div class="page-header">
+      <div>
+        <div class="t2-section-label">Technical</div>
+        <div class="page-title">Vendor &amp; Provider Status</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:var(--space-3);">
+        <span style="font-size:var(--text-sm);color:var(--color-text-muted);">2 connected · 2 pending · 1 not configured</span>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:var(--space-3);">
+
+      <div class="vendor-card">
+        <div class="vendor-icon">📄</div>
+        <div class="vendor-body">
+          <div class="vendor-name">DocConnect</div>
+          <div class="vendor-cat">Document Signing &amp; Audit Trail</div>
+          <div class="vendor-detail">Endpoint: api.docconnect.io · Webhook: active · Adapter: swappable · Last ping: 2 min ago</div>
+        </div>
+        <div class="vendor-right">
+          <div style="display:flex;align-items:center;gap:6px;"><span class="integration-status-dot connected"></span><span style="font-size:var(--text-sm);">Connected</span></div>
+          <button class="btn-ghost btn-sm">Test Connection</button>
+        </div>
+      </div>
+
+      <div class="vendor-card">
+        <div class="vendor-icon">⛓</div>
+        <div class="vendor-body">
+          <div class="vendor-name">Base (Coinbase)</div>
+          <div class="vendor-cat">Chain Provider — ERC-3643 Token Deployment</div>
+          <div class="vendor-detail">Network: Base Mainnet · RPC: connected · Token standard: ERC-3643 · Adapter: swappable</div>
+        </div>
+        <div class="vendor-right">
+          <div style="display:flex;align-items:center;gap:6px;"><span class="integration-status-dot connected"></span><span style="font-size:var(--text-sm);">Connected</span></div>
+          <button class="btn-ghost btn-sm">View Config</button>
+        </div>
+      </div>
+
+      <div class="vendor-card" style="border-color:#e8d090;">
+        <div class="vendor-icon">🪪</div>
+        <div class="vendor-body">
+          <div class="vendor-name">Parallel Markets</div>
+          <div class="vendor-cat">KYC / AML &amp; Accreditation Verification</div>
+          <div class="vendor-detail">Invite sent to: kyc@parallelmarkets.com · Sent: Apr 27 · Expires: May 4 · Not yet accepted</div>
+        </div>
+        <div class="vendor-right">
+          <div style="display:flex;align-items:center;gap:6px;"><span class="integration-status-dot pending"></span><span style="font-size:var(--text-sm);color:var(--color-warn);">Invite Pending</span></div>
+          <button class="btn-ghost btn-sm">Resend Invite</button>
+        </div>
+      </div>
+
+      <div class="vendor-card" style="border-color:#e8d090;">
+        <div class="vendor-icon">📋</div>
+        <div class="vendor-body">
+          <div class="vendor-name">Securitize</div>
+          <div class="vendor-cat">Transfer Agent — Cap Table &amp; Registry</div>
+          <div class="vendor-detail">Invite sent to: ops@securitize.io · Sent: Apr 27 · Expires: May 4 · Not yet accepted</div>
+        </div>
+        <div class="vendor-right">
+          <div style="display:flex;align-items:center;gap:6px;"><span class="integration-status-dot pending"></span><span style="font-size:var(--text-sm);color:var(--color-warn);">Invite Pending</span></div>
+          <button class="btn-ghost btn-sm">Resend Invite</button>
+        </div>
+      </div>
+
+      <div class="vendor-card" style="border-color:#f0c0a8;">
+        <div class="vendor-icon">🏦</div>
+        <div class="vendor-body">
+          <div class="vendor-name">Custodian — Not Configured</div>
+          <div class="vendor-cat">Digital Asset Custody for Tokenized Securities</div>
+          <div class="vendor-detail">Options: Anchorage Digital · BitGo · Copper · Provider-agnostic adapter — no code change required to swap</div>
+        </div>
+        <div class="vendor-right">
+          <div style="display:flex;align-items:center;gap:6px;"><span class="integration-status-dot disconnected"></span><span style="font-size:var(--text-sm);color:var(--color-alert);">Not Selected</span></div>
+          <button class="btn-primary btn-sm">Select Provider</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Integration checklist -->
+    <div class="panel">
+      <div class="panel-header"><span class="panel-title">Integration Readiness</span><span class="t2-tag mono">2 of 5 ready</span></div>
+      <div class="panel-body" style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);">
+        <div style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-sm);"><span style="color:var(--color-green);">✓</span> DocConnect signing flow tested</div>
+        <div style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-sm);"><span style="color:var(--color-green);">✓</span> Base RPC connection verified</div>
+        <div style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-sm);color:var(--color-text-muted);"><span style="color:var(--color-warn);">○</span> KYC flow not yet tested</div>
+        <div style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-sm);color:var(--color-text-muted);"><span style="color:var(--color-warn);">○</span> Transfer agent API not connected</div>
+        <div style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-sm);color:var(--color-alert);"><span style="color:var(--color-alert);">✗</span> Custody provider not selected</div>
+        <div style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-sm);color:var(--color-text-muted);"><span style="color:var(--color-warn);">○</span> Escrow flow not confirmed</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

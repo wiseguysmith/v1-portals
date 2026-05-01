@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T2T Backend — Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../public/design-tokens.css"/>
+  <link rel="stylesheet" href="../../admin/styles/admin.css"/>
+  <link rel="stylesheet" href="../styles/backend.css"/>
+  <style>
+    .tech-item { display:flex; align-items:flex-start; gap:var(--space-3); padding:10px var(--space-5); border-bottom:1px solid var(--color-border-faint); }
+    .tech-item:last-child { border-bottom:none; }
+    .tech-body { flex:1; }
+    .tech-title { font-size:var(--text-base); font-weight:500; }
+    .tech-meta  { font-size:var(--text-sm); color:var(--color-text-muted); margin-top:2px; }
+    .provider-row { display:flex; align-items:center; justify-content:space-between; padding:var(--space-3) var(--space-5); border-bottom:1px solid var(--color-border-faint); }
+    .provider-row:last-child { border-bottom:none; }
+    .provider-name { font-size:var(--text-base); font-weight:500; }
+    .provider-cat  { font-size:var(--text-sm); color:var(--color-text-muted); }
+  </style>
+</head>
+<body>
+<div class="t2-shell">
+
+  <header class="t2-topbar">
+    <span class="t2-logo">T2T</span>
+    <span class="t2-tag">|</span>
+    <span class="t2-portal-badge">Backend Partner Portal</span>
+    <div class="t2-topbar-search">
+      <input class="t2-search-input" type="text" placeholder="Search tasks, deals…"/>
+    </div>
+    <div class="t2-topbar-right">
+      <span class="t2-tag mono">Backend Partner</span>
+      <div class="t2-avatar" style="background:var(--color-text-faint);">BP</div>
+    </div>
+  </header>
+
+  <nav class="t2-nav">
+    <span class="t2-nav-label">Overview</span>
+    <a href="dashboard.html" class="t2-nav-item active">⬛ My Workload</a>
+    <span class="t2-nav-label">Deals</span>
+    <a href="deal.html" class="t2-nav-item">◈ T2T-001 Hotel Arco Iris</a>
+    <a href="deal.html" class="t2-nav-item">◈ T2T-002 Grande Beach Club</a>
+    <span class="t2-nav-label">Technical</span>
+    <a href="technical-checklist.html" class="t2-nav-item">⚙ Technical Checklist <span class="t2-nav-count">14</span></a>
+    <a href="vendor-status.html" class="t2-nav-item">◎ Vendor Status <span class="t2-nav-count alert">2</span></a>
+    <a href="activity.html" class="t2-nav-item">≡ Activity</a>
+  </nav>
+
+  <main class="t2-main">
+
+    <div class="page-header">
+      <div>
+        <div class="t2-section-label">Backend Partner Portal</div>
+        <div class="page-title">My Workload</div>
+      </div>
+      <span class="t2-tag mono">Apr 30, 2026</span>
+    </div>
+
+    <div class="warning-banner">
+      <span>ℹ</span>
+      <div>Technical items for T2T-001 are not yet scheduled — deal is blocked at Gate 2 (land title hard stop). Begin scoping Token Architecture and infrastructure setup now so you're ready when legal clears.</div>
+    </div>
+
+    <div class="four-col">
+      <div class="metric-card">
+        <div class="metric-label">Active Deals</div>
+        <div class="metric-value">2</div>
+        <div class="metric-sub">T2T-001 · T2T-002</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Technical Items</div>
+        <div class="metric-value">14</div>
+        <div class="metric-sub">across both deals</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Providers Pending</div>
+        <div class="metric-value" style="color:var(--color-alert);">2</div>
+        <div class="metric-sub">KYC · Transfer Agent</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Connected</div>
+        <div class="metric-value green">2</div>
+        <div class="metric-sub">DocConnect · Base</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Technical Items — Priority Order</span>
+          <a href="technical-checklist.html" style="font-size:var(--text-sm);color:var(--color-gold);text-decoration:none;">View all →</a>
+        </div>
+        <div class="tech-item">
+          <div style="color:var(--color-warn);font-size:14px;flex-shrink:0;">⚙</div>
+          <div class="tech-body">
+            <div class="tech-title">Token standard selected — ERC-3643 on Base</div>
+            <div class="tech-meta">T2T-001 · Technical/Tokenization · Gate 6 · May 14</div>
+          </div>
+          <span class="risk-badge medium">medium</span>
+        </div>
+        <div class="tech-item">
+          <div style="color:var(--color-warn);font-size:14px;flex-shrink:0;">⚙</div>
+          <div class="tech-body">
+            <div class="tech-title">Smart contract architecture defined</div>
+            <div class="tech-meta">T2T-001 · Technical/Tokenization · Gate 6 · May 21</div>
+          </div>
+          <span class="risk-badge medium">medium</span>
+        </div>
+        <div class="tech-item">
+          <div style="color:var(--color-text-faint);font-size:14px;flex-shrink:0;">⚙</div>
+          <div class="tech-body">
+            <div class="tech-title">Transfer agent integration confirmed (Securitize)</div>
+            <div class="tech-meta">T2T-001 · Vendors · Invite pending</div>
+          </div>
+          <span class="risk-badge medium">medium</span>
+        </div>
+        <div class="tech-item">
+          <div style="color:var(--color-text-faint);font-size:14px;flex-shrink:0;">⚙</div>
+          <div class="tech-body">
+            <div class="tech-title">Custody solution confirmed</div>
+            <div class="tech-meta">T2T-001 · Vendors · Provider not selected</div>
+          </div>
+          <span class="risk-badge medium">medium</span>
+        </div>
+        <div class="tech-item">
+          <div style="color:var(--color-text-faint);font-size:14px;flex-shrink:0;">⚙</div>
+          <div class="tech-body">
+            <div class="tech-title">KYC / AML provider integrated (Parallel Markets)</div>
+            <div class="tech-meta">T2T-001 · Vendors · Invite pending</div>
+          </div>
+          <span class="risk-badge medium">medium</span>
+        </div>
+        <div class="tech-item">
+          <div style="color:var(--color-text-faint);font-size:14px;flex-shrink:0;">⚙</div>
+          <div class="tech-body">
+            <div class="tech-title">Property condition assessment (PCA)</div>
+            <div class="tech-meta">T2T-001 · Asset/Property · May 21</div>
+          </div>
+          <span class="risk-badge high">high</span>
+        </div>
+        <div class="tech-item">
+          <div style="color:var(--color-text-faint);font-size:14px;flex-shrink:0;">⚙</div>
+          <div class="tech-body">
+            <div class="tech-title">Environmental report</div>
+            <div class="tech-meta">T2T-001 · Asset/Property · May 28</div>
+          </div>
+          <span class="risk-badge medium">medium</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:var(--space-4);">
+
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">Provider Status</span>
+            <a href="vendor-status.html" style="font-size:var(--text-sm);color:var(--color-gold);text-decoration:none;">Details →</a>
+          </div>
+          <div class="provider-row">
+            <div><div class="provider-name">DocConnect</div><div class="provider-cat">Document Signing</div></div>
+            <div style="display:flex;align-items:center;gap:6px;"><span class="integration-status-dot connected"></span><span style="font-size:var(--text-sm);">Connected</span></div>
+          </div>
+          <div class="provider-row">
+            <div><div class="provider-name">Base (Coinbase)</div><div class="provider-cat">Chain Provider · ERC-3643</div></div>
+            <div style="display:flex;align-items:center;gap:6px;"><span class="integration-status-dot connected"></span><span style="font-size:var(--text-sm);">Connected</span></div>
+          </div>
+          <div class="provider-row">
+            <div><div class="provider-name">Parallel Markets</div><div class="provider-cat">KYC / AML</div></div>
+            <div style="display:flex;align-items:center;gap:6px;"><span class="integration-status-dot pending"></span><span style="font-size:var(--text-sm);">Invite Pending</span></div>
+          </div>
+          <div class="provider-row">
+            <div><div class="provider-name">Securitize</div><div class="provider-cat">Transfer Agent</div></div>
+            <div style="display:flex;align-items:center;gap:6px;"><span class="integration-status-dot pending"></span><span style="font-size:var(--text-sm);">Invite Pending</span></div>
+          </div>
+          <div class="provider-row">
+            <div><div class="provider-name">Custodian</div><div class="provider-cat">Digital Asset Custody</div></div>
+            <div style="display:flex;align-items:center;gap:6px;"><span class="integration-status-dot disconnected"></span><span style="font-size:var(--text-sm);">Not Selected</span></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Token Architecture — T2T-001</span></div>
+          <div class="panel-body" style="display:flex;flex-direction:column;gap:var(--space-2);">
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Token standard</span><span class="mono">ERC-3643</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Chain</span><span class="mono">Base Mainnet</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Token structure</span><span class="mono" style="color:var(--color-text-muted);">TBD</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Supply</span><span class="mono" style="color:var(--color-text-muted);">TBD</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Transfer restrictions</span><span class="mono" style="color:var(--color-text-muted);">TBD · 506(c)</span></div>
+            <div class="t2-divider"></div>
+            <div style="font-size:var(--text-xs);color:var(--color-text-faint);">Architecture pending legal clearance. Token structure blocked on admin decision (per lot vs. fractional).</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

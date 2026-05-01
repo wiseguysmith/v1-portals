@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T2T Issuer — Documents</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../public/design-tokens.css"/>
+  <link rel="stylesheet" href="../../admin/styles/admin.css"/>
+  <link rel="stylesheet" href="../styles/issuer.css"/>
+</head>
+<body>
+<div class="t2-shell">
+
+  <header class="t2-topbar">
+    <span class="t2-logo">T2T</span>
+    <span class="t2-tag">|</span>
+    <span class="t2-portal-badge">Issuer Portal</span>
+    <div class="t2-topbar-search">
+      <input class="t2-search-input" type="text" placeholder="Search documents…"/>
+    </div>
+    <div class="t2-topbar-right">
+      <span class="t2-tag mono">Rafael Torres</span>
+      <div class="t2-avatar" style="background:#6080c0;">RT</div>
+    </div>
+  </header>
+
+  <nav class="t2-nav">
+    <span class="t2-nav-label">My Deal</span>
+    <a href="dashboard.html" class="t2-nav-item">◈ T2T-001 Overview</a>
+    <span class="t2-nav-label">Work Items</span>
+    <a href="checklist.html" class="t2-nav-item">✓ My Checklist <span class="t2-nav-count alert">3</span></a>
+    <a href="documents.html" class="t2-nav-item active">⬆ Documents <span class="t2-nav-count">2</span></a>
+    <a href="activity.html" class="t2-nav-item">◎ Activity &amp; Thread</a>
+    <span class="t2-nav-label">Deal Info</span>
+    <a href="deal.html" class="t2-nav-item">≡ Full Deal View</a>
+  </nav>
+
+  <main class="t2-main">
+
+    <div class="page-header">
+      <div>
+        <div class="t2-breadcrumb" style="margin-bottom:var(--space-1);"><a href="dashboard.html">T2T-001</a><span class="sep">›</span><span class="cur">Documents</span></div>
+        <div class="page-title">Documents</div>
+      </div>
+      <button class="btn-primary">⬆ Upload Document</button>
+    </div>
+
+    <!-- Upload zone -->
+    <div style="background:#fff;border:2px dashed var(--color-border);border-radius:var(--radius-md);padding:var(--space-8) var(--space-6);text-align:center;">
+      <div style="font-size:24px;margin-bottom:var(--space-3);">⬆</div>
+      <div style="font-size:var(--text-base);font-weight:500;margin-bottom:var(--space-1);">Drop files here or click to upload</div>
+      <div style="font-size:var(--text-sm);color:var(--color-text-muted);">PDF, XLSX, DOCX · max 50MB per file</div>
+    </div>
+
+    <!-- Uploaded docs -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Uploaded by You</span>
+        <span class="t2-tag mono">2 documents</span>
+      </div>
+      <table>
+        <thead><tr><th>Document</th><th>Category</th><th>Uploaded</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          <tr>
+            <td><div class="cell-name">Hotel_Arco_Iris_Investor_Package.pdf</div><div class="cell-sub">3.8 MB</div></td>
+            <td><span style="font-size:var(--text-xs);color:var(--color-text-muted);">Offering Docs</span></td>
+            <td class="ts">Apr 28 · 10:30am</td>
+            <td><span class="doc-status approved">Approved</span></td>
+            <td style="text-align:right;"><button class="btn-ghost btn-sm">View</button></td>
+          </tr>
+          <tr>
+            <td><div class="cell-name">2022 P&L Financials.pdf</div><div class="cell-sub">1.2 MB</div></td>
+            <td><span style="font-size:var(--text-xs);color:var(--color-text-muted);">Financial Docs</span></td>
+            <td class="ts">Apr 29 · 2:30pm</td>
+            <td><span class="doc-status uploaded">Under Review</span></td>
+            <td style="text-align:right;"><button class="btn-ghost btn-sm">View</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Still needed -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Still Needed From You</span>
+        <span class="t2-tag mono" style="color:var(--color-alert);">6 missing</span>
+      </div>
+      <table>
+        <thead><tr><th>Document</th><th>Category</th><th>Priority</th><th></th></tr></thead>
+        <tbody>
+          <tr>
+            <td><div class="cell-name" style="color:var(--color-alert);">ADR Decline Explanation Letter</div><div class="cell-sub">Written explanation + monthly booking data 2022–2025</div></td>
+            <td><span style="font-size:var(--text-xs);color:var(--color-text-muted);">Financial Docs</span></td>
+            <td><span class="doc-status missing">Missing ⛔</span></td>
+            <td style="text-align:right;"><button class="btn-primary btn-sm">Upload Now</button></td>
+          </tr>
+          <tr>
+            <td><div class="cell-name">Operator / Sponsor Profile</div><div class="cell-sub">Track record, bio, previous projects</div></td>
+            <td><span style="font-size:var(--text-xs);color:var(--color-text-muted);">Deal Profile</span></td>
+            <td><span class="doc-status missing">Overdue</span></td>
+            <td style="text-align:right;"><button class="btn-primary btn-sm">Upload Now</button></td>
+          </tr>
+          <tr>
+            <td><div class="cell-name">3 Years Tax Filings (2022–2024)</div><div class="cell-sub">CR tax filings + bank statements</div></td>
+            <td><span style="font-size:var(--text-xs);color:var(--color-text-muted);">Financial Docs</span></td>
+            <td><span class="doc-status missing">Missing</span></td>
+            <td style="text-align:right;"><button class="btn-ghost btn-sm">Upload</button></td>
+          </tr>
+          <tr>
+            <td><div class="cell-name">Occupancy &amp; RevPAR Data (2022–2025)</div><div class="cell-sub">Monthly breakdown by channel</div></td>
+            <td><span style="font-size:var(--text-xs);color:var(--color-text-muted);">Financial Docs</span></td>
+            <td><span class="doc-status missing">Missing</span></td>
+            <td style="text-align:right;"><button class="btn-ghost btn-sm">Upload</button></td>
+          </tr>
+          <tr>
+            <td><div class="cell-name">Property Insurance Certificate</div></td>
+            <td><span style="font-size:var(--text-xs);color:var(--color-text-muted);">Property Docs</span></td>
+            <td><span class="doc-status missing">Missing</span></td>
+            <td style="text-align:right;"><button class="btn-ghost btn-sm">Upload</button></td>
+          </tr>
+          <tr>
+            <td><div class="cell-name">CapEx History &amp; Deferred Maintenance Schedule</div></td>
+            <td><span style="font-size:var(--text-xs);color:var(--color-text-muted);">Financial Docs</span></td>
+            <td><span class="doc-status missing">Missing</span></td>
+            <td style="text-align:right;"><button class="btn-ghost btn-sm">Upload</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T2T Legal — Document Review</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../public/design-tokens.css"/>
+  <link rel="stylesheet" href="../../admin/styles/admin.css"/>
+  <link rel="stylesheet" href="../styles/legal.css"/>
+  <style>
+    .review-card { background:#fff; border:1px solid var(--color-border); border-radius:var(--radius-md); overflow:hidden; }
+    .review-card-header { display:flex; align-items:flex-start; justify-content:space-between; padding:var(--space-4) var(--space-5); border-bottom:1px solid var(--color-border); }
+    .review-card-body { padding:var(--space-5); display:flex; flex-direction:column; gap:var(--space-4); }
+    .review-actions { display:flex; gap:var(--space-2); padding:var(--space-4) var(--space-5); border-top:1px solid var(--color-border); background:var(--color-bg-subtle); }
+  </style>
+</head>
+<body>
+<div class="t2-shell">
+
+  <header class="t2-topbar">
+    <span class="t2-logo">T2T</span>
+    <span class="t2-tag">|</span>
+    <span class="t2-portal-badge">Legal Partner Portal</span>
+    <div class="t2-topbar-search">
+      <input class="t2-search-input" type="text" placeholder="Search documents…"/>
+    </div>
+    <div class="t2-topbar-right">
+      <span class="t2-tag mono">V. Saborio</span>
+      <div class="t2-avatar" style="background:var(--color-gold-dark);">VS</div>
+    </div>
+  </header>
+
+  <nav class="t2-nav">
+    <span class="t2-nav-label">Overview</span>
+    <a href="dashboard.html" class="t2-nav-item">⬛ My Workload</a>
+    <span class="t2-nav-label">Deals</span>
+    <a href="deal.html" class="t2-nav-item">◈ T2T-001 Hotel Arco Iris <span class="t2-nav-count alert">2</span></a>
+    <a href="deal.html" class="t2-nav-item">◈ T2T-002 Grande Beach Club</a>
+    <span class="t2-nav-label">Work Queue</span>
+    <a href="document-review.html" class="t2-nav-item active">📄 Document Review <span class="t2-nav-count alert">1</span></a>
+    <a href="signoffs.html" class="t2-nav-item">✓ Signoffs Needed <span class="t2-nav-count">3</span></a>
+    <a href="activity.html" class="t2-nav-item">◎ Activity</a>
+  </nav>
+
+  <main class="t2-main">
+
+    <div class="page-header">
+      <div>
+        <div class="t2-section-label">Work Queue</div>
+        <div class="page-title">Document Review</div>
+      </div>
+      <span class="t2-tag mono">1 pending review</span>
+    </div>
+
+    <!-- Pending review -->
+    <div>
+      <div class="t2-section-label" style="margin-bottom:var(--space-3);">Pending Your Review</div>
+      <div class="review-card">
+        <div class="review-card-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:var(--space-2);margin-bottom:var(--space-2);">
+              <span class="deal-id">T2T-001</span>
+              <span class="doc-status uploaded">Awaiting Legal Review</span>
+            </div>
+            <div style="font-size:var(--text-lg);font-weight:500;">Hotel_Arco_Iris_Investor_Package.pdf</div>
+            <div style="font-size:var(--text-sm);color:var(--color-text-muted);margin-top:2px;">Category: Offering Docs · 3.8 MB · Uploaded Apr 28 by Issuer (Rafael Torres)</div>
+          </div>
+          <button class="btn-ghost">⬇ Download</button>
+        </div>
+        <div class="review-card-body">
+          <div style="background:var(--color-bg-subtle);border-radius:var(--radius-md);padding:var(--space-5);display:flex;align-items:center;justify-content:center;min-height:200px;border:1px solid var(--color-border);">
+            <div style="text-align:center;">
+              <div style="font-size:32px;margin-bottom:var(--space-3);">📄</div>
+              <div style="font-size:var(--text-sm);color:var(--color-text-muted);">Hotel_Arco_Iris_Investor_Package.pdf</div>
+              <button class="btn-primary" style="margin-top:var(--space-3);">Open Document</button>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:var(--text-xs);text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-faint);margin-bottom:var(--space-2);">Review Notes</div>
+            <textarea class="t2-textarea" placeholder="Add legal review notes, flag issues, or request changes…" style="min-height:80px;"></textarea>
+          </div>
+        </div>
+        <div class="review-actions">
+          <button class="btn-primary">✓ Approve</button>
+          <button class="btn-ghost">Request Changes</button>
+          <button class="btn-danger">Reject</button>
+          <span style="margin-left:auto;font-size:var(--text-xs);color:var(--color-text-faint);">Note: Approval does not waive land title hard stop</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reviewed -->
+    <div>
+      <div class="t2-section-label" style="margin-bottom:var(--space-3);">Previously Reviewed</div>
+      <div class="panel">
+        <table>
+          <thead><tr><th>Document</th><th>Deal</th><th>Decision</th><th>Reviewed</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="cell-name">2022 P&L Financials.pdf</div><div class="cell-sub">Financial Docs · 1.2 MB</div></td>
+              <td><span class="deal-id">T2T-001</span></td>
+              <td><span class="doc-status uploaded">Under Review</span></td>
+              <td class="ts">Apr 29</td>
+              <td class="muted" style="font-size:var(--text-sm);">Financials noted, forwarded to admin for approval.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,23 @@
+/* ============================================
+   Title2Token — Issuer Portal CSS
+   issuer/styles/issuer.css
+   ============================================ */
+
+/* Override portal badge for Issuer identity */
+.t2-portal-badge {
+  background: #f0f4ff;
+  color: #6080c0;
+  border-color: #c0d0f0;
+}
+
+/* Issuer nav accent */
+.t2-nav-item.active {
+  border-left-color: #6080c0;
+  background: #f0f4ff;
+  color: var(--color-text);
+}
+
+/* Issuer-specific: my items highlight */
+.my-item-row {
+  background: #f8f9ff;
+}

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T2T Admin — Audit Log</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../public/design-tokens.css"/>
+  <link rel="stylesheet" href="../styles/admin.css"/>
+  <style>
+    .audit-row {
+      display:grid; grid-template-columns:140px 90px 130px 1fr 80px;
+      align-items:start; gap:var(--space-4);
+      padding:11px var(--space-5);
+      border-bottom:1px solid var(--color-border-faint);
+      transition:background 0.1s;
+    }
+    .audit-row:last-child { border-bottom:none; }
+    .audit-row:hover { background:var(--color-bg-subtle); }
+    .audit-ts { font-family:var(--font-mono); font-size:var(--text-xs); color:var(--color-text-muted); white-space:nowrap; line-height:1.6; }
+    .audit-actor { font-size:var(--text-sm); font-weight:500; }
+    .audit-actor-role { font-size:var(--text-xs); color:var(--color-text-muted); margin-top:1px; }
+    .audit-type {
+      font-size:var(--text-xs); font-family:var(--font-mono);
+      padding:2px 8px; border-radius:var(--radius-sm); border:1px solid;
+      white-space:nowrap; display:inline-block;
+    }
+    .audit-type.blocker    { background:var(--color-alert-bg); color:var(--color-alert); border-color:#f0c0a8; }
+    .audit-type.document   { background:var(--color-bg-gold); color:var(--color-gold); border-color:var(--color-gold-light); }
+    .audit-type.stage      { background:var(--color-bg-subtle); color:var(--color-text-muted); border-color:var(--color-border); }
+    .audit-type.partner    { background:#f0f4ff; color:#6080c0; border-color:#c0d0f0; }
+    .audit-type.deal       { background:var(--color-green-bg); color:var(--color-green); border-color:#b8d8c2; }
+    .audit-type.system     { background:var(--color-bg-subtle); color:var(--color-text-faint); border-color:var(--color-border); }
+    .audit-type.intake     { background:var(--color-warn-bg); color:var(--color-warn); border-color:#e8d090; }
+    .audit-desc { font-size:var(--text-sm); color:var(--color-text); line-height:1.5; }
+    .audit-desc strong { font-weight:500; }
+  </style>
+</head>
+<body>
+<div class="t2-shell">
+
+  <header class="t2-topbar">
+    <span class="t2-logo">T2T</span>
+    <span class="t2-tag">|</span>
+    <span class="t2-portal-badge">Admin Control Tower</span>
+    <div class="t2-topbar-search">
+      <input class="t2-search-input" type="text" placeholder="Search deals, documents, partners…"/>
+    </div>
+    <div class="t2-topbar-right">
+      <a href="notifications.html" class="t2-notif-btn">🔔<span class="t2-notif-badge">7</span></a>
+      <span class="t2-tag mono">James W.</span>
+      <div class="t2-avatar">JW</div>
+    </div>
+  </header>
+
+  <nav class="t2-nav">
+    <span class="t2-nav-label">Platform</span>
+    <a href="dashboard.html" class="t2-nav-item">⬛ Command Center</a>
+    <a href="pipeline.html" class="t2-nav-item">◈ Pipeline <span class="t2-nav-count gold">2</span></a>
+    <span class="t2-nav-label">Operations</span>
+    <a href="blocker-board.html" class="t2-nav-item">⚑ Blocker Board <span class="t2-nav-count alert">5</span></a>
+    <a href="intake-queue.html" class="t2-nav-item">↓ Intake Queue <span class="t2-nav-count">1</span></a>
+    <a href="notifications.html" class="t2-nav-item">🔔 Inbox <span class="t2-nav-count alert">7</span></a>
+    <span class="t2-nav-label">Admin</span>
+    <a href="partner-management.html" class="t2-nav-item">◎ Partners</a>
+    <a href="workflow-builder.html" class="t2-nav-item">⚙ Workflows</a>
+    <a href="audit-log.html" class="t2-nav-item active">≡ Audit Log</a>
+    <a href="settings.html" class="t2-nav-item">⚙ Settings</a>
+  </nav>
+
+  <main class="t2-main">
+
+    <div class="page-header">
+      <div>
+        <div class="t2-section-label">Admin</div>
+        <div class="page-title">Audit Log</div>
+      </div>
+      <button class="btn-ghost">Export CSV</button>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-bar">
+      <input class="t2-input" type="text" placeholder="Search events…" style="width:200px;"/>
+      <select class="t2-select" style="width:140px;"><option>All deals</option><option>T2T-001</option><option>T2T-002</option><option>Platform</option></select>
+      <select class="t2-select" style="width:140px;"><option>All actors</option><option>Admin</option><option>Issuer</option><option>Legal</option><option>Broker</option><option>System</option></select>
+      <select class="t2-select" style="width:150px;"><option>All event types</option><option>Blocker</option><option>Document</option><option>Stage Change</option><option>Partner</option><option>Deal</option><option>System</option></select>
+      <select class="t2-select" style="width:140px;"><option>Date: All time</option><option>Today</option><option>Last 7 days</option><option>Last 30 days</option></select>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Platform Events</span>
+        <span class="t2-tag mono">24 events · cursor-paginated</span>
+      </div>
+
+      <!-- Column headers -->
+      <div style="display:grid;grid-template-columns:140px 90px 130px 1fr 80px;gap:var(--space-4);padding:var(--space-2) var(--space-5);border-bottom:1px solid var(--color-border);background:var(--color-bg-subtle);">
+        <span class="label">Timestamp</span>
+        <span class="label">Actor</span>
+        <span class="label">Event Type</span>
+        <span class="label">Description</span>
+        <span class="label">Deal</span>
+      </div>
+
+      <div class="audit-row">
+        <div class="audit-ts">Apr 30, 2026<br/>9:02am</div>
+        <div><div class="audit-actor">James W.</div><div class="audit-actor-role">Admin</div></div>
+        <span class="audit-type blocker">blocker</span>
+        <div class="audit-desc"><strong>Hard stop flagged:</strong> Land title confirmation — fee simple vs. maritime concession. CR Legal Counsel (V. Saborio) engaged. Deal cannot advance past Gate 2.</div>
+        <span class="deal-id">T2T-001</span>
+      </div>
+
+      <div class="audit-row">
+        <div class="audit-ts">Apr 30, 2026<br/>8:15am</div>
+        <div><div class="audit-actor">System</div><div class="audit-actor-role">Auto-escalation</div></div>
+        <span class="audit-type system">system</span>
+        <div class="audit-desc"><strong>Auto-escalated:</strong> ADR decline explanation overdue by 3 days. Notification sent to admin (James W.). Partner: Rafael Torres (Issuer).</div>
+        <span class="deal-id">T2T-001</span>
+      </div>
+
+      <div class="audit-row">
+        <div class="audit-ts">Apr 30, 2026<br/>6:40am</div>
+        <div><div class="audit-actor">Marco D.</div><div class="audit-actor-role">Broker</div></div>
+        <span class="audit-type intake">intake</span>
+        <div class="audit-desc"><strong>New intake submission:</strong> Casa Horizonte, Puerto Viejo — $4.5M raise target, boutique hotel. Auto-screening: 2 failures (missing docs). Assigned INTAKE-003.</div>
+        <span class="deal-id">INTAKE-003</span>
+      </div>
+
+      <div class="audit-row">
+        <div class="audit-ts">Apr 29, 2026<br/>4:15pm</div>
+        <div><div class="audit-actor">James W.</div><div class="audit-actor-role">Admin</div></div>
+        <span class="audit-type document">document</span>
+        <div class="audit-desc"><strong>Document requested:</strong> ADR decline explanation letter sent to Rafael Torres (Issuer). Due date set: Apr 27. Method: platform notification + email.</div>
+        <span class="deal-id">T2T-001</span>
+      </div>
+
+      <div class="audit-row">
+        <div class="audit-ts">Apr 29, 2026<br/>2:30pm</div>
+        <div><div class="audit-actor">Rafael T.</div><div class="audit-actor-role">Issuer</div></div>
+        <span class="audit-type document">document</span>
+        <div class="audit-desc"><strong>Document uploaded:</strong> 2022 P&L Financials.pdf (1.2MB). Status: Under Review. Category: Financial Docs. Awaiting admin approval.</div>
+        <span class="deal-id">T2T-001</span>
+      </div>
+
+      <div class="audit-row">
+        <div class="audit-ts">Apr 28, 2026<br/>11:00am</div>
+        <div><div class="audit-actor">James W.</div><div class="audit-actor-role">Admin</div></div>
+        <span class="audit-type document">document</span>
+        <div class="audit-desc"><strong>Document approved:</strong> Hotel_Arco_Iris_Investor_Package.pdf. Category: Offering Docs. Approved for broker distribution planning.</div>
+        <span class="deal-id">T2T-001</span>
+      </div>
+
+      <div class="audit-row">
+        <div class="audit-ts">Apr 28, 2026<br/>10:30am</div>
+        <div><div class="audit-actor">Rafael T.</div><div class="audit-actor-role">Issuer</div></div>
+        <span class="audit-type document">document</span>
+        <div class="audit-desc"><strong>Document uploaded:</strong> Hotel_Arco_Iris_Investor_Package.pdf (3.8MB). Status: Pending review. Category: Offering Docs.</div>
+        <span class="deal-id">T2T-001</span>
+      </div>
+
+      <div class="audit-row">
+        <div class="audit-ts">Apr 27, 2026<br/>3:00pm</div>
+        <div><div class="audit-actor">James W.</div><div class="audit-actor-role">Admin</div></div>
+        <span class="audit-type partner">partner</span>
+        <div class="audit-desc"><strong>Partner assigned:</strong> V. Saborio &amp; Associates (CR Legal Counsel) assigned to T2T-001 — Legal/Entity and Local Jurisdiction categories. Invite sent: vsaborio@crlegal.cr.</div>
+        <span class="deal-id">T2T-001</span>
+      </div>
+
+      <div class="audit-row">
+        <div class="audit-ts">Apr 27, 2026<br/>2:45pm</div>
+        <div><div class="audit-actor">James W.</div><div class="audit-actor-role">Admin</div></div>
+        <span class="audit-type partner">partner</span>
+        <div class="audit-desc"><strong>Invite sent:</strong> U.S. Securities Counsel (uslegal@spvcounsel.com) — role: legal, deal: T2T-001. Expires May 5.</div>
+        <span class="deal-id">T2T-001</span>
+      </div>
+
+      <div class="audit-row">
+        <div class="audit-ts">Apr 24, 2026<br/>10:00am</div>
+        <div><div class="audit-actor">James W.</div><div class="audit-actor-role">Admin</div></div>
+        <span class="audit-type deal">deal</span>
+        <div class="audit-desc"><strong>Deal created:</strong> T2T-001 Hotel Arco Iris. Type: Acquisition. Stage: Intake → Readiness Review. Issuer: Rafael Torres. Template: Commercial Acquisition v1.0.</div>
+        <span class="deal-id">T2T-001</span>
+      </div>
+
+      <div class="audit-row">
+        <div class="audit-ts">Apr 23, 2026<br/>3:20pm</div>
+        <div><div class="audit-actor">James W.</div><div class="audit-actor-role">Admin</div></div>
+        <span class="audit-type deal">deal</span>
+        <div class="audit-desc"><strong>Deal created:</strong> T2T-002 Grande Beach Club &amp; Villas. Type: Development. Stage: Intake. Issuer: Grupo Vargas Dev. Template: Commercial Acquisition v1.0.</div>
+        <span class="deal-id">T2T-002</span>
+      </div>
+
+      <div class="audit-row">
+        <div class="audit-ts">Apr 23, 2026<br/>3:00pm</div>
+        <div><div class="audit-actor">James W.</div><div class="audit-actor-role">Admin</div></div>
+        <span class="audit-type intake">intake</span>
+        <div class="audit-desc"><strong>Intake approved:</strong> Grande Beach Club submission by Marco Delgado. Notes: Title confirmed fee simple. Strong data room. Assigned T2T-002.</div>
+        <span class="deal-id">T2T-002</span>
+      </div>
+
+      <div class="audit-row">
+        <div class="audit-ts">Apr 22, 2026<br/>2:10pm</div>
+        <div><div class="audit-actor">James W.</div><div class="audit-actor-role">Admin</div></div>
+        <span class="audit-type intake">intake</span>
+        <div class="audit-desc"><strong>Intake approved:</strong> Hotel Arco Iris submission by Rafael Torres (self). Conditional — land title to be confirmed in readiness stage. Assigned T2T-001.</div>
+        <span class="deal-id">T2T-001</span>
+      </div>
+
+      <div class="audit-row">
+        <div class="audit-ts">Apr 20, 2026<br/>9:00am</div>
+        <div><div class="audit-actor">System</div><div class="audit-actor-role">Platform</div></div>
+        <span class="audit-type system">system</span>
+        <div class="audit-desc"><strong>Workflow template published:</strong> Commercial Acquisition v1.0 — 10 categories, 42 steps, 7 gates. Applied to all new deals by default.</div>
+        <span class="deal-id" style="color:var(--color-text-faint);border-color:var(--color-border);">Platform</span>
+      </div>
+
+      <div class="pagination">
+        <span class="t2-tag mono">14 of 24 events</span>
+        <div style="display:flex;gap:var(--space-2);">
+          <button class="btn-ghost btn-sm" disabled style="opacity:0.4;">← Newer</button>
+          <button class="btn-ghost btn-sm">Older →</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

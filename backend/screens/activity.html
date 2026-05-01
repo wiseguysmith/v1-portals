@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T2T Backend — Activity</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../public/design-tokens.css"/>
+  <link rel="stylesheet" href="../../admin/styles/admin.css"/>
+  <link rel="stylesheet" href="../styles/backend.css"/>
+</head>
+<body>
+<div class="t2-shell">
+
+  <header class="t2-topbar">
+    <span class="t2-logo">T2T</span>
+    <span class="t2-tag">|</span>
+    <span class="t2-portal-badge">Backend Partner Portal</span>
+    <div class="t2-topbar-search">
+      <input class="t2-search-input" type="text" placeholder="Search activity…"/>
+    </div>
+    <div class="t2-topbar-right">
+      <span class="t2-tag mono">Backend Partner</span>
+      <div class="t2-avatar" style="background:var(--color-text-faint);">BP</div>
+    </div>
+  </header>
+
+  <nav class="t2-nav">
+    <span class="t2-nav-label">Overview</span>
+    <a href="dashboard.html" class="t2-nav-item">⬛ My Workload</a>
+    <span class="t2-nav-label">Deals</span>
+    <a href="deal.html" class="t2-nav-item">◈ T2T-001 Hotel Arco Iris</a>
+    <a href="deal.html" class="t2-nav-item">◈ T2T-002 Grande Beach Club</a>
+    <span class="t2-nav-label">Technical</span>
+    <a href="technical-checklist.html" class="t2-nav-item">⚙ Technical Checklist <span class="t2-nav-count">14</span></a>
+    <a href="vendor-status.html" class="t2-nav-item">◎ Vendor Status <span class="t2-nav-count alert">2</span></a>
+    <a href="activity.html" class="t2-nav-item active">≡ Activity</a>
+  </nav>
+
+  <main class="t2-main">
+
+    <div class="page-header">
+      <div>
+        <div class="t2-section-label">Technical</div>
+        <div class="page-title">Activity</div>
+      </div>
+      <select class="t2-select" style="width:140px;"><option>All deals</option><option>T2T-001</option><option>T2T-002</option></select>
+    </div>
+
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-header"><span class="panel-title">Deal Thread — T2T-001</span></div>
+        <div class="comment-item">
+          <div class="comment-avatar" style="background:var(--color-gold);">JW</div>
+          <div class="comment-body">
+            <div><span class="comment-author">James Whitmore</span><span class="comment-time">Apr 27 · 3:00pm</span></div>
+            <div class="comment-text">Welcome to T2T-001. You've been assigned to Technical/Tokenization and Vendors/Partner Activation categories. Deal is currently in Readiness Review with a land title hard stop blocking Gate 2. Technical items are at Gates 5–6. Please begin scoping architecture now and flag any provider concerns early.</div>
+          </div>
+        </div>
+        <div class="comment-box">
+          <div style="font-size:var(--text-xs);color:var(--color-text-faint);margin-bottom:var(--space-2);">Reply — visible to admin and assigned partners</div>
+          <div class="comment-input-row">
+            <textarea class="t2-textarea" placeholder="Write a message or ask a question…" style="min-height:60px;"></textarea>
+            <button class="btn-primary">Send</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header"><span class="panel-title">My Activity Log</span></div>
+        <div class="activity-list">
+          <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">Assigned to T2T-001 — Technical/Tokenization + Vendors/Partners categories</div><div class="activity-time">Apr 27 · 3:00pm · Admin</div></div></div>
+          <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">Assigned to T2T-002 — Technical/Tokenization category</div><div class="activity-time">Apr 23 · 3:20pm · Admin</div></div></div>
+          <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">Portal access granted</div><div class="activity-time">Apr 27 · 2:45pm · Admin</div></div></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

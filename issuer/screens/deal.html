@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T2T Issuer — Deal View</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../public/design-tokens.css"/>
+  <link rel="stylesheet" href="../../admin/styles/admin.css"/>
+  <link rel="stylesheet" href="../styles/issuer.css"/>
+  <style>
+    .deal-shell { display:flex; flex-direction:column; height:calc(100vh - var(--topbar-h)); overflow:hidden; }
+    .deal-header-bar { padding:var(--space-4) var(--space-8); border-bottom:1px solid var(--color-border); background:#fff; flex-shrink:0; }
+    .deal-header-top { display:flex; align-items:flex-start; justify-content:space-between; gap:var(--space-5); }
+    .deal-meta-row { display:flex; gap:var(--space-6); flex-wrap:wrap; margin-top:var(--space-3); }
+    .deal-meta-item { display:flex; flex-direction:column; gap:2px; }
+    .deal-meta-label { font-size:var(--text-xs); color:var(--color-text-faint); text-transform:uppercase; letter-spacing:0.08em; }
+    .deal-meta-val { font-size:var(--text-base); font-family:var(--font-mono); }
+    .deal-content { flex:1; overflow-y:auto; padding:var(--space-6) var(--space-8); display:flex; flex-direction:column; gap:var(--space-5); }
+    .overview-grid { display:grid; grid-template-columns:1fr 1fr; gap:var(--space-4); }
+  </style>
+</head>
+<body>
+<div class="t2-shell">
+
+  <header class="t2-topbar">
+    <span class="t2-logo">T2T</span>
+    <span class="t2-tag">|</span>
+    <span class="t2-portal-badge">Issuer Portal</span>
+    <div class="t2-topbar-search">
+      <input class="t2-search-input" type="text" placeholder="Search deal details…"/>
+    </div>
+    <div class="t2-topbar-right">
+      <span class="t2-tag mono">Rafael Torres</span>
+      <div class="t2-avatar" style="background:#6080c0;">RT</div>
+    </div>
+  </header>
+
+  <nav class="t2-nav">
+    <span class="t2-nav-label">My Deal</span>
+    <a href="dashboard.html" class="t2-nav-item">◈ T2T-001 Overview</a>
+    <span class="t2-nav-label">Work Items</span>
+    <a href="checklist.html" class="t2-nav-item">✓ My Checklist <span class="t2-nav-count alert">3</span></a>
+    <a href="documents.html" class="t2-nav-item">⬆ Documents <span class="t2-nav-count">2</span></a>
+    <a href="activity.html" class="t2-nav-item">◎ Activity &amp; Thread</a>
+    <span class="t2-nav-label">Deal Info</span>
+    <a href="deal.html" class="t2-nav-item active">≡ Full Deal View</a>
+  </nav>
+
+  <div class="deal-shell">
+    <div class="deal-header-bar">
+      <div class="hard-stop-banner" style="margin-bottom:var(--space-4);">
+        <div class="hard-stop-banner-header">⛔ 2 Hard Stops Require Your Action</div>
+        <div class="hard-stop-item"><span class="hard-stop-icon">⛔</span><span><strong>2025 ADR decline explanation</strong> — required from you · Deal blocked at Gate 2</span></div>
+        <div class="hard-stop-item"><span class="hard-stop-icon">⚠</span><span><strong>Sponsor/operator profile</strong> — overdue 3 days</span></div>
+      </div>
+      <div class="deal-header-top">
+        <div>
+          <div style="display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-2);">
+            <span class="deal-id">T2T-001</span>
+            <h1 style="font-size:var(--text-xl);font-weight:500;">Hotel Arco Iris</h1>
+            <span class="stage-pill readiness">Readiness Review</span>
+            <span class="risk-badge critical">HIGH RISK</span>
+          </div>
+          <div class="deal-meta-row">
+            <div class="deal-meta-item"><span class="deal-meta-label">Type</span><span class="deal-meta-val">Acquisition</span></div>
+            <div class="deal-meta-item"><span class="deal-meta-label">Location</span><span class="deal-meta-val">Tamarindo, CR</span></div>
+            <div class="deal-meta-item"><span class="deal-meta-label">Asset</span><span class="deal-meta-val">Boutique Hotel · 13 rooms + 5 bungalows</span></div>
+            <div class="deal-meta-item"><span class="deal-meta-label">Raise Target</span><span class="deal-meta-val gold">$2,320,500</span></div>
+            <div class="deal-meta-item"><span class="deal-meta-label">Cap Rate</span><span class="deal-meta-val">10.7%</span></div>
+            <div class="deal-meta-item"><span class="deal-meta-label">Hold Period</span><span class="deal-meta-val">5–7 years</span></div>
+            <div class="deal-meta-item"><span class="deal-meta-label">Readiness</span><span class="deal-meta-val" style="color:var(--color-alert);">0%</span></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:var(--space-2);flex-shrink:0;">
+          <button class="pdf-btn">⬇ Export PDF</button>
+          <a href="activity.html" class="btn-ghost" style="text-decoration:none;">Message Admin</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="deal-content">
+
+      <div class="overview-grid">
+
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Deal Overview</span></div>
+          <div class="panel-body" style="display:flex;flex-direction:column;gap:var(--space-3);">
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Asset type</span><span>Boutique Hotel</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Rooms</span><span>13 rooms + 5 bungalows</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Acquisition price</span><span class="mono">$2,100,000</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Total raise</span><span class="mono gold">$2,320,500</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Cap rate</span><span class="mono">10.7%</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Projected IRR</span><span class="mono">18–22%</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Hold period</span><span>5–7 years</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Token standard</span><span class="mono">ERC-3643 · Base</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Target investors</span><span>15–25 accredited</span></div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:var(--space-4);">
+
+          <div class="panel">
+            <div class="panel-header"><span class="panel-title">Your Items — Summary</span></div>
+            <div class="panel-body" style="display:flex;flex-direction:column;gap:var(--space-2);">
+              <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Total assigned to you</span><span class="mono">9</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Complete</span><span class="mono" style="color:var(--color-green);">0</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Overdue</span><span class="mono" style="color:var(--color-alert);">2</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Hard stops</span><span class="mono" style="color:var(--color-alert);">1</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Documents uploaded</span><span class="mono">2</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);"><span class="muted">Documents still needed</span><span class="mono" style="color:var(--color-warn);">6</span></div>
+              <div class="t2-divider"></div>
+              <a href="checklist.html" style="font-size:var(--text-sm);color:#6080c0;text-decoration:none;">View full checklist →</a>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header"><span class="panel-title">Stage Progress</span></div>
+            <div class="panel-body">
+              <div class="gate-bar">
+                <div class="gate-item complete"><div class="gate-dot complete">✓</div><span class="gate-label complete">G1</span></div>
+                <div class="gate-item"><div class="gate-dot active">2</div><span class="gate-label active">G2</span></div>
+                <div class="gate-item"><div class="gate-dot blocked">⛔</div><span class="gate-label blocked">G3</span></div>
+                <div class="gate-item"><div class="gate-dot">4</div><span class="gate-label">G4</span></div>
+                <div class="gate-item"><div class="gate-dot">5</div><span class="gate-label">G5</span></div>
+                <div class="gate-item"><div class="gate-dot">6</div><span class="gate-label">G6</span></div>
+                <div class="gate-item"><div class="gate-dot">7</div><span class="gate-label">G7</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

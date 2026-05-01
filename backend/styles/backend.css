@@ -1,0 +1,16 @@
+/* ============================================
+   Title2Token — Backend Partner Portal CSS
+   backend/styles/backend.css
+   ============================================ */
+
+.t2-portal-badge {
+  background: var(--color-bg-subtle);
+  color: var(--color-text-muted);
+  border-color: var(--color-border);
+}
+
+.t2-nav-item.active {
+  border-left-color: var(--color-text-muted);
+  background: var(--color-bg-subtle);
+  color: var(--color-text);
+}
